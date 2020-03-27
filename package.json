@@ -1,0 +1,57 @@
+{
+  "name": "biz-manager",
+  "version": "0.0.0",
+  "engines": {
+    "node": "10.16.3"
+  },
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "start-t": "node ./bin/www",
+    "build": "webpack --config webpack.config.js",
+    "build-watch": "webpack --config webpack.config.js --watch"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.7",
+    "axios": "^0.18.1",
+    "babel-plugin-add-react-displayname": "0.0.5",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "~1.18.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "core-js": "^3.6.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "express": "^4.17.1",
+    "express-session": "^1.15.6",
+    "helmet": "^3.22.0",
+    "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0",
+    "lodash.merge": "^4.6.2",
+    "memory-fs": "^0.4.1",
+    "method-override": "^2.3.10",
+    "moment": "^2.22.2",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg-promise": "^8.4.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "serve-favicon": "~2.4.5",
+    "shortid": "^2.2.8",
+    "universal-router": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
+    "babel-core": "^7.0.0-0",
+    "babel-loader": "^7.1.5",
+    "css-loader": "^0.28.11",
+    "nodemon": "~1.15.0",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11",
+    "webpack-serve": "^1.0.2"
+  }
+}
