@@ -1,9 +1,16 @@
 import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { Switch, Route, Redirect } from "react-router-dom";
+import NotFound from "./NotFound";
+import NavBar from "./NavBar";
+import CompaniesPage from "./CompaniesPage";
 
 export default () => (
   <div>
-    <CssBaseline />
-    <div>hi</div>
+    <NavBar />
+    <Switch>
+      <Route path="/companies" component={CompaniesPage} />
+      <Redirect exact from="/" to="/companies" />
+      <Route component={NotFound} />
+    </Switch>
   </div>
 );

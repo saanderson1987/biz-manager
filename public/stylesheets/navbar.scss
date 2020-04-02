@@ -1,0 +1,27 @@
+.navbar {
+  background-color: #4f78a9;
+  color: $white;
+}
+
+.navbar-logo {
+  height: 40px;
+  margin-right: 16px;
+  border: 1px solid #c3c4c6;
+  border-radius: 50%;
+  background-color: #a0a1a5;
+  padding: 2px;
+}
+
+.navbar-toggler- {
+  cursor: pointer;
+}
+
+#navbar .active {
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .navbar-toggler- {
+    display: none;
+  }
+}

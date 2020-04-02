@@ -1,0 +1,85 @@
+.button-row  {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #e4e4e4;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  background-color: inherit;
+  padding: 6px 30px;
+}
+
+.button--save {
+  // background-color: #28c34c;
+  background-color: #34cc57;
+  border: 1px solid #34cc57;
+  color: white;
+}
+
+.button--small {
+  padding: 1px 7px 2px;
+}
+
+.button--new {
+  // border: 1px solid #e4e4e4;
+  // border-radius: 20px;
+  // font-size: 0.8rem;
+  // background-color: white;
+  color: green;
+  margin: 10px;
+  padding: 1px 7px 2px;
+}
+
+.button--new > span {
+  margin-left: 5px;
+}
+
+.button--delete {
+  border-color: #d80202;
+  color: #d80202;
+}
+
+.button-icon {
+  margin-right: 5px;
+}
+
+.save-cancel-buttons {
+  display: inline-block;
+}
+
+.save-cancel-buttons > button {
+  margin-left: 20px;
+}
+
+.pencil-icon {
+  color: #b38700;
+}
+
+.check-icon {
+  color: green;
+  // font-size: 1.4rem;
+}
+
+.edit-detail-cancel {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: .85rem;
+  text-decoration: underline;
+}
+
+.loader {
+    border: 3px solid #f3f3f3; /* Light grey */
+    border-top: 3px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

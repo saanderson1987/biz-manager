@@ -1,5 +1,5 @@
-const express = require('express');
-const isEmpty = require('../util/functions').isEmpty;
+const express = require("express");
+const isEmpty = require("../util/functions").isEmpty;
 
 class Controller {
   constructor(model) {
@@ -17,7 +17,7 @@ class Controller {
     //   const columns = query.columns ? query.columns : null;
     //   this.send(this.model.all(columns), res);
     // } else {
-      this.send(this.model.getByQuery(req.query), res);
+    this.send(this.model.getByQuery(req.query), res);
     // }
   }
 
@@ -47,10 +47,9 @@ class Controller {
         res.send(data);
       })
       .catch(err => {
-        res.send(err);
+        res.status(500).send(err);
       });
   }
-
 }
 
 module.exports = Controller;
