@@ -1,19 +1,25 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
 import { capitalize } from "../../util/functions";
 import Dropdown from "./Dropdown";
 
 const NewItemDetail = ({
   detailValue,
   onValueChange,
-  field: { displayName, columnName, type, valueOptions }
+  field: {
+    displayName,
+    columnName,
+    type,
+    valueOptions,
+    resource,
+    dropdownType,
+  },
 }) => {
   const getInput = () => {
     switch (type) {
       case "radio":
-        return valueOptions.map(valueOption => (
+        return valueOptions.map((valueOption) => (
           <div className="radio-buttons-row" key={valueOption.value}>
             <input
               type="radio"
@@ -31,8 +37,8 @@ const NewItemDetail = ({
       case "date":
         return (
           <DatePicker
-            selected={moment(detailValue)}
-            onChange={date => onValueChange(date)}
+            selected={detailValue}
+            onChange={(date) => onValueChange(date)}
             popperPlacement="bottom"
           />
         );
@@ -41,15 +47,16 @@ const NewItemDetail = ({
           <input
             type="checkbox"
             checked={detailValue}
-            onChange={e => onValueChange(e.target.checked)}
+            onChange={(e) => onValueChange(e.target.checked)}
           />
         );
       case "dropdown":
         return (
           <Dropdown
-            resource={itemDetail.resource}
+            resource={resource}
+            type={dropdownType}
             value={detailValue}
-            onChange={newValue => onValueChange(newValue)}
+            onChange={(newValue) => onValueChange(newValue)}
           />
         );
       default:
@@ -57,7 +64,7 @@ const NewItemDetail = ({
           <input
             type="text"
             value={detailValue}
-            onChange={e => onValueChange(e.target.value)}
+            onChange={(e) => onValueChange(e.target.value)}
           />
         );
     }

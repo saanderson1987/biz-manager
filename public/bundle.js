@@ -272,6 +272,8 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_mo
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
+var _constants = __webpack_require__(/*! ../constants */ "./frontend/constants.js");
+
 var _NewItemModal = _interopRequireDefault(__webpack_require__(/*! ./NewItemModal */ "./frontend/components/NewItemModal.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -293,7 +295,9 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Dropdown = function Dropdown(_ref) {
-  var value = _ref.value,
+  var type = _ref.type,
+      getAll = _ref.getAll,
+      value = _ref.value,
       _onChange = _ref.onChange,
       items = _ref.items,
       resource = _ref.resource;
@@ -306,6 +310,7 @@ var Dropdown = function Dropdown(_ref) {
   (0, _react.useEffect)(function () {
     getAll();
   }, []);
+  var itemTypeName = _constants.itemNameByItemType[type];
   return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("select", {
     value: value,
     onChange: function onChange(e) {
@@ -314,10 +319,11 @@ var Dropdown = function Dropdown(_ref) {
   }, /*#__PURE__*/_react["default"].createElement("option", {
     disabled: true,
     value: ""
-  }, " ", "-- select a vendor --", " "), items.map(function (item) {
+  }, " ", "-- select a ", itemTypeName, " --", " "), items.map(function (item) {
     return /*#__PURE__*/_react["default"].createElement("option", {
-      value: item.id
-    }, item.name);
+      value: item.id,
+      key: item.id
+    }, _constants.getItemNameFuncByItemType[type](item));
   })), /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--new",
     onClick: function onClick() {
@@ -325,8 +331,8 @@ var Dropdown = function Dropdown(_ref) {
     }
   }, /*#__PURE__*/_react["default"].createElement("i", {
     className: "fas fa-plus-circle"
-  }), /*#__PURE__*/_react["default"].createElement("span", null, "Create new vendor"))), isNewItemModalVisible && /*#__PURE__*/_react["default"].createElement(_NewItemModal["default"], {
-    type: "vendor",
+  }), /*#__PURE__*/_react["default"].createElement("span", null, "Create new ", itemTypeName))), isNewItemModalVisible && /*#__PURE__*/_react["default"].createElement(_NewItemModal["default"], {
+    type: type,
     closeModal: function closeModal() {
       return setIsNewItemModalVisible(false);
     },
@@ -342,11 +348,12 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
-  var resource = _ref3.resource;
+  var resource = _ref3.resource,
+      type = _ref3.type;
   return {
     getAll: function getAll() {
       return dispatch(resource.getByQuery({
-        columns: "name"
+        columns: _constants.listQueryColumnNamesByItemType[type]
       }));
     }
   };
@@ -379,9 +386,9 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_mo
 
 var _reactDatepicker = _interopRequireDefault(__webpack_require__(/*! react-datepicker */ "./node_modules/react-datepicker/dist/react-datepicker.min.js"));
 
-var _moment = _interopRequireDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
-
 __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
+
+var _functions = __webpack_require__(/*! ../../util/functions */ "./util/functions.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -401,14 +408,16 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var formatDetailValueFromProps = function formatDetailValueFromProps(value) {
-  return value instanceof Date ? (0, _moment["default"])(value).locale(_moment["default"].locale()).format("L") : value;
+var formatDetailValueState = function formatDetailValueState(value, type) {
+  return type === "date" ? new Date(value) : value;
 };
 
 var ItemDetail = function ItemDetail(props) {
-  var columnName = props.columnName,
-      updateDetail = props.updateDetail,
-      displayName = props.displayName;
+  var field = props.field,
+      updateDetail = props.updateDetail;
+  var columnName = field.columnName,
+      displayName = field.displayName,
+      type = field.type;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -420,13 +429,13 @@ var ItemDetail = function ItemDetail(props) {
       isDetailValueUpdating = _useState4[0],
       setIsDetailValueUpdating = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(formatDetailValueFromProps(props.detailValue)),
+  var _useState5 = (0, _react.useState)(formatDetailValueState(props.detailValue, type)),
       _useState6 = _slicedToArray(_useState5, 2),
       detailValueState = _useState6[0],
       setDetailValueState = _useState6[1];
 
   (0, _react.useEffect)(function () {
-    setDetailValueState(formatDetailValueFromProps(props.detailValue));
+    setDetailValueState(formatDetailValueState(props.detailValue, type));
 
     if (isDetailValueUpdating) {
       setIsDetailValueUpdating(false);
@@ -434,7 +443,7 @@ var ItemDetail = function ItemDetail(props) {
   }, [props.detailValue]);
 
   var getInput = function getInput() {
-    if (props.detailValue instanceof Date) {
+    if (type === "date") {
       return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
         selected: detailValueState,
         onChange: function onChange(date) {
@@ -443,7 +452,7 @@ var ItemDetail = function ItemDetail(props) {
       });
     }
 
-    if (typeof props.detailValue === "boolean") {
+    if (type === "checkbox") {
       return /*#__PURE__*/_react["default"].createElement("input", {
         type: "checkbox",
         checked: detailValueState,
@@ -465,12 +474,16 @@ var ItemDetail = function ItemDetail(props) {
   };
 
   var getDisplayValue = function getDisplayValue() {
-    if (typeof props.detailValue === "boolean") {
+    if (type === "checkbox") {
       return /*#__PURE__*/_react["default"].createElement("input", {
         type: "checkbox",
         checked: props.detailValue,
         disabled: true
       });
+    }
+
+    if (type === "date") {
+      return (0, _functions.getDateString)(props.detailValue);
     }
 
     return props.detailValue;
@@ -559,6 +572,8 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -570,8 +585,6 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.it
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var ItemDetails = function ItemDetails(_ref) {
   var type = _ref.type,
@@ -590,27 +603,25 @@ var ItemDetails = function ItemDetails(_ref) {
   return item && /*#__PURE__*/_react["default"].createElement("div", {
     className: "item-details"
   }, _constants.itemDetailFieldsByItemType[type].map(function (field, i) {
-    if (field.type === "value") {
-      return /*#__PURE__*/_react["default"].createElement(_ItemDetail["default"], {
-        columnName: field.columnName,
-        displayName: field.displayName,
-        detailValue: item[field.name],
-        updateDetail: function updateDetail(newValue) {
-          return update(_defineProperty({
-            id: item.id
-          }, field.name, newValue));
-        },
-        key: i
-      });
-    }
-
     if (field.type === "list") {
       return /*#__PURE__*/_react["default"].createElement(_List["default"], {
         type: field.columnName,
-        resource: resource // TODO should field.name correspond to route ??
+        resource: resource,
+        parentId: itemId,
+        subset: [].concat(_toConsumableArray(subset || []), [itemId, field.columnName]) // TODO should field.columnName correspond to route ??
         ,
-        subset: [].concat(_toConsumableArray(subset || []), [itemId, field.columnName]),
         route: field.columnName,
+        key: i
+      });
+    } else {
+      return /*#__PURE__*/_react["default"].createElement(_ItemDetail["default"], {
+        field: field,
+        detailValue: item[field.columnName],
+        updateDetail: function updateDetail(newValue) {
+          return update(_defineProperty({
+            id: item.id
+          }, field.columnName, newValue));
+        },
         key: i
       });
     }
@@ -671,7 +682,7 @@ var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "
 
 var _lodash = _interopRequireDefault(__webpack_require__(/*! lodash.get */ "./node_modules/lodash.get/index.js"));
 
-var _functions = __webpack_require__(/*! ../../util/functions */ "./util/functions.js");
+var _constants = __webpack_require__(/*! ../constants */ "./frontend/constants.js");
 
 var _ListItem = _interopRequireDefault(__webpack_require__(/*! ./ListItem */ "./frontend/components/ListItem.jsx"));
 
@@ -708,7 +719,8 @@ var List = function List(_ref) {
       isRoot = _ref.isRoot,
       resource = _ref.resource,
       subset = _ref.subset,
-      route = _ref.route;
+      route = _ref.route,
+      parentId = _ref.parentId;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -717,14 +729,12 @@ var List = function List(_ref) {
 
   (0, _react.useEffect)(function () {
     getAll();
-  }, []); // TODO may need to change:
-
-  var listName = route ? (0, _functions.capitalize)(route) : (0, _functions.capitalize)(resource.name);
+  }, []);
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "list"
   }, !isRoot && /*#__PURE__*/_react["default"].createElement("div", {
     className: "list-name"
-  }, listName, ":"), /*#__PURE__*/_react["default"].createElement("div", {
+  }, _constants.listNameByItemType[type], ":"), /*#__PURE__*/_react["default"].createElement("div", {
     className: (0, _classnames["default"])("list-items", {
       "list-items--root": isRoot
     })
@@ -756,7 +766,8 @@ var List = function List(_ref) {
     },
     resource: resource,
     subset: subset,
-    route: route
+    route: route,
+    parentId: parentId
   }));
 };
 
@@ -770,17 +781,17 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch, _ref3) {
   var getByQuery = _ref3.resource.getByQuery,
-      _ref3$columns = _ref3.columns,
-      columns = _ref3$columns === void 0 ? "name" : _ref3$columns,
-      _ref3$query = _ref3.query,
-      query = _ref3$query === void 0 ? {} : _ref3$query,
+      type = _ref3.type,
+      parentId = _ref3.parentId,
       subset = _ref3.subset,
       route = _ref3.route;
+  var parentColumn = _constants.parentColumnByItemType[type];
+  var parentIdQuery = parentColumn && parentId ? _defineProperty({}, parentColumn, parentId) : {};
   return {
     getAll: function getAll() {
       return dispatch(getByQuery(_objectSpread({
-        columns: columns
-      }, query), subset, route));
+        columns: _constants.listQueryColumnNamesByItemType[type]
+      }, parentIdQuery), subset, route));
     }
   };
 };
@@ -1063,8 +1074,6 @@ var _reactDatepicker = _interopRequireDefault(__webpack_require__(/*! react-date
 
 __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
 
-var _moment = _interopRequireDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
-
 var _functions = __webpack_require__(/*! ../../util/functions */ "./util/functions.js");
 
 var _Dropdown = _interopRequireDefault(__webpack_require__(/*! ./Dropdown */ "./frontend/components/Dropdown.jsx"));
@@ -1078,7 +1087,9 @@ var NewItemDetail = function NewItemDetail(_ref) {
       displayName = _ref$field.displayName,
       columnName = _ref$field.columnName,
       type = _ref$field.type,
-      valueOptions = _ref$field.valueOptions;
+      valueOptions = _ref$field.valueOptions,
+      resource = _ref$field.resource,
+      dropdownType = _ref$field.dropdownType;
 
   var getInput = function getInput() {
     switch (type) {
@@ -1102,7 +1113,7 @@ var NewItemDetail = function NewItemDetail(_ref) {
 
       case "date":
         return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
-          selected: (0, _moment["default"])(detailValue),
+          selected: detailValue,
           onChange: function onChange(date) {
             return onValueChange(date);
           },
@@ -1120,7 +1131,8 @@ var NewItemDetail = function NewItemDetail(_ref) {
 
       case "dropdown":
         return /*#__PURE__*/_react["default"].createElement(_Dropdown["default"], {
-          resource: itemDetail.resource,
+          resource: resource,
+          type: dropdownType,
           value: detailValue,
           onChange: function onChange(newValue) {
             return onValueChange(newValue);
@@ -1173,7 +1185,7 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_mo
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var _moment = _interopRequireDefault(__webpack_require__(/*! moment */ "./node_modules/moment/moment.js"));
+var _functions = __webpack_require__(/*! ../../util/functions */ "./util/functions.js");
 
 var _constants = __webpack_require__(/*! ../constants */ "./frontend/constants.js");
 
@@ -1208,7 +1220,7 @@ var createPendingNewRecord = function createPendingNewRecord(type) {
     if (field.type === "checkbox") {
       acc[field.columnName] = false;
     } else if (field.type === "date") {
-      acc[field.columnName] = (0, _moment["default"])();
+      acc[field.columnName] = new Date();
     } else {
       acc[field.columnName] = "";
     }
@@ -1219,6 +1231,7 @@ var createPendingNewRecord = function createPendingNewRecord(type) {
 
 var NewItemForm = function NewItemForm(_ref) {
   var type = _ref.type,
+      parentId = _ref.parentId,
       closeModal = _ref.closeModal,
       create = _ref.create;
 
@@ -1231,7 +1244,7 @@ var NewItemForm = function NewItemForm(_ref) {
     className: "form"
   }, /*#__PURE__*/_react["default"].createElement("div", {
     className: "form-header"
-  }, "Create New ", _constants.newItemNameByItemType[type]), /*#__PURE__*/_react["default"].createElement("div", {
+  }, "Create New ", (0, _functions.capitalize)(_constants.itemNameByItemType[type])), /*#__PURE__*/_react["default"].createElement("div", {
     className: "form-body"
   }, _constants.newItemFormFieldsByItemType[type].map(function (field, i) {
     return /*#__PURE__*/_react["default"].createElement(_NewItemDetail["default"], {
@@ -1254,11 +1267,11 @@ var NewItemForm = function NewItemForm(_ref) {
     onClick: function onClick() {
       var newRecord = _objectSpread({}, pendingNewRecord);
 
-      if (parent) {
-        newRecord[parent.column] = parent.id;
+      if (parentId) {
+        newRecord[_constants.parentColumnByItemType[type]] = parentId;
       }
 
-      create(_objectSpread({}, pendingNewRecord));
+      create(newRecord);
       closeModal();
     }
   }, "Save"))));
@@ -1309,7 +1322,8 @@ var NewItemModal = function NewItemModal(_ref) {
       type = _ref.type,
       resource = _ref.resource,
       subset = _ref.subset,
-      route = _ref.route;
+      route = _ref.route,
+      parentId = _ref.parentId;
   return /*#__PURE__*/_react["default"].createElement(_Modal["default"], {
     closeModal: closeModal
   }, /*#__PURE__*/_react["default"].createElement(_NewItemForm["default"], {
@@ -1317,7 +1331,8 @@ var NewItemModal = function NewItemModal(_ref) {
     closeModal: closeModal,
     resource: resource,
     subset: subset,
-    route: route
+    route: route,
+    parentId: parentId
   }));
 };
 
@@ -1447,14 +1462,77 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getItemNameFuncByItemType = exports.newItemFormFieldsByItemType = exports.newItemNameByItemType = exports.itemDetailFieldsByItemType = void 0;
+exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listQueryColumnNamesByItemType = exports.parentColumnByItemType = exports.listNameByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
+var _vendor_company = _interopRequireDefault(__webpack_require__(/*! ./resources/vendor_company */ "./frontend/resources/vendor_company.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var listNameByItemType = {
+  companies: "Companies",
+  jobs: "Jobs",
+  job_orders: "Job Orders",
+  installations: "Installations",
+  vendor_orders: "Vendor Orders",
+  vendors: "Vendors"
+};
+exports.listNameByItemType = listNameByItemType;
+var parentColumnByItemType = {
+  jobs: "company_id",
+  job_orders: "job_id",
+  installations: "job_order_id",
+  vendor_orders: "job_order_id"
+};
+exports.parentColumnByItemType = parentColumnByItemType;
+var listQueryColumnNamesByItemType = {
+  companies: "name",
+  jobs: "name",
+  job_orders: "date_ordered",
+  installations: "installation_date",
+  vendor_orders: "name,date_ordered",
+  vendors: "name"
+};
+exports.listQueryColumnNamesByItemType = listQueryColumnNamesByItemType;
+var getItemNameFuncByItemType = {
+  companies: function companies(item) {
+    return item.name;
+  },
+  jobs: function jobs(item) {
+    return item.name;
+  },
+  job_orders: function job_orders(_ref) {
+    var date_ordered = _ref.date_ordered;
+    return date_ordered && "Job order ordered on ".concat((0, _functions.getDateString)(date_ordered));
+  },
+  installations: function installations(_ref2) {
+    var installation_date = _ref2.installation_date;
+    return installation_date && "Installation set for ".concat((0, _functions.getDateString)(installation_date));
+  },
+  vendor_orders: function vendor_orders(_ref3) {
+    var vendorName = _ref3.name,
+        date_ordered = _ref3.date_ordered;
+
+    if (vendorName) {
+      var itemName = "".concat(vendorName, " ordered");
+
+      if (date_ordered) {
+        itemName += " on ".concat((0, _functions.getDateString)(date_ordered));
+      }
+
+      return itemName;
+    }
+  },
+  vendors: function vendors(item) {
+    return item.name;
+  }
+};
+exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
 var itemDetailFieldsByItemType = {
   companies: [{
     columnName: "notes",
-    type: "value"
+    type: "text"
   }, {
     columnName: "jobs",
     type: "list"
@@ -1462,29 +1540,62 @@ var itemDetailFieldsByItemType = {
   jobs: [{
     columnName: "po_num",
     displayName: "PO #",
-    type: "value"
+    type: "text"
   }, {
     columnName: "job_orders",
     type: "list"
   }],
   job_orders: [{
     columnName: "notes",
-    type: "value"
+    type: "text"
   }, {
     columnName: "date_ordered",
-    type: "value"
+    displayName: "Date Ordered",
+    type: "date"
   }, {
     columnName: "installations",
     type: "list"
+  }, {
+    columnName: "vendor_orders",
+    type: "list"
+  }],
+  installations: [{
+    columnName: "installation_date",
+    displayName: "Install Date",
+    type: "date"
+  }, {
+    columnName: "completed",
+    type: "checkbox"
+  }],
+  vendor_orders: [{
+    columnName: "po_num",
+    displayName: "PO Number",
+    type: "text"
+  }, {
+    columnName: "date_ordered",
+    type: "date"
+  }, {
+    columnName: "number_of_pieces",
+    displayName: "Number of Pieces",
+    type: "text"
+  }, {
+    columnName: "price",
+    type: "text"
+  }, {
+    columnName: "notes",
+    type: "text"
   }]
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;
-var newItemNameByItemType = {
+var itemNameByItemType = {
   companies: "Company",
   jobs: "Job",
-  job_orders: "Job Orders"
+  job_orders: "Job Order",
+  installations: "Installation",
+  vendor_orders: "Vendor Orders",
+  vendors: "Vendor"
 };
-exports.newItemNameByItemType = newItemNameByItemType;
+exports.itemNameByItemType = itemNameByItemType;
 var newItemFormFieldsByItemType = {
   companies: [{
     columnName: "name"
@@ -1504,22 +1615,50 @@ var newItemFormFieldsByItemType = {
   }, {
     columnName: "po_num",
     displayName: "PO #"
+  }],
+  job_orders: [{
+    columnName: "date_ordered",
+    displayName: "Date Ordered",
+    type: "date"
+  }, {
+    columnName: "notes"
+  }],
+  installations: [{
+    columnName: "installation_date",
+    displayName: "Install Date",
+    type: "date"
+  }, {
+    columnName: "completed",
+    type: "checkbox"
+  }],
+  vendor_orders: [{
+    columnName: "vendor_id",
+    displayName: "Vendor Name",
+    type: "dropdown",
+    dropdownType: "vendors",
+    resource: _vendor_company["default"]
+  }, {
+    columnName: "po_num",
+    displayName: "PO Number"
+  }, {
+    columnName: "date_ordered",
+    displayName: "Date Ordered",
+    type: "date"
+  }, {
+    columnName: "number_of_pieces",
+    displayName: "Number of Pieces"
+  }, {
+    columnName: "price"
+  }, {
+    columnName: "notes"
+  }],
+  vendors: [{
+    columnName: "name"
+  }, {
+    columnName: "notes"
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;
-var getItemNameFuncByItemType = {
-  companies: function companies(item) {
-    return item.name;
-  },
-  jobs: function jobs(item) {
-    return item.name;
-  },
-  job_orders: function job_orders(_ref) {
-    var date_ordered = _ref.date_ordered;
-    return date_ordered ? "Job order ordered on ".concat((0, _functions.getDateString)(date_ordered)) : "";
-  }
-};
-exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
 
 /***/ }),
 
@@ -75030,8 +75169,11 @@ module.exports = {
   capitalize: function capitalize(string) {
     return string[0].toUpperCase() + string.slice(1);
   },
+  uncapitalize: function uncapitalize(string) {
+    return string[0].toLowerCase() + string.slice(1);
+  },
   getDateString: function getDateString(date) {
-    return moment(date).clone().locale(moment.locale()).format("L");
+    return moment(date).locale(moment.locale()).format("L");
   }
 };
 

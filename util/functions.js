@@ -1,7 +1,7 @@
 const moment = require("moment");
 
 module.exports = {
-  isEmpty: function(obj) {
+  isEmpty: function (obj) {
     for (var key in obj) {
       if (obj.hasOwnProperty(key)) return false;
     }
@@ -9,14 +9,15 @@ module.exports = {
     // return Object.keys(obj).length === 0;
   },
 
-  capitalize: function(string) {
+  capitalize: function (string) {
     return string[0].toUpperCase() + string.slice(1);
   },
 
-  getDateString: function(date) {
-    return moment(date)
-      .clone()
-      .locale(moment.locale())
-      .format("L");
-  }
+  uncapitalize: function (string) {
+    return string[0].toLowerCase() + string.slice(1);
+  },
+
+  getDateString: function (date) {
+    return moment(date).locale(moment.locale()).format("L");
+  },
 };

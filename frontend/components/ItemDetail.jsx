@@ -1,40 +1,37 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
-import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import { getDateString } from "../../util/functions";
 
-const formatDetailValueFromProps = value =>
-  value instanceof Date
-    ? moment(value)
-        .locale(moment.locale())
-        .format("L")
-    : value;
+const formatDetailValueState = (value, type) =>
+  type === "date" ? new Date(value) : value;
 
-const ItemDetail = props => {
-  const { columnName, updateDetail, displayName } = props;
+const ItemDetail = (props) => {
+  const { field, updateDetail } = props;
+  const { columnName, displayName, type } = field;
   const [inEditMode, setInEditMode] = useState(false);
   const [isDetailValueUpdating, setIsDetailValueUpdating] = useState(false);
   const [detailValueState, setDetailValueState] = useState(
-    formatDetailValueFromProps(props.detailValue)
+    formatDetailValueState(props.detailValue, type)
   );
 
   useEffect(() => {
-    setDetailValueState(formatDetailValueFromProps(props.detailValue));
+    setDetailValueState(formatDetailValueState(props.detailValue, type));
     if (isDetailValueUpdating) {
       setIsDetailValueUpdating(false);
     }
   }, [props.detailValue]);
 
   const getInput = () => {
-    if (props.detailValue instanceof Date) {
+    if (type === "date") {
       return (
         <DatePicker
           selected={detailValueState}
-          onChange={date => setDetailValueState(date)}
+          onChange={(date) => setDetailValueState(date)}
         />
       );
     }
-    if (typeof props.detailValue === "boolean") {
+    if (type === "checkbox") {
       return (
         <input
           type="checkbox"
@@ -53,8 +50,11 @@ const ItemDetail = props => {
   };
 
   const getDisplayValue = () => {
-    if (typeof props.detailValue === "boolean") {
+    if (type === "checkbox") {
       return <input type="checkbox" checked={props.detailValue} disabled />;
+    }
+    if (type === "date") {
+      return getDateString(props.detailValue);
     }
     return props.detailValue;
   };

@@ -13,7 +13,7 @@ const ItemDetails = ({
   update,
   resource,
   subset,
-  route
+  route,
 }) => {
   useEffect(() => {
     if (itemId) {
@@ -25,27 +25,26 @@ const ItemDetails = ({
     item && (
       <div className="item-details">
         {itemDetailFieldsByItemType[type].map((field, i) => {
-          if (field.type === "value") {
-            return (
-              <ItemDetail
-                columnName={field.columnName}
-                displayName={field.displayName}
-                detailValue={item[field.name]}
-                updateDetail={newValue =>
-                  update({ id: item.id, [field.name]: newValue })
-                }
-                key={i}
-              />
-            );
-          }
           if (field.type === "list") {
             return (
               <List
                 type={field.columnName}
                 resource={resource}
-                // TODO should field.name correspond to route ??
+                parentId={itemId}
                 subset={[...(subset || []), itemId, field.columnName]}
+                // TODO should field.columnName correspond to route ??
                 route={field.columnName}
+                key={i}
+              />
+            );
+          } else {
+            return (
+              <ItemDetail
+                field={field}
+                detailValue={item[field.columnName]}
+                updateDetail={(newValue) =>
+                  update({ id: item.id, [field.columnName]: newValue })
+                }
                 key={i}
               />
             );
@@ -60,13 +59,13 @@ const mapStateToProps = (state, { subset, resource, itemId }) => {
   return {
     item: subset
       ? get(state[resource.name], [...subset, itemId])
-      : state[resource.name][itemId]
+      : state[resource.name][itemId],
   };
 };
 
 const mapDispatchToProps = (dispatch, { resource, subset, route }) => ({
-  getItemById: id => dispatch(resource.getById(id, subset, route)),
-  update: record => dispatch(resource.update(record, subset, route))
+  getItemById: (id) => dispatch(resource.getById(id, subset, route)),
+  update: (record) => dispatch(resource.update(record, subset, route)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemDetails);

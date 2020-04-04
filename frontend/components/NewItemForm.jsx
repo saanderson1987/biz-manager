@@ -1,25 +1,26 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import moment from "moment";
+import { capitalize } from "../../util/functions";
 import {
-  newItemNameByItemType,
-  newItemFormFieldsByItemType
+  itemNameByItemType,
+  newItemFormFieldsByItemType,
+  parentColumnByItemType,
 } from "../constants";
 import NewItemDetail from "./NewItemDetail";
 
-const createPendingNewRecord = type =>
+const createPendingNewRecord = (type) =>
   newItemFormFieldsByItemType[type].reduce((acc, field) => {
     if (field.type === "checkbox") {
       acc[field.columnName] = false;
     } else if (field.type === "date") {
-      acc[field.columnName] = moment();
+      acc[field.columnName] = new Date();
     } else {
       acc[field.columnName] = "";
     }
     return acc;
   }, {});
 
-const NewItemForm = ({ type, closeModal, create }) => {
+const NewItemForm = ({ type, parentId, closeModal, create }) => {
   const [pendingNewRecord, setPendingNewRecord] = useState(
     createPendingNewRecord(type)
   );
@@ -27,7 +28,7 @@ const NewItemForm = ({ type, closeModal, create }) => {
   return (
     <div className="form">
       <div className="form-header">
-        Create New {newItemNameByItemType[type]}
+        Create New {capitalize(itemNameByItemType[type])}
       </div>
       <div className="form-body">
         {newItemFormFieldsByItemType[type].map((field, i) => (
@@ -35,10 +36,10 @@ const NewItemForm = ({ type, closeModal, create }) => {
             field={field}
             detailValue={pendingNewRecord[field.columnName]}
             displayName={field.displayName}
-            onValueChange={value =>
-              setPendingNewRecord(prev => ({
+            onValueChange={(value) =>
+              setPendingNewRecord((prev) => ({
                 ...prev,
-                [field.columnName]: value
+                [field.columnName]: value,
               }))
             }
             key={i}
@@ -50,10 +51,10 @@ const NewItemForm = ({ type, closeModal, create }) => {
             className="button--save"
             onClick={() => {
               const newRecord = { ...pendingNewRecord };
-              if (parent) {
-                newRecord[parent.column] = parent.id;
+              if (parentId) {
+                newRecord[parentColumnByItemType[type]] = parentId;
               }
-              create({ ...pendingNewRecord });
+              create(newRecord);
               closeModal();
             }}
           >
@@ -66,7 +67,7 @@ const NewItemForm = ({ type, closeModal, create }) => {
 };
 
 const mapDispatchToProps = (dispatch, { resource, subset, route }) => ({
-  create: record => dispatch(resource.create(record, subset, route))
+  create: (record) => dispatch(resource.create(record, subset, route)),
 });
 
 export default connect(null, mapDispatchToProps)(NewItemForm);
