@@ -1,5 +1,5 @@
-const db = require('../db.js');
-const pgp = require('pg-promise')();
+const db = require("../db.js");
+const pgp = require("pg-promise")();
 
 class Model {
   constructor(name) {
@@ -8,10 +8,10 @@ class Model {
   }
 
   test() {
-    const name = 'name';
-    const query = pgp.as.format('SELECT ${columns:name} FROM ${table}', {
-      columns: ['id', name],
-      table: this.table
+    const name = "name";
+    const query = pgp.as.format("SELECT ${columns:name} FROM ${table}", {
+      columns: ["id", name],
+      table: this.table,
     });
     return this.format(db.any(query));
   }
@@ -31,13 +31,13 @@ class Model {
   // }
 
   createWhereClause(columns) {
-    let whereClause = '';
+    let whereClause = "";
     if (columns.length > 0) {
-      whereClause = ' WHERE ';
+      whereClause = " WHERE ";
       columns.forEach((column, idx) => {
-        if (idx > 0) whereClause += ' AND ';
+        if (idx > 0) whereClause += " AND ";
         // whereClause += `${column} = \${${column}}`;
-        if (column === 'id') {
+        if (column === "id") {
           whereClause += `t1.${column} = \${${column}}`;
         } else {
           whereClause += `${column} = \${${column}}`;
@@ -48,16 +48,16 @@ class Model {
   }
 
   getByQuery(queryParams) {
-    let selectClause = 'SELECT *';
+    let selectClause = "SELECT *";
     if (queryParams.columns) {
-      const selectColumns = queryParams.columns.split(',');
-      if (!selectColumns.includes('id')) selectColumns.push('t1.id');
-      selectColumns.join(',');
+      const selectColumns = queryParams.columns.split(",");
+      if (!selectColumns.includes("id")) selectColumns.push("t1.id");
+      selectColumns.join(",");
       // selectClause = 'SELECT ${columns:name}';
       selectClause = `SELECT ${selectColumns}`;
     }
 
-    const joinClause = queryParams.joinClause || '';
+    const joinClause = queryParams.joinClause || "";
 
     let columns = Object.assign({}, queryParams);
     delete columns.columns;
@@ -69,46 +69,67 @@ class Model {
     queryParams.table = this.table;
 
     // const query = pgp.as.format(selectClause + ' FROM ${table}' + whereClause, queryParams);
-    const query = pgp.as.format(selectClause + ' FROM ${table} as t1' + joinClause + whereClause, queryParams);
+    const query = pgp.as.format(
+      selectClause + " FROM ${table} as t1" + joinClause + whereClause,
+      queryParams
+    );
     console.log(query);
     return this.format(db.any(query));
   }
 
-  getById(id, {joinClause='', joinTable}={}) {
-    if (this.isInvalidId(id)) return this.error('id');
-    const query = pgp.as.format('SELECT *, t1.id FROM ${table} as t1' + joinClause + ' WHERE t1.id = ${id}', {
-      table: this.table,
-      id,
-      joinTable
-    });
+  getById(id, { joinClause = "", joinTable, columns = "*" } = {}) {
+    if (this.isInvalidId(id)) return this.error("id");
+    const query = pgp.as.format(
+      "SELECT " +
+        columns +
+        ", t1.id FROM ${table} as t1" +
+        joinClause +
+        " WHERE t1.id = ${id}",
+      {
+        table: this.table,
+        id,
+        joinTable,
+      }
+    );
     console.log(query);
     return this.returnIfIdExists(db.one(query));
   }
 
   new(record) {
     const columns = Object.keys(record);
-    const colSet = new pgp.helpers.ColumnSet(columns, {table: this.tableString});
-    const query = pgp.helpers.insert(record, colSet) + ' RETURNING *';
+    const colSet = new pgp.helpers.ColumnSet(columns, {
+      table: this.tableString,
+    });
+    const query = pgp.helpers.insert(record, colSet) + " RETURNING *";
     console.log(query);
     return db.one(query);
   }
 
   update(record) {
-    if (this.isInvalidId(record.id)) return this.error('id');
+    if (this.isInvalidId(record.id)) return this.error("id");
     if (Object.keys(record).length === 1) return this.getById(record.id);
-    record['?id'] = record.id;
+    record["?id"] = record.id;
     delete record.id;
     const columns = Object.keys(record);
-    const colSet = new pgp.helpers.ColumnSet(columns, {table: this.tableString});
-    const query = pgp.helpers.update(record, colSet) + ' WHERE id = ' + record['?id'] + ' RETURNING *';
+    const colSet = new pgp.helpers.ColumnSet(columns, {
+      table: this.tableString,
+    });
+    const query =
+      pgp.helpers.update(record, colSet) +
+      " WHERE id = " +
+      record["?id"] +
+      " RETURNING *";
     return this.returnIfIdExists(db.one(query));
   }
 
   delete(id) {
-    const query = pgp.as.format('DELETE FROM ${table} WHERE id = ${id} RETURNING id', {
-      id: id,
-      table: this.table
-    })
+    const query = pgp.as.format(
+      "DELETE FROM ${table} WHERE id = ${id} RETURNING id",
+      {
+        id: id,
+        table: this.table,
+      }
+    );
     console.log(query);
     return this.returnIfIdExists(db.one(query));
   }
@@ -127,15 +148,15 @@ class Model {
         });
       })
       .catch((err) => {
-        if (err.code === 0) return this.error('id');
+        if (err.code === 0) return this.error("id");
       });
   }
 
   error(type) {
     // @param {string} type
-    if (!type) type = 'errorMessageType';
+    if (!type) type = "errorMessageType";
     const message = {
-      errorMessageType: 'Error: wrong error message type',
+      errorMessageType: "Error: wrong error message type",
       id: "Error: Please enter a valid id",
     };
     return new Promise((resolve, reject) => {
@@ -144,18 +165,16 @@ class Model {
   }
 
   format(query) {
-    return query
-      .then((records) => {
-        const obj = {};
-        records.forEach((record) => {
-          obj[record.id] = record;
-        });
-        return new Promise((resolve, reject) => {
-          resolve(obj);
-        });
+    return query.then((records) => {
+      const obj = {};
+      records.forEach((record) => {
+        obj[record.id] = record;
       });
+      return new Promise((resolve, reject) => {
+        resolve(obj);
+      });
+    });
   }
-
 }
 
 module.exports = Model;
