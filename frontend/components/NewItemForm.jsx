@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useContext, useState } from "react";
 import { capitalize } from "../../util/functions";
 import {
   itemNameByItemType,
   newItemFormFieldsByItemType,
   parentColumnByItemType,
+  apiRouteByItemType,
 } from "../constants";
+import { StoreContext } from "../store";
 import NewItemDetail from "./NewItemDetail";
 
 const createPendingNewRecord = (type) =>
@@ -20,7 +21,9 @@ const createPendingNewRecord = (type) =>
     return acc;
   }, {});
 
-const NewItemForm = ({ type, parentId, closeModal, create }) => {
+const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
+  const { createRecord } = useContext(StoreContext);
+
   const [pendingNewRecord, setPendingNewRecord] = useState(
     createPendingNewRecord(type)
   );
@@ -54,7 +57,14 @@ const NewItemForm = ({ type, parentId, closeModal, create }) => {
               if (parentId) {
                 newRecord[parentColumnByItemType[type]] = parentId;
               }
-              create(newRecord);
+              if (type === "vendor") {
+                newRecord.status = "vendor";
+              }
+              createRecord({
+                route: apiRouteByItemType[type],
+                newRecord,
+                statePath,
+              });
               closeModal();
             }}
           >
@@ -66,8 +76,4 @@ const NewItemForm = ({ type, parentId, closeModal, create }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch, { resource, subset, route }) => ({
-  create: (record) => dispatch(resource.create(record, subset, route)),
-});
-
-export default connect(null, mapDispatchToProps)(NewItemForm);
+export default NewItemForm;

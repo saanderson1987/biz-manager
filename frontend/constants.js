@@ -1,15 +1,6 @@
 import { getDateString } from "../util/functions";
 import VendorCompanyResource from "./resources/vendor_company";
 
-export const listNameByItemType = {
-  companies: "Companies",
-  jobs: "Jobs",
-  job_orders: "Job Orders",
-  installations: "Installations",
-  vendor_orders: "Vendor Orders",
-  vendors: "Vendors",
-};
-
 export const parentColumnByItemType = {
   jobs: "company_id",
   job_orders: "job_id",
@@ -17,17 +8,67 @@ export const parentColumnByItemType = {
   vendor_orders: "job_order_id",
 };
 
-export const listQueryColumnNamesByItemType = {
-  companies: "name",
-  jobs: "name",
-  job_orders: "date_ordered",
-  installations: "installation_date",
-  vendor_orders: "name,date_ordered",
-  vendors: "name",
+const createParentIdQuery = (type, parentId) => {
+  const parentColumn = parentColumnByItemType[type];
+  return parentColumn && parentId ? { [parentColumn]: parentId } : {};
+};
+
+export const apiRouteByItemType = {
+  companies: "companies",
+  clients: "companies",
+  prospects: "companies",
+  jobs: "jobs",
+  job_orders: "job_orders",
+  installations: "installations",
+  vendor_orders: "vendor_orders",
+  vendors: "companies",
+};
+
+export const queryParamsByItemType = {
+  companies: {
+    columns: "name",
+  },
+  clients: {
+    columns: "name",
+    status: "client",
+  },
+  prospects: {
+    columns: "name",
+    status: "prospect",
+  },
+  jobs: { columns: "name" },
+  job_orders: { columns: "date_ordered" },
+  installations: { columns: "installation_date" },
+  vendor_orders: { columns: "name,date_ordered" },
+  vendors: { columns: "name", status: "vendor" },
+};
+
+export const createListGetByQueryOptions = (type, parentId, statePath) => {
+  return {
+    route: apiRouteByItemType[type],
+    queryParams: {
+      ...queryParamsByItemType[type],
+      ...createParentIdQuery(type, parentId),
+    },
+    statePath,
+  };
+};
+
+export const listNameByItemType = {
+  companies: "Companies",
+  clients: "Clients",
+  prospects: "Prospects",
+  jobs: "Jobs",
+  job_orders: "Job Orders",
+  installations: "Installations",
+  vendor_orders: "Vendor Orders",
+  vendors: "Vendors",
 };
 
 export const getItemNameFuncByItemType = {
   companies: (item) => item.name,
+  clients: (item) => item.name,
+  prospects: (item) => item.name,
   jobs: (item) => item.name,
   job_orders: ({ date_ordered }) =>
     date_ordered && `Job order ordered on ${getDateString(date_ordered)}`,
@@ -48,6 +89,14 @@ export const getItemNameFuncByItemType = {
 
 export const itemDetailFieldsByItemType = {
   companies: [
+    { columnName: "notes", type: "text" },
+    { columnName: "jobs", type: "list" },
+  ],
+  clients: [
+    { columnName: "notes", type: "text" },
+    { columnName: "jobs", type: "list" },
+  ],
+  prospects: [
     { columnName: "notes", type: "text" },
     { columnName: "jobs", type: "list" },
   ],
@@ -87,6 +136,8 @@ export const itemDetailFieldsByItemType = {
 
 export const itemNameByItemType = {
   companies: "Company",
+  clients: "Company",
+  prospects: "Company",
   jobs: "Job",
   job_orders: "Job Order",
   installations: "Installation",
@@ -96,6 +147,24 @@ export const itemNameByItemType = {
 
 export const newItemFormFieldsByItemType = {
   companies: [
+    { columnName: "name" },
+    {
+      columnName: "status",
+      type: "radio",
+      valueOptions: [{ value: "prospect" }, { value: "client" }],
+    },
+    { columnName: "notes" },
+  ],
+  clients: [
+    { columnName: "name" },
+    {
+      columnName: "status",
+      type: "radio",
+      valueOptions: [{ value: "prospect" }, { value: "client" }],
+    },
+    { columnName: "notes" },
+  ],
+  prospects: [
     { columnName: "name" },
     {
       columnName: "status",

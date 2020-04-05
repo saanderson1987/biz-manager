@@ -1,7 +1,5 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import Session from "../resources/session";
 
 const NavBar = () => {
   const links = [
@@ -9,7 +7,7 @@ const NavBar = () => {
     <NavLink to="/jobs">Jobs</NavLink>,
     <NavLink to="/orders">Orders</NavLink>,
     <NavLink to="/inventory">Inventory</NavLink>,
-    <a onClick={e => this.props.logout()}>Log out</a>
+    <a onClick={(e) => this.props.logout()}>Log out</a>,
   ];
 
   const key = Math.random();
@@ -44,8 +42,4 @@ const NavBar = () => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(Session.logout())
-});
-
-export default withRouter(connect(null, mapDispatchToProps)(NavBar));
+export default withRouter(NavBar);

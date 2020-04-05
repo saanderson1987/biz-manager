@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useContext, useState, useEffect } from "react";
 import {
-  listQueryColumnNamesByItemType,
+  apiRouteByItemType,
+  queryParamsByItemType,
   getItemNameFuncByItemType,
   itemNameByItemType,
 } from "../constants";
 import NewItemModal from "./NewItemModal";
+import { StoreContext } from "../store";
 
-const Dropdown = ({ type, getAll, value, onChange, items, resource }) => {
+const Dropdown = ({ type, value, onChange }) => {
+  const { state, getByQuery } = useContext(StoreContext);
+
   const [isNewItemModalVisible, setIsNewItemModalVisible] = useState(false);
 
   useEffect(() => {
-    getAll();
+    getByQuery({
+      route: apiRouteByItemType[type],
+      queryParams: {
+        ...queryParamsByItemType[type],
+      },
+      statePath: [type],
+    });
   }, []);
 
+  const items = Object.values(state[type]);
   const itemTypeName = itemNameByItemType[type];
 
   return (
@@ -42,22 +52,11 @@ const Dropdown = ({ type, getAll, value, onChange, items, resource }) => {
         <NewItemModal
           type={type}
           closeModal={() => setIsNewItemModalVisible(false)}
-          resource={resource}
+          statePath={[type]}
         />
       )}
     </div>
   );
 };
 
-const mapStateToProps = (state, { resource }) => ({
-  items: Object.values(state[resource.name]),
-});
-
-const mapDispatchToProps = (dispatch, { resource, type }) => ({
-  getAll: () =>
-    dispatch(
-      resource.getByQuery({ columns: listQueryColumnNamesByItemType[type] })
-    ),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dropdown);
+export default Dropdown;

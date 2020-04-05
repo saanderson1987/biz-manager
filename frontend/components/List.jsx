@@ -1,29 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useContext, useState, useEffect } from "react";
 import classNames from "classnames";
 import get from "lodash.get";
-import {
-  listNameByItemType,
-  parentColumnByItemType,
-  listQueryColumnNamesByItemType,
-} from "../constants";
+import { createListGetByQueryOptions, listNameByItemType } from "../constants";
+import { StoreContext } from "../store";
 import ListItem from "./ListItem";
 import NewItemModal from "./NewItemModal";
 
-const List = ({
-  getAll,
-  items,
-  type,
-  isRoot,
-  resource,
-  subset,
-  route,
-  parentId,
-}) => {
+const List = ({ type, parentId, statePath, isRoot }) => {
+  const { state, getByQuery } = useContext(StoreContext);
+
   const [isNewItemModalVisible, setIsNewItemModalVisible] = useState(false);
+
   useEffect(() => {
-    getAll();
-  }, []);
+    getByQuery(createListGetByQueryOptions(type, parentId, statePath));
+  }, [type]);
+
+  const items = Object.values(get(state, statePath, {}));
 
   return (
     <div className={"list"}>
@@ -45,9 +37,8 @@ const List = ({
             type={type}
             item={item}
             isFirst={idx === 0}
-            resource={resource}
-            subset={subset}
-            route={route}
+            parentId={parentId}
+            statePath={statePath}
             key={item.id}
           />
         ))}
@@ -56,9 +47,7 @@ const List = ({
         <NewItemModal
           type={type}
           closeModal={() => setIsNewItemModalVisible(false)}
-          resource={resource}
-          subset={subset}
-          route={route}
+          statePath={statePath}
           parentId={parentId}
         />
       )}
@@ -66,29 +55,4 @@ const List = ({
   );
 };
 
-const mapStateToProps = (state, { resource, subset }) => ({
-  items: Object.values(
-    subset ? get(state[resource.name], subset, {}) : state[resource.name]
-  ),
-});
-
-const mapDispatchToProps = (
-  dispatch,
-  { resource: { getByQuery }, type, parentId, subset, route }
-) => {
-  const parentColumn = parentColumnByItemType[type];
-  const parentIdQuery =
-    parentColumn && parentId ? { [parentColumn]: parentId } : {};
-  return {
-    getAll: () =>
-      dispatch(
-        getByQuery(
-          { columns: listQueryColumnNamesByItemType[type], ...parentIdQuery },
-          subset,
-          route
-        )
-      ),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default List;

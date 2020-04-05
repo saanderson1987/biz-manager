@@ -3,8 +3,6 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Tabs from "./Tabs";
 import Tab from "./Tab";
 import List from "./List";
-import Prospect from "../resources/prospect_company";
-import Client from "../resources/client_company";
 
 export default ({ location: { pathname } }) => (
   <div className="root-container">
@@ -17,12 +15,14 @@ export default ({ location: { pathname } }) => (
       <Route
         exact
         path="/companies/clients"
-        render={() => <List type="companies" resource={Client} isRoot />}
+        render={() => <List type="clients" statePath={["clients"]} isRoot />}
       />
       <Route
         exact
         path="/companies/prospects"
-        render={() => <List type="companies" resource={Prospect} isRoot />}
+        render={() => (
+          <List type="prospects" statePath={["prospects"]} isRoot />
+        )}
       />
       <Redirect exact from="/companies" to="/companies/clients" />
     </Switch>
