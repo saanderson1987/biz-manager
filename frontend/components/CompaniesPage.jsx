@@ -1,13 +1,11 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import Tabs from "./Tabs";
-import Tab from "./Tab";
+import { Tabs, Tab } from "./Tabs";
 import List from "./List";
 
-export default ({ location: { pathname } }) => (
+export default () => (
   <div className="root-container">
-    {/* TODO: remove pathname from props-- able to get if use withRouter HOC */}
-    <Tabs pathname={pathname}>
+    <Tabs>
       <Tab to="/companies/clients">Clients</Tab>
       <Tab to="/companies/prospects">Prospects</Tab>
     </Tabs>

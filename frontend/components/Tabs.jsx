@@ -1,15 +1,24 @@
 import React from "react";
+import { Link, withRouter } from "react-router-dom";
+import classNames from "classnames";
 
-export default props => {
-  const tabs = React.Children.map(props.children, (child, idx) => {
-    const spacer = idx === 0 ? null : <div className="spacer"></div>;
-    return [spacer, React.cloneElement(child, { pathname: props.pathname })];
-  });
+export const Tabs = ({ children }) => (
+  <div id="company-tabs" className="tabs">
+    {React.Children.map(children, (child, idx) => (
+      <>
+        {idx > 0 && <div className="spacer"></div>}
+        {child}
+      </>
+    ))}
+    <div className="empty-tab"></div>
+  </div>
+);
 
-  return (
-    <div id="company-tabs" className="tabs">
-      {tabs}
-      <div className="empty-tab"></div>
-    </div>
-  );
-};
+export const Tab = withRouter(({ location: { pathname }, to, children }) => (
+  <Link
+    to={to}
+    className={classNames("tab", { "active-tab": pathname === to })}
+  >
+    {children}
+  </Link>
+));

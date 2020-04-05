@@ -7,14 +7,7 @@ import Dropdown from "./Dropdown";
 const NewItemDetail = ({
   detailValue,
   onValueChange,
-  field: {
-    displayName,
-    columnName,
-    type,
-    valueOptions,
-    resource,
-    dropdownType,
-  },
+  field: { displayName, columnName, type, valueOptions, dropdownType },
 }) => {
   const getInput = () => {
     switch (type) {
@@ -53,7 +46,6 @@ const NewItemDetail = ({
       case "dropdown":
         return (
           <Dropdown
-            resource={resource}
             type={dropdownType}
             value={detailValue}
             onChange={(newValue) => onValueChange(newValue)}

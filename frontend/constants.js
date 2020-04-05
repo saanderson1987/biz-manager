@@ -1,5 +1,4 @@
 import { getDateString } from "../util/functions";
-import VendorCompanyResource from "./resources/vendor_company";
 
 export const parentColumnByItemType = {
   jobs: "company_id",
@@ -192,7 +191,6 @@ export const newItemFormFieldsByItemType = {
       displayName: "Vendor Name",
       type: "dropdown",
       dropdownType: "vendors",
-      resource: VendorCompanyResource,
     },
     { columnName: "po_num", displayName: "PO Number" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
