@@ -149,23 +149,18 @@ var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_mod
 
 var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
-var _Tabs = _interopRequireDefault(__webpack_require__(/*! ./Tabs */ "./frontend/components/Tabs.jsx"));
-
-var _Tab = _interopRequireDefault(__webpack_require__(/*! ./Tab */ "./frontend/components/Tab.jsx"));
+var _Tabs = __webpack_require__(/*! ./Tabs */ "./frontend/components/Tabs.jsx");
 
 var _List = _interopRequireDefault(__webpack_require__(/*! ./List */ "./frontend/components/List.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _default = function _default(_ref) {
-  var pathname = _ref.location.pathname;
+var _default = function _default() {
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "root-container"
-  }, /*#__PURE__*/_react["default"].createElement(_Tabs["default"], {
-    pathname: pathname
-  }, /*#__PURE__*/_react["default"].createElement(_Tab["default"], {
+  }, /*#__PURE__*/_react["default"].createElement(_Tabs.Tabs, null, /*#__PURE__*/_react["default"].createElement(_Tabs.Tab, {
     to: "/companies/clients"
-  }, "Clients"), /*#__PURE__*/_react["default"].createElement(_Tab["default"], {
+  }, "Clients"), /*#__PURE__*/_react["default"].createElement(_Tabs.Tab, {
     to: "/companies/prospects"
   }, "Prospects")), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
     exact: true,
@@ -1006,7 +1001,6 @@ var NewItemDetail = function NewItemDetail(_ref) {
       columnName = _ref$field.columnName,
       type = _ref$field.type,
       valueOptions = _ref$field.valueOptions,
-      resource = _ref$field.resource,
       dropdownType = _ref$field.dropdownType;
 
   var getInput = function getInput() {
@@ -1049,7 +1043,6 @@ var NewItemDetail = function NewItemDetail(_ref) {
 
       case "dropdown":
         return /*#__PURE__*/_react["default"].createElement(_Dropdown["default"], {
-          resource: resource,
           type: dropdownType,
           value: detailValue,
           onChange: function onChange(newValue) {
@@ -1281,46 +1274,6 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ "./frontend/components/Tab.jsx":
-/*!*************************************!*\
-  !*** ./frontend/components/Tab.jsx ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
-
-var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var _default = function _default(_ref) {
-  var pathname = _ref.pathname,
-      to = _ref.to,
-      children = _ref.children;
-  var isActive = pathname === to;
-  return /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Link, {
-    to: to,
-    className: (0, _classnames["default"])("tab", {
-      "active-tab": isActive
-    })
-  }, children);
-};
-
-exports["default"] = _default;
-
-/***/ }),
-
 /***/ "./frontend/components/Tabs.jsx":
 /*!**************************************!*\
   !*** ./frontend/components/Tabs.jsx ***!
@@ -1334,31 +1287,43 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.Tab = exports.Tabs = void 0;
 
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _default = function _default(props) {
-  var tabs = _react["default"].Children.map(props.children, function (child, idx) {
-    var spacer = idx === 0 ? null : /*#__PURE__*/_react["default"].createElement("div", {
-      className: "spacer"
-    });
-    return [spacer, _react["default"].cloneElement(child, {
-      pathname: props.pathname
-    })];
-  });
-
+var Tabs = function Tabs(_ref) {
+  var children = _ref.children;
   return /*#__PURE__*/_react["default"].createElement("div", {
     id: "company-tabs",
     className: "tabs"
-  }, tabs, /*#__PURE__*/_react["default"].createElement("div", {
+  }, _react["default"].Children.map(children, function (child, idx) {
+    return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, idx > 0 && /*#__PURE__*/_react["default"].createElement("div", {
+      className: "spacer"
+    }), child);
+  }), /*#__PURE__*/_react["default"].createElement("div", {
     className: "empty-tab"
   }));
 };
 
-exports["default"] = _default;
+exports.Tabs = Tabs;
+var Tab = (0, _reactRouterDom.withRouter)(function (_ref2) {
+  var pathname = _ref2.location.pathname,
+      to = _ref2.to,
+      children = _ref2.children;
+  return /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Link, {
+    to: to,
+    className: (0, _classnames["default"])("tab", {
+      "active-tab": pathname === to
+    })
+  }, children);
+});
+exports.Tab = Tab;
 
 /***/ }),
 
@@ -1378,10 +1343,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
-
-var _vendor_company = _interopRequireDefault(__webpack_require__(/*! ./resources/vendor_company */ "./frontend/resources/vendor_company.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -1652,8 +1613,7 @@ var newItemFormFieldsByItemType = {
     columnName: "vendor_id",
     displayName: "Vendor Name",
     type: "dropdown",
-    dropdownType: "vendors",
-    resource: _vendor_company["default"]
+    dropdownType: "vendors"
   }, {
     columnName: "po_num",
     displayName: "PO Number"
@@ -1705,251 +1665,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
   path: "/",
   component: _App["default"]
 }))), document.getElementById("root"));
-
-/***/ }),
-
-/***/ "./frontend/resources/resource.js":
-/*!****************************************!*\
-  !*** ./frontend/resources/resource.js ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
-
-var _lodash = _interopRequireDefault(__webpack_require__(/*! lodash.merge */ "./node_modules/lodash.merge/index.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Resource = /*#__PURE__*/function () {
-  function Resource(baseRouteName, name) {
-    var _this$actions;
-
-    _classCallCheck(this, Resource);
-
-    // this.all = this.all.bind(this);
-    this.getByQuery = this.getByQuery.bind(this);
-    this.getById = this.getById.bind(this);
-    this.create = this.create.bind(this);
-    this.update = this.update.bind(this);
-    this["delete"] = this["delete"].bind(this);
-    this.reducer = this.reducer.bind(this);
-    this.name = name ? name : baseRouteName;
-    this.baseRoute = "/api/".concat(baseRouteName);
-    this.actions = (_this$actions = {}, _defineProperty(_this$actions, "".concat(this.name.toUpperCase(), "_GET_MANY"), function _GET_MANY(oldState, newData) {
-      return (0, _lodash["default"])({}, oldState, newData);
-    }), _defineProperty(_this$actions, "".concat(this.name.toUpperCase(), "_GET_ONE"), function _GET_ONE(oldState, newData) {
-      return (0, _lodash["default"])({}, oldState, _defineProperty({}, newData.id, newData));
-    }), _defineProperty(_this$actions, "".concat(this.name.toUpperCase(), "_DELETE_ONE"), function _DELETE_ONE(oldState, newData) {
-      var newState = (0, _lodash["default"])({}, oldState);
-      delete newState[newData.id];
-      return newState;
-    }), _this$actions);
-  }
-
-  _createClass(Resource, [{
-    key: "all",
-    value: function all() {
-      return this.send(_axios["default"].get(this.baseRoute), "".concat(this.name.toUpperCase(), "_GET_MANY"));
-    }
-  }, {
-    key: "getByQuery",
-    value: function getByQuery(queryParams, subset, route) {
-      var actionName = subset ? this.createAction(subset, "GET_MANY") : "".concat(this.name.toUpperCase(), "_GET_MANY");
-      route = route ? "/api/".concat(route) : this.baseRoute;
-      return this.send(_axios["default"].get(route, {
-        params: queryParams
-      }), actionName);
-    }
-  }, {
-    key: "createAction",
-    value: function createAction(subset, type) {
-      var actionName = "".concat(this.name.toUpperCase(), "_").concat(subset[subset.length - 1].toUpperCase(), "_").concat(type);
-      var newObject = {};
-
-      switch (type) {
-        case "GET_MANY":
-          this.actions[actionName] = function (oldState, newData) {
-            setValue(newObject, subset, newData);
-            return (0, _lodash["default"])({}, oldState, newObject);
-          };
-
-          break;
-
-        case "GET_ONE":
-          this.actions[actionName] = function (oldState, newData) {
-            subset.push(newData.id);
-            setValue(newObject, subset, newData);
-            return (0, _lodash["default"])({}, oldState, newObject);
-          };
-
-          break;
-      }
-
-      function setValue(object, path, value) {
-        var last = object;
-        path.forEach(function (pathName, idx) {
-          if (idx === path.length - 1) last[pathName] = value;else last[pathName] = {};
-          last = last[pathName];
-        });
-      }
-
-      return actionName;
-    }
-  }, {
-    key: "getById",
-    value: function getById(id, subset, route) {
-      var actionName = subset ? this.createAction(subset, "GET_ONE") : "".concat(this.name.toUpperCase(), "_GET_ONE");
-      route = route ? "/api/".concat(route, "/").concat(id) : "".concat(this.baseRoute, "/").concat(id);
-      return this.send(_axios["default"].get(route), actionName);
-    }
-  }, {
-    key: "create",
-    value: function create(record, subset, route) {
-      var actionName = subset ? this.createAction(subset, "GET_ONE") : "".concat(this.name.toUpperCase(), "_GET_ONE");
-      route = route ? "/api/".concat(route) : this.baseRoute;
-      return this.send(_axios["default"].post(route, record), actionName);
-    }
-  }, {
-    key: "update",
-    value: function update(record, subset, route) {
-      var actionName = subset ? this.createAction(subset, "GET_ONE") : "".concat(this.name.toUpperCase(), "_GET_ONE");
-      route = route ? "/api/".concat(route, "/").concat(record.id) : "".concat(this.baseRoute, "/").concat(record.id);
-      return this.send(_axios["default"].put(route, record), actionName);
-    }
-  }, {
-    key: "delete",
-    value: function _delete(id, subset, route) {
-      var actionName = subset ? this.createAction(subset, "DELETE_ONE") : "".concat(this.name.toUpperCase(), "_DELETE_ONE");
-      return this.send(_axios["default"]["delete"]("".concat(this.baseRoute, "/").concat(id)), "".concat(this.name.toUpperCase(), "_DELETE_ONE"));
-    }
-  }, {
-    key: "send",
-    value: function send(apiCall, type) {
-      return function (dispatch) {
-        return apiCall.then(function (response) {
-          return dispatch({
-            type: type,
-            data: response.data
-          });
-        })["catch"](function (error) {
-          throw error.response;
-        });
-      };
-    }
-  }, {
-    key: "reducer",
-    value: function reducer() {
-      var oldState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var action = arguments.length > 1 ? arguments[1] : undefined;
-      if (!this.actions[action.type]) return oldState;
-      return this.actions[action.type](oldState, action.data);
-    }
-  }]);
-
-  return Resource;
-}();
-
-var _default = Resource;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./frontend/resources/vendor_company.js":
-/*!**********************************************!*\
-  !*** ./frontend/resources/vendor_company.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _resource = _interopRequireDefault(__webpack_require__(/*! ./resource */ "./frontend/resources/resource.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
-
-function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
-
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var VendorCompanyResource = /*#__PURE__*/function (_Resource) {
-  _inherits(VendorCompanyResource, _Resource);
-
-  var _super = _createSuper(VendorCompanyResource);
-
-  function VendorCompanyResource() {
-    _classCallCheck(this, VendorCompanyResource);
-
-    return _super.apply(this, arguments);
-  }
-
-  _createClass(VendorCompanyResource, [{
-    key: "getByQuery",
-    value: function getByQuery() {
-      var queryParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var subset = arguments.length > 1 ? arguments[1] : undefined;
-      var route = arguments.length > 2 ? arguments[2] : undefined;
-      queryParams.status = "vendor";
-      return _get(_getPrototypeOf(VendorCompanyResource.prototype), "getByQuery", this).call(this, queryParams, subset, route);
-    }
-  }, {
-    key: "create",
-    value: function create(record, subset, route) {
-      record.status = "vendor";
-      return _get(_getPrototypeOf(VendorCompanyResource.prototype), "create", this).call(this, record, subset, route);
-    }
-  }]);
-
-  return VendorCompanyResource;
-}(_resource["default"]);
-
-var VendorCompany = new VendorCompanyResource("companies", "vendors");
-var _default = VendorCompany;
-exports["default"] = _default;
 
 /***/ }),
 
