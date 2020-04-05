@@ -1,19 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import classNames from "classnames";
-import { connect } from "react-redux";
 import ItemDetails from "./ItemDetails";
 import DeleteWarning from "./DeleteWarning";
 import { getItemNameFuncByItemType } from "../constants";
+import { StoreContext } from "../store";
 
-const ListItem = ({
-  type,
-  item,
-  isFirst,
-  deleteItem,
-  resource,
-  subset,
-  route
-}) => {
+const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
+  const { deleteRecord } = useContext(StoreContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleteWarningVisible, setIsDeleteWarningVisible] = useState(false);
   const itemName = getItemNameFuncByItemType[type](item);
@@ -45,24 +38,19 @@ const ListItem = ({
         <ItemDetails
           type={type}
           itemId={item.id}
-          resource={resource}
-          subset={subset}
-          route={route}
+          parentId={parentId}
+          statePath={statePath}
         />
       )}
       {isDeleteWarningVisible && (
         <DeleteWarning
           itemName={itemName}
           closeModal={() => setIsDeleteWarningVisible(false)}
-          deleteItem={() => deleteItem(item.id)}
+          deleteItem={() => deleteRecord({ route, id: item.id, statePath })}
         />
       )}
     </div>
   );
 };
 
-const mapDispatchToProps = (dispatch, { resource, subset, route }) => ({
-  deleteItem: id => dispatch(resource.delete(id, subset, route))
-});
-
-export default connect(null, mapDispatchToProps)(ListItem);
+export default ListItem;

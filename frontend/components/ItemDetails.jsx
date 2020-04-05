@@ -1,25 +1,21 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useContext, useEffect } from "react";
 import get from "lodash.get";
+import { apiRouteByItemType, itemDetailFieldsByItemType } from "../constants";
+import { StoreContext } from "../store";
 import ItemDetail from "./ItemDetail";
 import List from "./List";
-import { itemDetailFieldsByItemType } from "../constants";
 
-const ItemDetails = ({
-  type,
-  itemId,
-  item,
-  getItemById,
-  update,
-  resource,
-  subset,
-  route,
-}) => {
+const ItemDetails = ({ type, itemId, statePath }) => {
+  const { state, getById, updateRecord } = useContext(StoreContext);
+
+  const route = apiRouteByItemType[type];
+  const item = get(state, [...statePath, itemId]);
+
   useEffect(() => {
     if (itemId) {
-      getItemById(itemId);
+      getById({ route, id: itemId, statePath });
     }
-  }, []);
+  }, [itemId]);
 
   return (
     item && (
@@ -29,11 +25,8 @@ const ItemDetails = ({
             return (
               <List
                 type={field.columnName}
-                resource={resource}
                 parentId={itemId}
-                subset={[...(subset || []), itemId, field.columnName]}
-                // TODO should field.columnName correspond to route ??
-                route={field.columnName}
+                statePath={[...statePath, itemId, field.columnName]}
                 key={i}
               />
             );
@@ -43,7 +36,11 @@ const ItemDetails = ({
                 field={field}
                 detailValue={item[field.columnName]}
                 updateDetail={(newValue) =>
-                  update({ id: item.id, [field.columnName]: newValue })
+                  updateRecord({
+                    route,
+                    record: { id: item.id, [field.columnName]: newValue },
+                    statePath,
+                  })
                 }
                 key={i}
               />
@@ -55,17 +52,4 @@ const ItemDetails = ({
   );
 };
 
-const mapStateToProps = (state, { subset, resource, itemId }) => {
-  return {
-    item: subset
-      ? get(state[resource.name], [...subset, itemId])
-      : state[resource.name][itemId],
-  };
-};
-
-const mapDispatchToProps = (dispatch, { resource, subset, route }) => ({
-  getItemById: (id) => dispatch(resource.getById(id, subset, route)),
-  update: (record) => dispatch(resource.update(record, subset, route)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ItemDetails);
+export default ItemDetails;

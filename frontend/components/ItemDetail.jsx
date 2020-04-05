@@ -51,7 +51,7 @@ const ItemDetail = (props) => {
 
   const getDisplayValue = () => {
     if (type === "checkbox") {
-      return <input type="checkbox" checked={props.detailValue} disabled />;
+      return <input type="checkbox" checked={!!props.detailValue} disabled />;
     }
     if (type === "date") {
       return getDateString(props.detailValue);
