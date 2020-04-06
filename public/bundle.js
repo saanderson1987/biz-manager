@@ -111,12 +111,50 @@ var _NavBar = _interopRequireDefault(__webpack_require__(/*! ./NavBar */ "./fron
 
 var _CompaniesPage = _interopRequireDefault(__webpack_require__(/*! ./CompaniesPage */ "./frontend/components/CompaniesPage.jsx"));
 
+var _List = _interopRequireDefault(__webpack_require__(/*! ./List */ "./frontend/components/List.jsx"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var _default = function _default() {
   return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement(_NavBar["default"], null), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
     path: "/companies",
     component: _CompaniesPage["default"]
+  }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
+    path: "/jobs",
+    render: function render() {
+      return /*#__PURE__*/_react["default"].createElement(_List["default"], {
+        type: "jobs",
+        statePath: ["jobs"],
+        isRoot: true
+      });
+    }
+  }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
+    path: "/orders",
+    render: function render() {
+      return /*#__PURE__*/_react["default"].createElement(_List["default"], {
+        type: "job_orders",
+        statePath: ["job_orders"],
+        isRoot: true
+      });
+    }
+  }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
+    path: "/installations",
+    render: function render() {
+      return /*#__PURE__*/_react["default"].createElement(_List["default"], {
+        type: "installations",
+        statePath: ["installations"],
+        isRoot: true
+      });
+    }
+  }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
+    path: "/receiveables",
+    render: function render() {
+      return /*#__PURE__*/_react["default"].createElement(_List["default"], {
+        type: "receiveables",
+        statePath: ["receiveables"],
+        isRoot: true
+      });
+    }
   }), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Redirect, {
     exact: true,
     from: "/",
@@ -919,8 +957,10 @@ var NavBar = function NavBar() {
   }, "Jobs"), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.NavLink, {
     to: "/orders"
   }, "Orders"), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.NavLink, {
-    to: "/inventory"
-  }, "Inventory"), /*#__PURE__*/_react["default"].createElement("a", {
+    to: "/installations"
+  }, "Installations"), /*#__PURE__*/_react["default"].createElement(_reactRouterDom.NavLink, {
+    to: "/receivables"
+  }, "Receivables"), /*#__PURE__*/_react["default"].createElement("a", {
     onClick: function onClick(e) {
       return _this.props.logout();
     }

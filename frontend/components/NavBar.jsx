@@ -6,7 +6,8 @@ const NavBar = () => {
     <NavLink to="/companies">Companies</NavLink>,
     <NavLink to="/jobs">Jobs</NavLink>,
     <NavLink to="/orders">Orders</NavLink>,
-    <NavLink to="/inventory">Inventory</NavLink>,
+    <NavLink to="/installations">Installations</NavLink>,
+    <NavLink to="/receivables">Receivables</NavLink>,
     <a onClick={(e) => this.props.logout()}>Log out</a>,
   ];
 
