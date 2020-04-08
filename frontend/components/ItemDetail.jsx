@@ -1,102 +1,28 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { getDateString } from "../../util/functions";
+import Input from "./common/Input";
+import DisplayValue from "./common/DisplayValue";
+import EditAndSaveButtonRow from "./common/buttons/EditAndSaveButtonRow";
 
 const formatDetailValueState = (value, type) =>
   type === "date" ? new Date(value) : value;
 
-const ItemDetail = (props) => {
-  const { field, updateDetail } = props;
-  const { columnName, displayName, type } = field;
+const ItemField = ({
+  field: { columnName, displayName, type },
+  value,
+  updateValue,
+}) => {
   const [inEditMode, setInEditMode] = useState(false);
-  const [isDetailValueUpdating, setIsDetailValueUpdating] = useState(false);
-  const [detailValueState, setDetailValueState] = useState(
-    formatDetailValueState(props.detailValue, type)
+  const [isValueUpdating, setIsValueUpdating] = useState(false);
+  const [editedValue, setEditedValue] = useState(
+    formatDetailValueState(value, type)
   );
 
   useEffect(() => {
-    setDetailValueState(formatDetailValueState(props.detailValue, type));
-    if (isDetailValueUpdating) {
-      setIsDetailValueUpdating(false);
+    setEditedValue(formatDetailValueState(value, type));
+    if (isValueUpdating) {
+      setIsValueUpdating(false);
     }
-  }, [props.detailValue]);
-
-  const getInput = () => {
-    if (type === "date") {
-      return (
-        <DatePicker
-          selected={detailValueState}
-          onChange={(date) => setDetailValueState(date)}
-        />
-      );
-    }
-    if (type === "checkbox") {
-      return (
-        <input
-          type="checkbox"
-          checked={detailValueState}
-          onChange={({ target: { checked } }) => setDetailValueState(checked)}
-        />
-      );
-    }
-    return (
-      <input
-        type="text"
-        value={detailValueState}
-        onChange={({ target: { value } }) => setDetailValueState(value)}
-      />
-    );
-  };
-
-  const getDisplayValue = () => {
-    if (type === "checkbox") {
-      return <input type="checkbox" checked={!!props.detailValue} disabled />;
-    }
-    if (type === "date") {
-      return getDateString(props.detailValue);
-    }
-    return props.detailValue;
-  };
-
-  const editIcons = inEditMode ? (
-    <div className="save-cancel-buttons">
-      <button
-        className="button--small"
-        onClick={() => {
-          setInEditMode(false);
-          if (props.detailValue !== detailValueState) {
-            setIsDetailValueUpdating(true);
-            updateDetail(detailValueState);
-          }
-        }}
-      >
-        <i className="button-icon check-icon far fa-check-circle"></i>
-        <span>Save</span>
-      </button>
-      <button className="button--small" onClick={() => setInEditMode(false)}>
-        Cancel
-      </button>
-    </div>
-  ) : (
-    <div className="save-cancel-buttons">
-      <button className="button--small" onClick={() => setInEditMode(true)}>
-        <i className="button-icon pencil-icon fas fa-pencil-alt"></i>
-        <span>Edit</span>
-      </button>
-    </div>
-  );
-
-  const detailValueContainer = isDetailValueUpdating ? (
-    <div className="loader inline" />
-  ) : (
-    <div className="detail-value-container">
-      <div className="item-detail-value">
-        {inEditMode ? getInput() : getDisplayValue()}
-      </div>
-      {editIcons}
-    </div>
-  );
+  }, [value]);
 
   return (
     <div className="item-detail">
@@ -106,9 +32,35 @@ const ItemDetail = (props) => {
           : columnName.charAt(0).toUpperCase() + columnName.slice(1)}
         :
       </div>
-      {detailValueContainer}
+      {isValueUpdating ? (
+        <Loader isInline />
+      ) : (
+        <div className="detail-value-container">
+          <div className="item-detail-value">
+            {inEditMode ? (
+              <Input
+                value={editedValue}
+                type={type}
+                onChange={setEditedValue}
+              />
+            ) : (
+              <DisplayValue value={value} type={type} />
+            )}
+          </div>
+          <div className={"EditAndSaveButtonRow-container"}>
+            <EditAndSaveButtonRow
+              save={() => {
+                setInEditMode(!inEditMode);
+                updateValue(editedValue);
+              }}
+              inEditMode={inEditMode}
+              toggleEditMode={() => setInEditMode(!inEditMode)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ItemDetail;
+export default ItemField;

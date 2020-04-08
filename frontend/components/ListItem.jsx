@@ -1,39 +1,36 @@
 import React, { useContext, useState } from "react";
 import classNames from "classnames";
+import { getItemNameFuncByItemType, apiRouteByItemType } from "../constants";
+import { StoreContext } from "../store";
+import ListItemHeader from "./ListItemHeader";
 import ItemDetails from "./ItemDetails";
 import DeleteWarning from "./DeleteWarning";
-import { getItemNameFuncByItemType } from "../constants";
-import { StoreContext } from "../store";
 
 const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
-  const { deleteRecord } = useContext(StoreContext);
+  const { updateRecord, deleteRecord } = useContext(StoreContext);
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleteWarningVisible, setIsDeleteWarningVisible] = useState(false);
-  const itemName = getItemNameFuncByItemType[type](item);
+
+  const { itemName, itemNameColumnName } = getItemNameFuncByItemType[type](
+    item
+  );
 
   return (
     <div className={classNames("list-item", { "list-item--first": isFirst })}>
-      <div className="list-item-header">
-        <div
-          className={classNames("list-item-label", { bold: isExpanded })}
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? (
-            <i className="fas fa-caret-down"></i>
-          ) : (
-            <i className="fas fa-caret-right"></i>
-          )}
-          <span>{itemName}</span>
-        </div>
-        {isExpanded && (
-          <button
-            className="button--small"
-            onClick={() => setIsDeleteWarningVisible(true)}
-          >
-            Delete
-          </button>
-        )}
-      </div>
+      <ListItemHeader
+        itemName={itemName}
+        isExpanded={isExpanded}
+        toggleExpanded={() => setIsExpanded(!isExpanded)}
+        isEditable={!!itemNameColumnName}
+        save={(newValue) =>
+          updateRecord({
+            route: apiRouteByItemType[type],
+            record: { id: item.id, [itemNameColumnName]: newValue },
+            statePath,
+          })
+        }
+      />
       {isExpanded && (
         <ItemDetails
           type={type}

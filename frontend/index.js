@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Route } from "react-router-dom";
+import "../public/stylesheets/main.scss";
 import { StoreProvider } from "./store";
 import App from "./components/App";
 

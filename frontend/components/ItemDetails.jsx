@@ -34,8 +34,8 @@ const ItemDetails = ({ type, itemId, statePath }) => {
             return (
               <ItemDetail
                 field={field}
-                detailValue={item[field.columnName]}
-                updateDetail={(newValue) =>
+                value={item[field.columnName]}
+                updateValue={(newValue) =>
                   updateRecord({
                     route,
                     record: { id: item.id, [field.columnName]: newValue },

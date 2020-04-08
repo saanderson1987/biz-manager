@@ -65,25 +65,30 @@ export const listNameByItemType = {
 };
 
 export const getItemNameFuncByItemType = {
-  companies: (item) => item.name,
-  clients: (item) => item.name,
-  prospects: (item) => item.name,
-  jobs: (item) => item.name,
-  job_orders: ({ date_ordered }) =>
-    date_ordered && `Job order ordered on ${getDateString(date_ordered)}`,
-  installations: ({ installation_date }) =>
-    installation_date &&
-    `Installation set for ${getDateString(installation_date)}`,
+  companies: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  clients: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  prospects: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  jobs: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  job_orders: ({ date_ordered }) => ({
+    itemName:
+      date_ordered && `Job order ordered on ${getDateString(date_ordered)}`,
+  }),
+  installations: ({ installation_date }) => ({
+    itemName:
+      installation_date &&
+      `Installation set for ${getDateString(installation_date)}`,
+  }),
   vendor_orders: ({ name: vendorName, date_ordered }) => {
+    let itemName;
     if (vendorName) {
-      let itemName = `${vendorName} ordered`;
+      itemName = `${vendorName} ordered`;
       if (date_ordered) {
         itemName += ` on ${getDateString(date_ordered)}`;
       }
-      return itemName;
     }
+    return { itemName };
   },
-  vendors: (item) => item.name,
+  vendors: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
 };
 
 export const itemDetailFieldsByItemType = {
