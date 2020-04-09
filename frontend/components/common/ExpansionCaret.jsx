@@ -1,11 +1,11 @@
 import React from "react";
 
-const ExpansionCaret = ({ isExpanded, onClick }) => (
+const ExpansionCaret = ({ isExpanded, onClick, className = "" }) => (
   <span onClick={onClick}>
     {isExpanded ? (
-      <i className="fas fa-caret-down"></i>
+      <i className={`${className} fas fa-caret-down`}></i>
     ) : (
-      <i className="fas fa-caret-right"></i>
+      <i className={`${className} fas fa-caret-right`}></i>
     )}
   </span>
 );

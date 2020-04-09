@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Loader from "./common/Loader";
 import Input from "./common/Input";
 import DisplayValue from "./common/DisplayValue";
 import EditAndSaveButtonRow from "./common/buttons/EditAndSaveButtonRow";
@@ -6,7 +7,7 @@ import EditAndSaveButtonRow from "./common/buttons/EditAndSaveButtonRow";
 const formatDetailValueState = (value, type) =>
   type === "date" ? new Date(value) : value;
 
-const ItemField = ({
+const ItemDetail = ({
   field: { columnName, displayName, type },
   value,
   updateValue,
@@ -51,7 +52,10 @@ const ItemField = ({
             <EditAndSaveButtonRow
               save={() => {
                 setInEditMode(!inEditMode);
-                updateValue(editedValue);
+                if (editedValue !== value) {
+                  setIsValueUpdating(true);
+                  updateValue(editedValue);
+                }
               }}
               inEditMode={inEditMode}
               toggleEditMode={() => setInEditMode(!inEditMode)}
@@ -63,4 +67,4 @@ const ItemField = ({
   );
 };
 
-export default ItemField;
+export default ItemDetail;
