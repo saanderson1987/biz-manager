@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import Loader from "./common/Loader";
 import Input from "./common/Input";
 import DisplayValue from "./common/DisplayValue";
@@ -25,6 +25,22 @@ const ItemDetail = ({
     }
   }, [value]);
 
+  useEffect(() => {
+    if (inEditMode && inputToFocusRef.current.focus) {
+      inputToFocusRef.current.focus();
+    }
+  }, [inEditMode]);
+
+  const save = () => {
+    setInEditMode(!inEditMode);
+    if (editedValue !== value) {
+      setIsValueUpdating(true);
+      updateValue(editedValue);
+    }
+  };
+
+  const inputToFocusRef = createRef();
+
   return (
     <div className="item-detail">
       <div className="item-detail-name">
@@ -44,6 +60,8 @@ const ItemDetail = ({
                 type={type}
                 onChange={setEditedValue}
                 valueOptions={valueOptions}
+                save={save}
+                inputRef={inputToFocusRef}
               />
             ) : (
               <DisplayValue value={value} type={type} />
@@ -51,15 +69,11 @@ const ItemDetail = ({
           </div>
           <div className={"EditAndSaveButtonRow-container"}>
             <EditAndSaveButtonRow
-              save={() => {
-                setInEditMode(!inEditMode);
-                if (editedValue !== value) {
-                  setIsValueUpdating(true);
-                  updateValue(editedValue);
-                }
-              }}
+              save={save}
               inEditMode={inEditMode}
-              toggleEditMode={() => setInEditMode(!inEditMode)}
+              toggleEditMode={() => {
+                setInEditMode(!inEditMode);
+              }}
             />
           </div>
         </div>

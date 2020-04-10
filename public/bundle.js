@@ -466,6 +466,22 @@ var ItemDetail = function ItemDetail(_ref) {
       setIsValueUpdating(false);
     }
   }, [value]);
+  (0, _react.useEffect)(function () {
+    if (inEditMode && inputToFocusRef.current.focus) {
+      inputToFocusRef.current.focus();
+    }
+  }, [inEditMode]);
+
+  var save = function save() {
+    setInEditMode(!inEditMode);
+
+    if (editedValue !== value) {
+      setIsValueUpdating(true);
+      updateValue(editedValue);
+    }
+  };
+
+  var inputToFocusRef = (0, _react.createRef)();
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "item-detail"
   }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -480,24 +496,19 @@ var ItemDetail = function ItemDetail(_ref) {
     value: editedValue,
     type: type,
     onChange: setEditedValue,
-    valueOptions: valueOptions
+    valueOptions: valueOptions,
+    save: save,
+    inputRef: inputToFocusRef
   }) : /*#__PURE__*/_react["default"].createElement(_DisplayValue["default"], {
     value: value,
     type: type
   })), /*#__PURE__*/_react["default"].createElement("div", {
     className: "EditAndSaveButtonRow-container"
   }, /*#__PURE__*/_react["default"].createElement(_EditAndSaveButtonRow["default"], {
-    save: function save() {
-      setInEditMode(!inEditMode);
-
-      if (editedValue !== value) {
-        setIsValueUpdating(true);
-        updateValue(editedValue);
-      }
-    },
+    save: save,
     inEditMode: inEditMode,
     toggleEditMode: function toggleEditMode() {
-      return setInEditMode(!inEditMode);
+      setInEditMode(!inEditMode);
     }
   }))));
 };
@@ -1609,11 +1620,16 @@ var _functions = __webpack_require__(/*! ../../../util/functions */ "./util/func
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+// if props.save is defined and props.type is text, then `save` will be called if user presses enter in the text input.
 var Input = function Input(_ref) {
   var type = _ref.type,
       value = _ref.value,
       _onChange = _ref.onChange,
-      valueOptions = _ref.valueOptions;
+      valueOptions = _ref.valueOptions,
+      save = _ref.save,
+      inputRef = _ref.inputRef;
 
   if (type === "date") {
     return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
@@ -1624,15 +1640,28 @@ var Input = function Input(_ref) {
     });
   }
 
+  var commonInputProps = {
+    onKeyUp: function onKeyUp(_ref2) {
+      var keyCode = _ref2.keyCode;
+
+      if (save && keyCode === 13
+      /* 13 is enter key */
+      ) {
+          save();
+        }
+    },
+    ref: inputRef
+  };
+
   if (type === "checkbox") {
-    return /*#__PURE__*/_react["default"].createElement("input", {
+    return /*#__PURE__*/_react["default"].createElement("input", _extends({
       type: "checkbox",
       checked: value,
-      onChange: function onChange(_ref2) {
-        var checked = _ref2.target.checked;
+      onChange: function onChange(_ref3) {
+        var checked = _ref3.target.checked;
         return _onChange(checked);
       }
-    });
+    }, commonInputProps));
   }
 
   if (type === "radio") {
@@ -1640,7 +1669,7 @@ var Input = function Input(_ref) {
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: "radio-buttons-row",
         key: option.value
-      }, /*#__PURE__*/_react["default"].createElement("input", {
+      }, /*#__PURE__*/_react["default"].createElement("input", _extends({
         type: "radio",
         value: option.value,
         checked: value === option.value,
@@ -1648,7 +1677,7 @@ var Input = function Input(_ref) {
           return _onChange(option.value);
         },
         id: option.value
-      }), /*#__PURE__*/_react["default"].createElement("div", {
+      }, commonInputProps)), /*#__PURE__*/_react["default"].createElement("div", {
         className: "radio-button-display-name"
       }, /*#__PURE__*/_react["default"].createElement("label", {
         htmlFor: option.value
@@ -1656,14 +1685,14 @@ var Input = function Input(_ref) {
     });
   }
 
-  return /*#__PURE__*/_react["default"].createElement("input", {
+  return /*#__PURE__*/_react["default"].createElement("input", _extends({
     type: "text",
     value: value,
-    onChange: function onChange(_ref3) {
-      var value = _ref3.target.value;
+    onChange: function onChange(_ref4) {
+      var value = _ref4.target.value;
       return _onChange(value);
     }
-  });
+  }, commonInputProps));
 };
 
 var _default = Input;
