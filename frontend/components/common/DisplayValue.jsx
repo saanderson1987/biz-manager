@@ -1,16 +1,20 @@
 import React from "react";
-import { getDateString } from "../../../util/functions";
+import { getDateString, capitalize } from "../../../util/functions";
 
 const DisplayValue = ({ value, type, className }) => {
+  let displayValue = value;
   if (type === "checkbox") {
     return (
       <input type="checkbox" checked={!!value} disabled className={className} />
     );
   }
   if (type === "date") {
-    return <span className={className}>{getDateString(value)}</span>;
+    displayValue = getDateString(value);
   }
-  return <span className={className}>{value}</span>;
+  if (type === "radio") {
+    displayValue = capitalize(value);
+  }
+  return <span className={className}>{displayValue}</span>;
 };
 
 export default DisplayValue;

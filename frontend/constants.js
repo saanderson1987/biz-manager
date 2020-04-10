@@ -92,16 +92,22 @@ export const getItemNameFuncByItemType = {
 };
 
 export const itemDetailFieldsByItemType = {
-  companies: [
-    { columnName: "notes", type: "text" },
-    { columnName: "jobs", type: "list" },
-  ],
   clients: [
     { columnName: "notes", type: "text" },
+    {
+      columnName: "status",
+      type: "radio",
+      valueOptions: [{ value: "prospect" }, { value: "client" }],
+    },
     { columnName: "jobs", type: "list" },
   ],
   prospects: [
     { columnName: "notes", type: "text" },
+    {
+      columnName: "status",
+      type: "radio",
+      valueOptions: [{ value: "prospect" }, { value: "client" }],
+    },
     { columnName: "jobs", type: "list" },
   ],
   jobs: [
@@ -111,8 +117,8 @@ export const itemDetailFieldsByItemType = {
   job_orders: [
     { columnName: "notes", type: "text" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
-    { columnName: "installations", type: "list" },
     { columnName: "vendor_orders", type: "list" },
+    { columnName: "installations", type: "list" },
   ],
   installations: [
     {

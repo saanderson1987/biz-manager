@@ -19,7 +19,6 @@ const log = ({ functionName, statePath, oldState, data, newState }) => {
 
 export const StoreProvider = ({ children }) => {
   const [state, setState] = useState({
-    companies: {},
     prospects: {},
     vendors: {},
     clients: {},

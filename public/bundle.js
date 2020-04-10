@@ -440,6 +440,7 @@ var ItemDetail = function ItemDetail(_ref) {
       columnName = _ref$field.columnName,
       displayName = _ref$field.displayName,
       type = _ref$field.type,
+      valueOptions = _ref$field.valueOptions,
       value = _ref.value,
       updateValue = _ref.updateValue;
 
@@ -478,7 +479,8 @@ var ItemDetail = function ItemDetail(_ref) {
   }, inEditMode ? /*#__PURE__*/_react["default"].createElement(_Input["default"], {
     value: editedValue,
     type: type,
-    onChange: setEditedValue
+    onChange: setEditedValue,
+    valueOptions: valueOptions
   }) : /*#__PURE__*/_react["default"].createElement(_DisplayValue["default"], {
     value: value,
     type: type
@@ -1515,6 +1517,7 @@ var DisplayValue = function DisplayValue(_ref) {
   var value = _ref.value,
       type = _ref.type,
       className = _ref.className;
+  var displayValue = value;
 
   if (type === "checkbox") {
     return /*#__PURE__*/_react["default"].createElement("input", {
@@ -1526,14 +1529,16 @@ var DisplayValue = function DisplayValue(_ref) {
   }
 
   if (type === "date") {
-    return /*#__PURE__*/_react["default"].createElement("span", {
-      className: className
-    }, (0, _functions.getDateString)(value));
+    displayValue = (0, _functions.getDateString)(value);
+  }
+
+  if (type === "radio") {
+    displayValue = (0, _functions.capitalize)(value);
   }
 
   return /*#__PURE__*/_react["default"].createElement("span", {
     className: className
-  }, value);
+  }, displayValue);
 };
 
 var _default = DisplayValue;
@@ -1600,12 +1605,15 @@ var _reactDatepicker = _interopRequireDefault(__webpack_require__(/*! react-date
 
 __webpack_require__(/*! react-datepicker/dist/react-datepicker.css */ "./node_modules/react-datepicker/dist/react-datepicker.css");
 
+var _functions = __webpack_require__(/*! ../../../util/functions */ "./util/functions.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var Input = function Input(_ref) {
   var type = _ref.type,
       value = _ref.value,
-      _onChange = _ref.onChange;
+      _onChange = _ref.onChange,
+      valueOptions = _ref.valueOptions;
 
   if (type === "date") {
     return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
@@ -1624,6 +1632,27 @@ var Input = function Input(_ref) {
         var checked = _ref2.target.checked;
         return _onChange(checked);
       }
+    });
+  }
+
+  if (type === "radio") {
+    return valueOptions.map(function (option) {
+      return /*#__PURE__*/_react["default"].createElement("div", {
+        className: "radio-buttons-row",
+        key: option.value
+      }, /*#__PURE__*/_react["default"].createElement("input", {
+        type: "radio",
+        value: option.value,
+        checked: value === option.value,
+        onChange: function onChange() {
+          return _onChange(option.value);
+        },
+        id: option.value
+      }), /*#__PURE__*/_react["default"].createElement("div", {
+        className: "radio-button-display-name"
+      }, /*#__PURE__*/_react["default"].createElement("label", {
+        htmlFor: option.value
+      }, option.displayName || (0, _functions.capitalize)(option.value))));
     });
   }
 
@@ -2015,16 +2044,17 @@ var getItemNameFuncByItemType = {
 };
 exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
 var itemDetailFieldsByItemType = {
-  companies: [{
-    columnName: "notes",
-    type: "text"
-  }, {
-    columnName: "jobs",
-    type: "list"
-  }],
   clients: [{
     columnName: "notes",
     type: "text"
+  }, {
+    columnName: "status",
+    type: "radio",
+    valueOptions: [{
+      value: "prospect"
+    }, {
+      value: "client"
+    }]
   }, {
     columnName: "jobs",
     type: "list"
@@ -2032,6 +2062,14 @@ var itemDetailFieldsByItemType = {
   prospects: [{
     columnName: "notes",
     type: "text"
+  }, {
+    columnName: "status",
+    type: "radio",
+    valueOptions: [{
+      value: "prospect"
+    }, {
+      value: "client"
+    }]
   }, {
     columnName: "jobs",
     type: "list"
@@ -2052,10 +2090,10 @@ var itemDetailFieldsByItemType = {
     displayName: "Date Ordered",
     type: "date"
   }, {
-    columnName: "installations",
+    columnName: "vendor_orders",
     type: "list"
   }, {
-    columnName: "vendor_orders",
+    columnName: "installations",
     type: "list"
   }],
   installations: [{
@@ -2305,7 +2343,6 @@ var StoreProvider = function StoreProvider(_ref2) {
   var children = _ref2.children;
 
   var _useState = (0, _react.useState)({
-    companies: {},
     prospects: {},
     vendors: {},
     clients: {},
@@ -75890,10 +75927,10 @@ module.exports = {
     return true; // return Object.keys(obj).length === 0;
   },
   capitalize: function capitalize(string) {
-    return string[0].toUpperCase() + string.slice(1);
+    return typeof string === "string" ? string[0].toUpperCase() + string.slice(1) : string;
   },
   uncapitalize: function uncapitalize(string) {
-    return string[0].toLowerCase() + string.slice(1);
+    return typeof string === "string" ? string[0].toLowerCase() + string.slice(1) : string;
   },
   getDateString: function getDateString(date) {
     return moment(date).locale(moment.locale()).format("L");

@@ -10,11 +10,15 @@ module.exports = {
   },
 
   capitalize: function (string) {
-    return string[0].toUpperCase() + string.slice(1);
+    return typeof string === "string"
+      ? string[0].toUpperCase() + string.slice(1)
+      : string;
   },
 
   uncapitalize: function (string) {
-    return string[0].toLowerCase() + string.slice(1);
+    return typeof string === "string"
+      ? string[0].toLowerCase() + string.slice(1)
+      : string;
   },
 
   getDateString: function (date) {

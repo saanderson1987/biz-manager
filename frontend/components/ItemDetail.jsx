@@ -8,7 +8,7 @@ const formatDetailValueState = (value, type) =>
   type === "date" ? new Date(value) : value;
 
 const ItemDetail = ({
-  field: { columnName, displayName, type },
+  field: { columnName, displayName, type, valueOptions },
   value,
   updateValue,
 }) => {
@@ -43,6 +43,7 @@ const ItemDetail = ({
                 value={editedValue}
                 type={type}
                 onChange={setEditedValue}
+                valueOptions={valueOptions}
               />
             ) : (
               <DisplayValue value={value} type={type} />
