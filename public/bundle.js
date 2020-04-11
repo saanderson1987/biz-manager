@@ -440,6 +440,7 @@ var ItemDetail = function ItemDetail(_ref) {
       columnName = _ref$field.columnName,
       displayName = _ref$field.displayName,
       type = _ref$field.type,
+      getDisplayValue = _ref$field.getDisplayValue,
       valueOptions = _ref$field.valueOptions,
       value = _ref.value,
       updateValue = _ref.updateValue;
@@ -500,7 +501,7 @@ var ItemDetail = function ItemDetail(_ref) {
     save: save,
     inputRef: inputToFocusRef
   }) : /*#__PURE__*/_react["default"].createElement(_DisplayValue["default"], {
-    value: value,
+    value: getDisplayValue ? getDisplayValue(value) : value,
     type: type
   })), /*#__PURE__*/_react["default"].createElement("div", {
     className: "EditAndSaveButtonRow-container"
@@ -1355,13 +1356,15 @@ var NewItemForm = function NewItemForm(_ref) {
   }, "Cancel"), /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--save",
     onClick: function onClick() {
-      var newRecord = _objectSpread({}, pendingNewRecord);
+      var newRecordBase = _constants.newItemRecordBaseByItemType[type] || {};
+
+      var newRecord = _objectSpread({}, newRecordBase, {}, pendingNewRecord);
 
       if (parentId) {
         newRecord[_constants.parentColumnByItemType[type]] = parentId;
       }
 
-      if (type === "vendor") {
+      if (type === "vendors") {
         newRecord.status = "vendor";
       }
 
@@ -1630,16 +1633,6 @@ var Input = function Input(_ref) {
       valueOptions = _ref.valueOptions,
       save = _ref.save,
       inputRef = _ref.inputRef;
-
-  if (type === "date") {
-    return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
-      selected: value,
-      onChange: function onChange(date) {
-        return _onChange(date);
-      }
-    });
-  }
-
   var commonInputProps = {
     onKeyUp: function onKeyUp(_ref2) {
       var keyCode = _ref2.keyCode;
@@ -1652,6 +1645,15 @@ var Input = function Input(_ref) {
     },
     ref: inputRef
   };
+
+  if (type === "date") {
+    return /*#__PURE__*/_react["default"].createElement(_reactDatepicker["default"], {
+      selected: value,
+      onChange: function onChange(date) {
+        return _onChange(date);
+      }
+    });
+  }
 
   if (type === "checkbox") {
     return /*#__PURE__*/_react["default"].createElement("input", _extends({
@@ -1685,11 +1687,26 @@ var Input = function Input(_ref) {
     });
   }
 
+  if (type === "dropdown") {
+    return /*#__PURE__*/_react["default"].createElement("select", _extends({
+      value: value,
+      onChange: function onChange(_ref4) {
+        var value = _ref4.target.value;
+        return _onChange(value);
+      }
+    }, commonInputProps), valueOptions.map(function (option) {
+      return /*#__PURE__*/_react["default"].createElement("option", {
+        value: option.value,
+        key: option.value
+      }, option.displayName || option.value);
+    }));
+  }
+
   return /*#__PURE__*/_react["default"].createElement("input", _extends({
     type: "text",
     value: value,
-    onChange: function onChange(_ref4) {
-      var value = _ref4.target.value;
+    onChange: function onChange(_ref5) {
+      var value = _ref5.target.value;
       return _onChange(value);
     }
   }, commonInputProps));
@@ -1925,7 +1942,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
+exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
@@ -2072,6 +2089,11 @@ var getItemNameFuncByItemType = {
   }
 };
 exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
+var jobStatusDisplayNameByType = {
+  in_progress: "In Progress",
+  on_hold: "On Hold",
+  completed: "Completed"
+};
 var itemDetailFieldsByItemType = {
   clients: [{
     columnName: "notes",
@@ -2107,6 +2129,22 @@ var itemDetailFieldsByItemType = {
     columnName: "po_num",
     displayName: "PO #",
     type: "text"
+  }, {
+    columnName: "status",
+    type: "dropdown",
+    getDisplayValue: function getDisplayValue(value) {
+      return jobStatusDisplayNameByType[value];
+    },
+    valueOptions: [{
+      value: "in_progress",
+      displayName: jobStatusDisplayNameByType.in_progress
+    }, {
+      value: "on_hold",
+      displayName: jobStatusDisplayNameByType.on_hold
+    }, {
+      value: "completed",
+      displayName: jobStatusDisplayNameByType.completed
+    }]
   }, {
     columnName: "job_orders",
     type: "list"
@@ -2252,6 +2290,15 @@ var newItemFormFieldsByItemType = {
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;
+var newItemRecordBaseByItemType = {
+  jobs: {
+    status: "in_progress"
+  },
+  vendors: {
+    status: "vendor"
+  }
+};
+exports.newItemRecordBaseByItemType = newItemRecordBaseByItemType;
 
 /***/ }),
 

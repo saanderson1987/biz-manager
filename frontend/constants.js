@@ -91,6 +91,12 @@ export const getItemNameFuncByItemType = {
   vendors: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
 };
 
+const jobStatusDisplayNameByType = {
+  in_progress: "In Progress",
+  on_hold: "On Hold",
+  completed: "Completed",
+};
+
 export const itemDetailFieldsByItemType = {
   clients: [
     { columnName: "notes", type: "text" },
@@ -112,6 +118,22 @@ export const itemDetailFieldsByItemType = {
   ],
   jobs: [
     { columnName: "po_num", displayName: "PO #", type: "text" },
+    {
+      columnName: "status",
+      type: "dropdown",
+      getDisplayValue: (value) => jobStatusDisplayNameByType[value],
+      valueOptions: [
+        {
+          value: "in_progress",
+          displayName: jobStatusDisplayNameByType.in_progress,
+        },
+        { value: "on_hold", displayName: jobStatusDisplayNameByType.on_hold },
+        {
+          value: "completed",
+          displayName: jobStatusDisplayNameByType.completed,
+        },
+      ],
+    },
     { columnName: "job_orders", type: "list" },
   ],
   job_orders: [
@@ -210,4 +232,13 @@ export const newItemFormFieldsByItemType = {
     { columnName: "notes" },
   ],
   vendors: [{ columnName: "name" }, { columnName: "notes" }],
+};
+
+export const newItemRecordBaseByItemType = {
+  jobs: {
+    status: "in_progress",
+  },
+  vendors: {
+    status: "vendor",
+  },
 };

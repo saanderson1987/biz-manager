@@ -5,6 +5,7 @@ import {
   newItemFormFieldsByItemType,
   parentColumnByItemType,
   apiRouteByItemType,
+  newItemRecordBaseByItemType,
 } from "../constants";
 import { StoreContext } from "../store";
 import NewItemDetail from "./NewItemDetail";
@@ -53,11 +54,12 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
           <button
             className="button--save"
             onClick={() => {
-              const newRecord = { ...pendingNewRecord };
+              const newRecordBase = newItemRecordBaseByItemType[type] || {};
+              const newRecord = { ...newRecordBase, ...pendingNewRecord };
               if (parentId) {
                 newRecord[parentColumnByItemType[type]] = parentId;
               }
-              if (type === "vendor") {
+              if (type === "vendors") {
                 newRecord.status = "vendor";
               }
               createRecord({

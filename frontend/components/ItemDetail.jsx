@@ -8,7 +8,7 @@ const formatDetailValueState = (value, type) =>
   type === "date" ? new Date(value) : value;
 
 const ItemDetail = ({
-  field: { columnName, displayName, type, valueOptions },
+  field: { columnName, displayName, type, getDisplayValue, valueOptions },
   value,
   updateValue,
 }) => {
@@ -64,7 +64,10 @@ const ItemDetail = ({
                 inputRef={inputToFocusRef}
               />
             ) : (
-              <DisplayValue value={value} type={type} />
+              <DisplayValue
+                value={getDisplayValue ? getDisplayValue(value) : value}
+                type={type}
+              />
             )}
           </div>
           <div className={"EditAndSaveButtonRow-container"}>
