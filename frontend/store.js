@@ -50,7 +50,8 @@ export const StoreProvider = ({ children }) => {
         )
         .catch(handleError),
 
-    getByQuery: ({ route, queryParams, statePath }) =>
+    getByQuery: ({ route, queryParams, statePath }) => {
+      console.log(queryParams);
       axios
         .get(baseUrl + route, {
           params: queryParams,
@@ -70,11 +71,12 @@ export const StoreProvider = ({ children }) => {
             return newState;
           })
         )
-        .catch(handleError),
+        .catch(handleError);
+    },
 
-    getById: ({ route, id, statePath }) =>
+    getById: ({ route, id, queryParams, statePath }) =>
       axios
-        .get(baseUrl + route + "/" + id)
+        .get(baseUrl + route + "/" + id, { params: queryParams })
         .then(({ data }) =>
           setState((oldState) => {
             const newState = update(

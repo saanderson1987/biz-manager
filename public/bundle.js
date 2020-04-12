@@ -582,11 +582,7 @@ var ItemDetails = function ItemDetails(_ref) {
   var item = (0, _lodash["default"])(state, [].concat(_toConsumableArray(statePath), [itemId]));
   (0, _react.useEffect)(function () {
     if (itemId) {
-      getById({
-        route: route,
-        id: itemId,
-        statePath: statePath
-      });
+      getById((0, _constants.createItemDetailsGetByIdQueryOptions)(type, itemId, statePath));
     }
   }, [itemId]);
   return item && /*#__PURE__*/_react["default"].createElement("div", {
@@ -1942,7 +1938,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
+exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
@@ -2016,6 +2012,22 @@ var createListGetByQueryOptions = function createListGetByQueryOptions(type, par
 };
 
 exports.createListGetByQueryOptions = createListGetByQueryOptions;
+var itemDetailsGetByIdQueryParams = {
+  jobs: {
+    columns: "name,po_num,status,proposal_item_name"
+  }
+};
+
+var createItemDetailsGetByIdQueryOptions = function createItemDetailsGetByIdQueryOptions(type, id, statePath) {
+  return {
+    route: apiRouteByItemType[type],
+    id: id,
+    queryParams: itemDetailsGetByIdQueryParams[type] || {},
+    statePath: statePath
+  };
+};
+
+exports.createItemDetailsGetByIdQueryOptions = createItemDetailsGetByIdQueryOptions;
 var listNameByItemType = {
   companies: "Companies",
   clients: "Clients",
@@ -2456,7 +2468,9 @@ var StoreProvider = function StoreProvider(_ref2) {
       var route = _ref5.route,
           queryParams = _ref5.queryParams,
           statePath = _ref5.statePath;
-      return _axios["default"].get(baseUrl + route, {
+      console.log(queryParams);
+
+      _axios["default"].get(baseUrl + route, {
         params: queryParams
       }).then(function (_ref6) {
         var data = _ref6.data;
@@ -2478,8 +2492,11 @@ var StoreProvider = function StoreProvider(_ref2) {
     getById: function getById(_ref7) {
       var route = _ref7.route,
           id = _ref7.id,
+          queryParams = _ref7.queryParams,
           statePath = _ref7.statePath;
-      return _axios["default"].get(baseUrl + route + "/" + id).then(function (_ref8) {
+      return _axios["default"].get(baseUrl + route + "/" + id, {
+        params: queryParams
+      }).then(function (_ref8) {
         var data = _ref8.data;
         return setState(function (oldState) {
           var newState = (0, _lodash4["default"])((0, _lodash["default"])(oldState), [].concat(_toConsumableArray(statePath), [data.id]), function (currVal) {

@@ -53,6 +53,21 @@ export const createListGetByQueryOptions = (type, parentId, statePath) => {
   };
 };
 
+const itemDetailsGetByIdQueryParams = {
+  jobs: {
+    columns: "name,po_num,status,proposal_item_name",
+  },
+};
+
+export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
+  return {
+    route: apiRouteByItemType[type],
+    id,
+    queryParams: itemDetailsGetByIdQueryParams[type] || {},
+    statePath,
+  };
+};
+
 export const listNameByItemType = {
   companies: "Companies",
   clients: "Clients",

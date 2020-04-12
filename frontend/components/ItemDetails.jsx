@@ -1,6 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import get from "lodash.get";
-import { apiRouteByItemType, itemDetailFieldsByItemType } from "../constants";
+import {
+  apiRouteByItemType,
+  itemDetailFieldsByItemType,
+  createItemDetailsGetByIdQueryOptions,
+} from "../constants";
 import { StoreContext } from "../store";
 import ItemDetail from "./ItemDetail";
 import List from "./List";
@@ -13,7 +17,7 @@ const ItemDetails = ({ type, itemId, statePath }) => {
 
   useEffect(() => {
     if (itemId) {
-      getById({ route, id: itemId, statePath });
+      getById(createItemDetailsGetByIdQueryOptions(type, itemId, statePath));
     }
   }, [itemId]);
 

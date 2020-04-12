@@ -7,36 +7,12 @@ class Model {
     this.table = new pgp.helpers.TableName(name);
   }
 
-  test() {
-    const name = "name";
-    const query = pgp.as.format("SELECT ${columns:name} FROM ${table}", {
-      columns: ["id", name],
-      table: this.table,
-    });
-    return this.format(db.any(query));
-  }
-
-  // all(columns) {
-  //   // const query = pgp.as.format('SELECT * FROM $1', this.table);
-  //   let query;
-  //   if (columns) {
-  //     columns = columns.split(',');
-  //     if (!columns.includes('id')) columns.push('id');
-  //     query = pgp.as.format('SELECT ${columns:name} FROM ${table}', {
-  //       columns: columns,
-  //       table: this.table
-  //     });
-  //   } else query = pgp.as.format('SELECT * FROM $1', this.table);
-  //   return this.format(db.any(query));
-  // }
-
   createWhereClause(columns) {
     let whereClause = "";
     if (columns.length > 0) {
       whereClause = " WHERE ";
       columns.forEach((column, idx) => {
         if (idx > 0) whereClause += " AND ";
-        // whereClause += `${column} = \${${column}}`;
         if (column === "id") {
           whereClause += `t1.${column} = \${${column}}`;
         } else {
@@ -47,28 +23,27 @@ class Model {
     return whereClause;
   }
 
+  createWhereClauseFromQueryParams(queryParams) {
+    const columns = Object.keys(queryParams).reduce((acc, queryParamKey) => {
+      if (
+        queryParamKey !== "columns" &&
+        queryParamKey !== "joinClause" &&
+        queryParamKey.slice(0, 9) !== "joinTable"
+      ) {
+        acc.push(queryParamKey);
+      }
+      return acc;
+    }, []);
+    return this.createWhereClause(columns);
+  }
+
   getByQuery(queryParams) {
-    let selectClause = "SELECT *";
-    if (queryParams.columns) {
-      const selectColumns = queryParams.columns.split(",");
-      if (!selectColumns.includes("id")) selectColumns.push("t1.id");
-      selectColumns.join(",");
-      // selectClause = 'SELECT ${columns:name}';
-      selectClause = `SELECT ${selectColumns}`;
-    }
-
+    const selectClause = this.createSelectClause(queryParams.columns);
     const joinClause = queryParams.joinClause || "";
-
-    let columns = Object.assign({}, queryParams);
-    delete columns.columns;
-    delete columns.joinClause;
-    delete columns.joinTable;
-    columns = Object.keys(columns);
-    const whereClause = this.createWhereClause(columns);
+    const whereClause = this.createWhereClauseFromQueryParams(queryParams);
 
     queryParams.table = this.table;
 
-    // const query = pgp.as.format(selectClause + ' FROM ${table}' + whereClause, queryParams);
     const query = pgp.as.format(
       selectClause + " FROM ${table} as t1" + joinClause + whereClause,
       queryParams
@@ -77,18 +52,33 @@ class Model {
     return this.format(db.any(query));
   }
 
-  getById(id, { joinClause = "", joinTable, columns = "*" } = {}) {
+  createSelectClause(columns) {
+    const selectClause = "SELECT ";
+    let selectColumns = "*";
+
+    if (columns) {
+      const columnsArr = columns.split(",");
+      if (!columnsArr.includes("id")) {
+        columnsArr.push("t1.id");
+      }
+      selectColumns = columnsArr.join(",");
+    }
+
+    return selectClause + selectColumns;
+  }
+
+  getById(id, { columns, joinClause = "", queryValues } = {}) {
     if (this.isInvalidId(id)) return this.error("id");
+
     const query = pgp.as.format(
-      "SELECT " +
-        columns +
-        ", t1.id FROM ${table} as t1" +
+      this.createSelectClause(columns) +
+        " FROM ${table} as t1" +
         joinClause +
         " WHERE t1.id = ${id}",
       {
         table: this.table,
         id,
-        joinTable,
+        ...queryValues,
       }
     );
     console.log(query);

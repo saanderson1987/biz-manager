@@ -1,6 +1,3 @@
-const express = require("express");
-const isEmpty = require("../util/functions").isEmpty;
-
 class Controller {
   constructor(model) {
     this.model = model;
@@ -12,17 +9,11 @@ class Controller {
   }
 
   index(req, res) {
-    const query = req.query;
-    // if (isEmpty(query) || (query.columns && Object.keys(query).length === 1) ) {
-    //   const columns = query.columns ? query.columns : null;
-    //   this.send(this.model.all(columns), res);
-    // } else {
     this.send(this.model.getByQuery(req.query), res);
-    // }
   }
 
   getById(req, res) {
-    this.send(this.model.getById(req.params.id), res);
+    this.send(this.model.getById(req.params.id, req.query), res);
   }
 
   create(req, res) {
@@ -43,10 +34,10 @@ class Controller {
 
   send(query, res) {
     return query
-      .then(data => {
+      .then((data) => {
         res.send(data);
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   }
