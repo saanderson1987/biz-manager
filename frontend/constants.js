@@ -55,7 +55,8 @@ export const createListGetByQueryOptions = (type, parentId, statePath) => {
 
 const itemDetailsGetByIdQueryParams = {
   jobs: {
-    columns: "name,po_num,status,proposal_item_name",
+    columns:
+      "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date",
   },
 };
 
@@ -148,6 +149,21 @@ export const itemDetailFieldsByItemType = {
           displayName: jobStatusDisplayNameByType.completed,
         },
       ],
+    },
+    {
+      columnName: "budget_sent_date",
+      displayName: "Budget Sent Date",
+      type: "date",
+    },
+    {
+      columnName: "image_proposal_sent_date",
+      displayName: "Image Proposal Sent Date",
+      type: "date",
+    },
+    {
+      columnName: "art_plan_sent_date",
+      displayName: "Art Plan Sent Date",
+      type: "date",
     },
     { columnName: "job_orders", type: "list" },
   ],

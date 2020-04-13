@@ -22,6 +22,6 @@ module.exports = {
   },
 
   getDateString: function (date) {
-    return moment(date).locale(moment.locale()).format("L");
+    return date ? moment(date).locale(moment.locale()).format("L") : date;
   },
 };

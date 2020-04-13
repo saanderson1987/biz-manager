@@ -4,8 +4,12 @@ import Input from "./common/Input";
 import DisplayValue from "./common/DisplayValue";
 import EditAndSaveButtonRow from "./common/buttons/EditAndSaveButtonRow";
 
-const formatDetailValueState = (value, type) =>
-  type === "date" ? new Date(value) : value;
+const formatDetailValueState = (value, type) => {
+  if (type === "date") {
+    return value ? new Date(value) : new Date();
+  }
+  return value;
+};
 
 const ItemDetail = ({
   field: { columnName, displayName, type, getDisplayValue, valueOptions },
@@ -26,7 +30,11 @@ const ItemDetail = ({
   }, [value]);
 
   useEffect(() => {
-    if (inEditMode && inputToFocusRef.current.focus) {
+    if (
+      inEditMode &&
+      inputToFocusRef.current &&
+      inputToFocusRef.current.focus
+    ) {
       inputToFocusRef.current.focus();
     }
   }, [inEditMode]);
