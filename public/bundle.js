@@ -2201,7 +2201,7 @@ var itemDetailFieldsByItemType = {
   }],
   vendor_orders: [{
     columnName: "po_num",
-    displayName: "PO Number",
+    displayName: "Invoice / PO #",
     type: "text"
   }, {
     columnName: "date_ordered",

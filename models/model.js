@@ -69,7 +69,7 @@ class Model {
 
   getById(id, { columns, joinClause = "", queryValues } = {}) {
     if (this.isInvalidId(id)) return this.error("id");
-
+    console.log(queryValues);
     const query = pgp.as.format(
       this.createSelectClause(columns) +
         " FROM ${table} as t1" +

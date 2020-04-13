@@ -14,7 +14,11 @@ class VendorOrderModel extends Model {
     const joinClause = " INNER JOIN ${joinTable} on company.id = t1.vendor_id";
     const columns =
       "job_order_id,vendor_id,price,number_of_pieces,date_ordered,po_num,t1.notes,company.name";
-    return super.getById(id, { joinTable, joinClause, columns });
+    return super.getById(id, {
+      queryValues: { joinTable },
+      joinClause,
+      columns,
+    });
   }
 
   new(record) {

@@ -182,7 +182,7 @@ export const itemDetailFieldsByItemType = {
     { columnName: "completed", type: "checkbox" },
   ],
   vendor_orders: [
-    { columnName: "po_num", displayName: "PO Number", type: "text" },
+    { columnName: "po_num", displayName: "Invoice / PO #", type: "text" },
     { columnName: "date_ordered", type: "date" },
     {
       columnName: "number_of_pieces",
