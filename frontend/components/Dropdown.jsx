@@ -35,7 +35,7 @@ const Dropdown = ({ type, value, onChange }) => {
         </option>
         {items.map((item) => (
           <option value={item.id} key={item.id}>
-            {getItemNameFuncByItemType[type](item)}
+            {getItemNameFuncByItemType[type](item).itemName}
           </option>
         ))}
       </select>

@@ -364,7 +364,7 @@ var Dropdown = function Dropdown(_ref) {
     return /*#__PURE__*/_react["default"].createElement("option", {
       value: item.id,
       key: item.id
-    }, _constants.getItemNameFuncByItemType[type](item));
+    }, _constants.getItemNameFuncByItemType[type](item).itemName);
   })), /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--new",
     onClick: function onClick() {
