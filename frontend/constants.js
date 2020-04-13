@@ -189,10 +189,6 @@ export const itemDetailFieldsByItemType = {
       displayName: "Number of Pieces",
       type: "text",
     },
-    {
-      columnName: "price",
-      type: "text",
-    },
     { columnName: "notes", type: "text" },
   ],
 };
@@ -259,7 +255,6 @@ export const newItemFormFieldsByItemType = {
     { columnName: "po_num", displayName: "PO Number" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
     { columnName: "number_of_pieces", displayName: "Number of Pieces" },
-    { columnName: "price" },
     { columnName: "notes" },
   ],
   vendors: [{ columnName: "name" }, { columnName: "notes" }],

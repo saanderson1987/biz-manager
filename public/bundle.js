@@ -2211,9 +2211,6 @@ var itemDetailFieldsByItemType = {
     displayName: "Number of Pieces",
     type: "text"
   }, {
-    columnName: "price",
-    type: "text"
-  }, {
     columnName: "notes",
     type: "text"
   }]
@@ -2306,8 +2303,6 @@ var newItemFormFieldsByItemType = {
   }, {
     columnName: "number_of_pieces",
     displayName: "Number of Pieces"
-  }, {
-    columnName: "price"
   }, {
     columnName: "notes"
   }],
