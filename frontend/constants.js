@@ -199,6 +199,7 @@ export const itemDetailFieldsByItemType = {
   ],
   vendor_orders: [
     { columnName: "po_num", displayName: "Invoice / PO #", type: "text" },
+    { columnName: "tracking_num", displayName: "Tracking #", type: "text" },
     { columnName: "date_ordered", type: "date" },
     {
       columnName: "number_of_pieces",
@@ -276,7 +277,8 @@ export const newItemFormFieldsByItemType = {
       type: "dropdown",
       dropdownType: "vendors",
     },
-    { columnName: "po_num", displayName: "PO Number" },
+    { columnName: "po_num", displayName: "Invoice/ PO #" },
+    { columnName: "tracking_num", displayName: "Tracking #" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
     { columnName: "number_of_pieces", displayName: "Number of Pieces" },
     { columnName: "completed", type: "checkbox" },

@@ -2239,6 +2239,10 @@ var itemDetailFieldsByItemType = {
     displayName: "Invoice / PO #",
     type: "text"
   }, {
+    columnName: "tracking_num",
+    displayName: "Tracking #",
+    type: "text"
+  }, {
     columnName: "date_ordered",
     type: "date"
   }, {
@@ -2344,7 +2348,10 @@ var newItemFormFieldsByItemType = {
     dropdownType: "vendors"
   }, {
     columnName: "po_num",
-    displayName: "PO Number"
+    displayName: "Invoice/ PO #"
+  }, {
+    columnName: "tracking_num",
+    displayName: "Tracking #"
   }, {
     columnName: "date_ordered",
     displayName: "Date Ordered",
