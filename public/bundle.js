@@ -690,7 +690,8 @@ var List = function List(_ref) {
   (0, _react.useEffect)(function () {
     getByQuery((0, _constants.createListGetByQueryOptions)(type, parentId, statePath));
   }, [type]);
-  var items = Object.values((0, _lodash["default"])(state, statePath, {}));
+  var sortFunc = (0, _constants.getDefaultListSortFuncByItemType)(type);
+  var items = Object.values((0, _lodash["default"])(state, statePath, {})).sort(sortFunc);
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "list"
   }, !isRoot && /*#__PURE__*/_react["default"].createElement("div", {
@@ -1942,7 +1943,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
+exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.getDefaultListSortFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
@@ -2052,6 +2053,27 @@ var listNameByItemType = {
   vendors: "Vendors"
 };
 exports.listNameByItemType = listNameByItemType;
+var defaultSortFieldByItemType = {
+  job_orders: "date_ordered",
+  installations: "installation_date"
+};
+
+var getDefaultListSortFuncByItemType = function getDefaultListSortFuncByItemType(type) {
+  var sortField = defaultSortFieldByItemType[type] || "name";
+  return function (a, b) {
+    if (a[sortField] < b[sortField]) {
+      return -1;
+    }
+
+    if (a[sortField] > b[sortField]) {
+      return 1;
+    }
+
+    return 0;
+  };
+};
+
+exports.getDefaultListSortFuncByItemType = getDefaultListSortFuncByItemType;
 var getItemNameFuncByItemType = {
   companies: function companies(item) {
     return {

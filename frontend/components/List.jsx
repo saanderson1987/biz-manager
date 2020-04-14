@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import classNames from "classnames";
 import get from "lodash.get";
-import { createListGetByQueryOptions, listNameByItemType } from "../constants";
+import {
+  createListGetByQueryOptions,
+  getDefaultListSortFuncByItemType,
+  listNameByItemType,
+} from "../constants";
 import { StoreContext } from "../store";
 import ListItem from "./ListItem";
 import NewItemModal from "./NewItemModal";
@@ -15,7 +19,8 @@ const List = ({ type, parentId, statePath, isRoot }) => {
     getByQuery(createListGetByQueryOptions(type, parentId, statePath));
   }, [type]);
 
-  const items = Object.values(get(state, statePath, {}));
+  const sortFunc = getDefaultListSortFuncByItemType(type);
+  const items = Object.values(get(state, statePath, {})).sort(sortFunc);
 
   return (
     <div className={"list"}>

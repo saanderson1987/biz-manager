@@ -87,6 +87,24 @@ export const listNameByItemType = {
   vendors: "Vendors",
 };
 
+const defaultSortFieldByItemType = {
+  job_orders: "date_ordered",
+  installations: "installation_date",
+};
+
+export const getDefaultListSortFuncByItemType = (type) => {
+  const sortField = defaultSortFieldByItemType[type] || "name";
+  return (a, b) => {
+    if (a[sortField] < b[sortField]) {
+      return -1;
+    }
+    if (a[sortField] > b[sortField]) {
+      return 1;
+    }
+    return 0;
+  };
+};
+
 export const getItemNameFuncByItemType = {
   companies: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
   clients: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
