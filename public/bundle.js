@@ -2211,6 +2211,9 @@ var itemDetailFieldsByItemType = {
     displayName: "Number of Pieces",
     type: "text"
   }, {
+    columnName: "completed",
+    type: "checkbox"
+  }, {
     columnName: "notes",
     type: "text"
   }]
@@ -2303,6 +2306,9 @@ var newItemFormFieldsByItemType = {
   }, {
     columnName: "number_of_pieces",
     displayName: "Number of Pieces"
+  }, {
+    columnName: "completed",
+    type: "checkbox"
   }, {
     columnName: "notes"
   }],
