@@ -1,6 +1,7 @@
 import { getDateString } from "../util/functions";
 
 export const parentColumnByItemType = {
+  contacts: "company_id",
   jobs: "company_id",
   job_orders: "job_id",
   installations: "job_order_id",
@@ -16,6 +17,7 @@ export const apiRouteByItemType = {
   companies: "companies",
   clients: "companies",
   prospects: "companies",
+  contacts: "contacts",
   jobs: "jobs",
   job_orders: "job_orders",
   installations: "installations",
@@ -35,6 +37,7 @@ export const queryParamsByItemType = {
     columns: "name",
     status: "prospect",
   },
+  contacts: { columns: "name" },
   jobs: { columns: "name" },
   job_orders: { columns: "date_ordered" },
   installations: { columns: "installation_date" },
@@ -54,6 +57,9 @@ export const createListGetByQueryOptions = (type, parentId, statePath) => {
 };
 
 const itemDetailsGetByIdQueryParams = {
+  contacts: {
+    columns: "name,phone_num,email,position",
+  },
   jobs: {
     columns:
       "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date",
@@ -73,6 +79,7 @@ export const listNameByItemType = {
   companies: "Companies",
   clients: "Clients",
   prospects: "Prospects",
+  contacts: "Contacts",
   jobs: "Jobs",
   job_orders: "Job Orders",
   installations: "Installations",
@@ -84,6 +91,7 @@ export const getItemNameFuncByItemType = {
   companies: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
   clients: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
   prospects: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  contacts: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
   jobs: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
   job_orders: ({ date_ordered }) => ({
     itemName:
@@ -121,6 +129,7 @@ export const itemDetailFieldsByItemType = {
       type: "radio",
       valueOptions: [{ value: "prospect" }, { value: "client" }],
     },
+    { columnName: "contacts", type: "list" },
     { columnName: "jobs", type: "list" },
   ],
   prospects: [
@@ -130,7 +139,14 @@ export const itemDetailFieldsByItemType = {
       type: "radio",
       valueOptions: [{ value: "prospect" }, { value: "client" }],
     },
+    { columnName: "contacts", type: "list" },
     { columnName: "jobs", type: "list" },
+  ],
+  contacts: [
+    { columnName: "name", type: "text" },
+    { columnName: "phone_num", displayName: "Phone Number", type: "text" },
+    { columnName: "email", type: "text" },
+    { columnName: "position", type: "text" },
   ],
   jobs: [
     { columnName: "po_num", displayName: "PO #", type: "text" },
@@ -198,10 +214,11 @@ export const itemNameByItemType = {
   companies: "Company",
   clients: "Company",
   prospects: "Company",
+  contact: "Contact",
   jobs: "Job",
   job_orders: "Job Order",
   installations: "Installation",
-  vendor_orders: "Vendor Orders",
+  vendor_orders: "Vendor Order",
   vendors: "Vendor",
 };
 
@@ -232,6 +249,12 @@ export const newItemFormFieldsByItemType = {
       valueOptions: [{ value: "prospect" }, { value: "client" }],
     },
     { columnName: "notes" },
+  ],
+  contacts: [
+    { columnName: "name" },
+    { columnName: "phone_num", displayName: "Phone Number" },
+    { columnName: "email" },
+    { columnName: "position" },
   ],
   jobs: [{ columnName: "name" }, { columnName: "po_num", displayName: "PO #" }],
   job_orders: [

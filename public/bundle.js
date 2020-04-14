@@ -1953,6 +1953,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var parentColumnByItemType = {
+  contacts: "company_id",
   jobs: "company_id",
   job_orders: "job_id",
   installations: "job_order_id",
@@ -1969,6 +1970,7 @@ var apiRouteByItemType = {
   companies: "companies",
   clients: "companies",
   prospects: "companies",
+  contacts: "contacts",
   jobs: "jobs",
   job_orders: "job_orders",
   installations: "installations",
@@ -1987,6 +1989,9 @@ var queryParamsByItemType = {
   prospects: {
     columns: "name",
     status: "prospect"
+  },
+  contacts: {
+    columns: "name"
   },
   jobs: {
     columns: "name"
@@ -2017,6 +2022,9 @@ var createListGetByQueryOptions = function createListGetByQueryOptions(type, par
 
 exports.createListGetByQueryOptions = createListGetByQueryOptions;
 var itemDetailsGetByIdQueryParams = {
+  contacts: {
+    columns: "name,phone_num,email,position"
+  },
   jobs: {
     columns: "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date"
   }
@@ -2036,6 +2044,7 @@ var listNameByItemType = {
   companies: "Companies",
   clients: "Clients",
   prospects: "Prospects",
+  contacts: "Contacts",
   jobs: "Jobs",
   job_orders: "Job Orders",
   installations: "Installations",
@@ -2057,6 +2066,12 @@ var getItemNameFuncByItemType = {
     };
   },
   prospects: function prospects(item) {
+    return {
+      itemName: item.name,
+      itemNameColumnName: "name"
+    };
+  },
+  contacts: function contacts(item) {
     return {
       itemName: item.name,
       itemNameColumnName: "name"
@@ -2123,6 +2138,9 @@ var itemDetailFieldsByItemType = {
       value: "client"
     }]
   }, {
+    columnName: "contacts",
+    type: "list"
+  }, {
     columnName: "jobs",
     type: "list"
   }],
@@ -2138,8 +2156,25 @@ var itemDetailFieldsByItemType = {
       value: "client"
     }]
   }, {
+    columnName: "contacts",
+    type: "list"
+  }, {
     columnName: "jobs",
     type: "list"
+  }],
+  contacts: [{
+    columnName: "name",
+    type: "text"
+  }, {
+    columnName: "phone_num",
+    displayName: "Phone Number",
+    type: "text"
+  }, {
+    columnName: "email",
+    type: "text"
+  }, {
+    columnName: "position",
+    type: "text"
   }],
   jobs: [{
     columnName: "po_num",
@@ -2223,10 +2258,11 @@ var itemNameByItemType = {
   companies: "Company",
   clients: "Company",
   prospects: "Company",
+  contact: "Contact",
   jobs: "Job",
   job_orders: "Job Order",
   installations: "Installation",
-  vendor_orders: "Vendor Orders",
+  vendor_orders: "Vendor Order",
   vendors: "Vendor"
 };
 exports.itemNameByItemType = itemNameByItemType;
@@ -2269,6 +2305,16 @@ var newItemFormFieldsByItemType = {
     }]
   }, {
     columnName: "notes"
+  }],
+  contacts: [{
+    columnName: "name"
+  }, {
+    columnName: "phone_num",
+    displayName: "Phone Number"
+  }, {
+    columnName: "email"
+  }, {
+    columnName: "position"
   }],
   jobs: [{
     columnName: "name"
