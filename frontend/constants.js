@@ -62,7 +62,7 @@ const itemDetailsGetByIdQueryParams = {
   },
   jobs: {
     columns:
-      "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date",
+      "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status",
   },
 };
 
@@ -185,6 +185,21 @@ export const itemDetailFieldsByItemType = {
       ],
     },
     {
+      columnName: "receivable_status",
+      displayName: "Receivable Status",
+      type: "dropdown",
+      valueOptions: [
+        { value: null, displayName: "" },
+        {
+          value: "PO sent",
+        },
+        { value: "50% paid" },
+        {
+          value: "100% paid",
+        },
+      ],
+    },
+    {
       columnName: "budget_sent_date",
       displayName: "Budget Sent Date",
       type: "date",
@@ -275,7 +290,23 @@ export const newItemFormFieldsByItemType = {
     { columnName: "email" },
     { columnName: "position" },
   ],
-  jobs: [{ columnName: "name" }, { columnName: "po_num", displayName: "PO #" }],
+  jobs: [
+    { columnName: "name" },
+    { columnName: "po_num", displayName: "PO #" },
+    {
+      columnName: "receivable_status",
+      type: "dropdown",
+      valueOptions: [
+        {
+          value: "PO sent",
+        },
+        { value: "50% paid" },
+        {
+          value: "100% paid",
+        },
+      ],
+    },
+  ],
   job_orders: [
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
     { columnName: "notes" },

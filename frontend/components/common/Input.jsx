@@ -49,7 +49,7 @@ const Input = ({ type, value, onChange, valueOptions, save, inputRef }) => {
   if (type === "dropdown") {
     return (
       <select
-        value={value}
+        value={value || ""}
         onChange={({ target: { value } }) => onChange(value)}
         {...commonInputProps}
       >

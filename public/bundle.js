@@ -608,7 +608,7 @@ var ItemDetails = function ItemDetails(_ref) {
             route: route,
             record: _defineProperty({
               id: item.id
-            }, field.columnName, newValue),
+            }, field.columnName, newValue || null),
             statePath: statePath
           });
         },
@@ -1690,7 +1690,7 @@ var Input = function Input(_ref) {
 
   if (type === "dropdown") {
     return /*#__PURE__*/_react["default"].createElement("select", _extends({
-      value: value,
+      value: value || "",
       onChange: function onChange(_ref4) {
         var value = _ref4.target.value;
         return _onChange(value);
@@ -2027,7 +2027,7 @@ var itemDetailsGetByIdQueryParams = {
     columns: "name,phone_num,email,position"
   },
   jobs: {
-    columns: "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date"
+    columns: "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status"
   }
 };
 
@@ -2219,6 +2219,20 @@ var itemDetailFieldsByItemType = {
       displayName: jobStatusDisplayNameByType.completed
     }]
   }, {
+    columnName: "receivable_status",
+    displayName: "Receivable Status",
+    type: "dropdown",
+    valueOptions: [{
+      value: null,
+      displayName: ""
+    }, {
+      value: "PO sent"
+    }, {
+      value: "50% paid"
+    }, {
+      value: "100% paid"
+    }]
+  }, {
     columnName: "budget_sent_date",
     displayName: "Budget Sent Date",
     type: "date"
@@ -2347,6 +2361,16 @@ var newItemFormFieldsByItemType = {
   }, {
     columnName: "po_num",
     displayName: "PO #"
+  }, {
+    columnName: "receivable_status",
+    type: "dropdown",
+    valueOptions: [{
+      value: "PO sent"
+    }, {
+      value: "50% paid"
+    }, {
+      value: "100% paid"
+    }]
   }],
   job_orders: [{
     columnName: "date_ordered",
