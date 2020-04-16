@@ -1976,7 +1976,8 @@ var apiRouteByItemType = {
   job_orders: "job_orders",
   installations: "installations",
   vendor_orders: "vendor_orders",
-  vendors: "companies"
+  vendors: "companies",
+  notes: "notes"
 };
 exports.apiRouteByItemType = apiRouteByItemType;
 var queryParamsByItemType = {
@@ -2009,6 +2010,9 @@ var queryParamsByItemType = {
   vendors: {
     columns: "name",
     status: "vendor"
+  },
+  notes: {
+    columns: "contents,updated_at"
   }
 };
 exports.queryParamsByItemType = queryParamsByItemType;
@@ -2028,6 +2032,9 @@ var itemDetailsGetByIdQueryParams = {
   },
   jobs: {
     columns: "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status"
+  },
+  notes: {
+    columns: "contents,author_name,updated_at"
   }
 };
 
@@ -2050,12 +2057,14 @@ var listNameByItemType = {
   job_orders: "Job Orders",
   installations: "Installations",
   vendor_orders: "Vendor Orders",
-  vendors: "Vendors"
+  vendors: "Vendors",
+  notes: "Notes"
 };
 exports.listNameByItemType = listNameByItemType;
 var defaultSortFieldByItemType = {
   job_orders: "date_ordered",
-  installations: "installation_date"
+  installations: "installation_date",
+  notes: "updated_at"
 };
 
 var getDefaultListSortFuncByItemType = function getDefaultListSortFuncByItemType(type) {
@@ -2138,6 +2147,11 @@ var getItemNameFuncByItemType = {
     return {
       itemName: item.name,
       itemNameColumnName: "name"
+    };
+  },
+  notes: function notes(item) {
+    return {
+      itemName: item.contents && item.contents.length > 44 ? "".concat(item.contents.slice(0, 44), "... (see more)") : item.contents
     };
   }
 };
@@ -2247,6 +2261,9 @@ var itemDetailFieldsByItemType = {
   }, {
     columnName: "job_orders",
     type: "list"
+  }, {
+    columnName: "notes",
+    type: "list"
   }],
   job_orders: [{
     columnName: "notes",
@@ -2291,6 +2308,20 @@ var itemDetailFieldsByItemType = {
   }, {
     columnName: "notes",
     type: "text"
+  }],
+  notes: [{
+    columnName: "author_name",
+    displayName: "Author",
+    type: "text",
+    readOnly: true
+  }, {
+    columnName: "updated_at",
+    displayName: "Last Updated",
+    type: "date",
+    readOnly: true
+  }, {
+    columnName: "contents",
+    type: "text"
   }]
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;
@@ -2303,7 +2334,8 @@ var itemNameByItemType = {
   job_orders: "Job Order",
   installations: "Installation",
   vendor_orders: "Vendor Order",
-  vendors: "Vendor"
+  vendors: "Vendor",
+  notes: "Note"
 };
 exports.itemNameByItemType = itemNameByItemType;
 var newItemFormFieldsByItemType = {
@@ -2415,6 +2447,9 @@ var newItemFormFieldsByItemType = {
     columnName: "name"
   }, {
     columnName: "notes"
+  }],
+  note: [{
+    columnName: "contents"
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;

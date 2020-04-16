@@ -23,6 +23,7 @@ export const apiRouteByItemType = {
   installations: "installations",
   vendor_orders: "vendor_orders",
   vendors: "companies",
+  notes: "notes",
 };
 
 export const queryParamsByItemType = {
@@ -43,6 +44,7 @@ export const queryParamsByItemType = {
   installations: { columns: "installation_date" },
   vendor_orders: { columns: "name,date_ordered" },
   vendors: { columns: "name", status: "vendor" },
+  notes: { columns: "contents,updated_at" },
 };
 
 export const createListGetByQueryOptions = (type, parentId, statePath) => {
@@ -64,6 +66,7 @@ const itemDetailsGetByIdQueryParams = {
     columns:
       "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status",
   },
+  notes: { columns: "contents,author_name,updated_at" },
 };
 
 export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
@@ -85,11 +88,13 @@ export const listNameByItemType = {
   installations: "Installations",
   vendor_orders: "Vendor Orders",
   vendors: "Vendors",
+  notes: "Notes",
 };
 
 const defaultSortFieldByItemType = {
   job_orders: "date_ordered",
   installations: "installation_date",
+  notes: "updated_at",
 };
 
 export const getDefaultListSortFuncByItemType = (type) => {
@@ -131,6 +136,12 @@ export const getItemNameFuncByItemType = {
     return { itemName };
   },
   vendors: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
+  notes: (item) => ({
+    itemName:
+      item.contents && item.contents.length > 44
+        ? `${item.contents.slice(0, 44)}... (see more)`
+        : item.contents,
+  }),
 };
 
 const jobStatusDisplayNameByType = {
@@ -215,6 +226,7 @@ export const itemDetailFieldsByItemType = {
       type: "date",
     },
     { columnName: "job_orders", type: "list" },
+    { columnName: "notes", type: "list" },
   ],
   job_orders: [
     { columnName: "notes", type: "text" },
@@ -242,6 +254,21 @@ export const itemDetailFieldsByItemType = {
     { columnName: "completed", type: "checkbox" },
     { columnName: "notes", type: "text" },
   ],
+  notes: [
+    {
+      columnName: "author_name",
+      displayName: "Author",
+      type: "text",
+      readOnly: true,
+    },
+    {
+      columnName: "updated_at",
+      displayName: "Last Updated",
+      type: "date",
+      readOnly: true,
+    },
+    { columnName: "contents", type: "text" },
+  ],
 };
 
 export const itemNameByItemType = {
@@ -254,6 +281,7 @@ export const itemNameByItemType = {
   installations: "Installation",
   vendor_orders: "Vendor Order",
   vendors: "Vendor",
+  notes: "Note",
 };
 
 export const newItemFormFieldsByItemType = {
@@ -334,6 +362,7 @@ export const newItemFormFieldsByItemType = {
     { columnName: "notes" },
   ],
   vendors: [{ columnName: "name" }, { columnName: "notes" }],
+  note: [{ columnName: "contents" }],
 };
 
 export const newItemRecordBaseByItemType = {
