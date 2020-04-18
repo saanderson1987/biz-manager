@@ -136,12 +136,16 @@ export const getItemNameFuncByItemType = {
     return { itemName };
   },
   vendors: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
-  notes: (item) => ({
-    itemName:
-      item.contents && item.contents.length > 44
-        ? `${item.contents.slice(0, 44)}... (see more)`
-        : item.contents,
-  }),
+  notes: (item) => {
+    let itemName = item.contents || "";
+    itemName = itemName.replace("\n", "...");
+    if (itemName.length > 44) {
+      itemName = `${itemName.slice(0, 44)}... (see more)`;
+    }
+    return {
+      itemName,
+    };
+  },
 };
 
 const jobStatusDisplayNameByType = {

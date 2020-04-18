@@ -14,6 +14,11 @@ const DisplayValue = ({ value, type, className }) => {
   if (type === "radio") {
     displayValue = capitalize(value);
   }
+  if (type === "text-box") {
+    return (value || "")
+      .split("\n")
+      .map((line) => (line ? <div>{line}</div> : <br />));
+  }
   return <span className={className}>{displayValue}</span>;
 };
 

@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { capitalize } from "../../../util/functions";
@@ -75,7 +76,8 @@ const Input = ({
       <textarea
         value={value}
         onChange={({ target: { value } }) => onChange(value)}
-        {...commonInputProps}
+        ref={inputRef}
+        className={classNames(className, "text-box")}
       />
     );
   }
