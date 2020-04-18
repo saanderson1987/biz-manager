@@ -12,7 +12,14 @@ const formatDetailValueState = (value, type) => {
 };
 
 const ItemDetail = ({
-  field: { columnName, displayName, type, getDisplayValue, valueOptions },
+  field: {
+    columnName,
+    displayName,
+    type,
+    getDisplayValue,
+    valueOptions,
+    isReadOnly,
+  },
   value,
   updateValue,
 }) => {
@@ -78,15 +85,17 @@ const ItemDetail = ({
               />
             )}
           </div>
-          <div className={"EditAndSaveButtonRow-container"}>
-            <EditAndSaveButtonRow
-              save={save}
-              inEditMode={inEditMode}
-              toggleEditMode={() => {
-                setInEditMode(!inEditMode);
-              }}
-            />
-          </div>
+          {!isReadOnly && (
+            <div className={"EditAndSaveButtonRow-container"}>
+              <EditAndSaveButtonRow
+                save={save}
+                inEditMode={inEditMode}
+                toggleEditMode={() => {
+                  setInEditMode(!inEditMode);
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -446,6 +446,7 @@ var ItemDetail = function ItemDetail(_ref) {
       type = _ref$field.type,
       getDisplayValue = _ref$field.getDisplayValue,
       valueOptions = _ref$field.valueOptions,
+      isReadOnly = _ref$field.isReadOnly,
       value = _ref.value,
       updateValue = _ref.updateValue;
 
@@ -507,7 +508,7 @@ var ItemDetail = function ItemDetail(_ref) {
   }) : /*#__PURE__*/_react["default"].createElement(_DisplayValue["default"], {
     value: getDisplayValue ? getDisplayValue(value) : value,
     type: type
-  })), /*#__PURE__*/_react["default"].createElement("div", {
+  })), !isReadOnly && /*#__PURE__*/_react["default"].createElement("div", {
     className: "EditAndSaveButtonRow-container"
   }, /*#__PURE__*/_react["default"].createElement(_EditAndSaveButtonRow["default"], {
     save: save,
@@ -1549,7 +1550,10 @@ var DisplayValue = function DisplayValue(_ref) {
 
   if (type === "radio") {
     displayValue = (0, _functions.capitalize)(value);
-  }
+  } // if (type === "text-box") {
+  //   return <div className={className}>{displayValue}</div>;
+  // }
+
 
   return /*#__PURE__*/_react["default"].createElement("span", {
     className: className
@@ -1703,11 +1707,21 @@ var Input = function Input(_ref) {
     }));
   }
 
+  if (type === "text-box") {
+    return /*#__PURE__*/_react["default"].createElement("textarea", _extends({
+      value: value,
+      onChange: function onChange(_ref5) {
+        var value = _ref5.target.value;
+        return _onChange(value);
+      }
+    }, commonInputProps));
+  }
+
   return /*#__PURE__*/_react["default"].createElement("input", _extends({
     type: "text",
     value: value,
-    onChange: function onChange(_ref5) {
-      var value = _ref5.target.value;
+    onChange: function onChange(_ref6) {
+      var value = _ref6.target.value;
       return _onChange(value);
     }
   }, commonInputProps));
@@ -2313,15 +2327,15 @@ var itemDetailFieldsByItemType = {
     columnName: "author_name",
     displayName: "Author",
     type: "text",
-    readOnly: true
+    isReadOnly: true
   }, {
     columnName: "updated_at",
     displayName: "Last Updated",
     type: "date",
-    readOnly: true
+    isReadOnly: true
   }, {
     columnName: "contents",
-    type: "text"
+    type: "text-box"
   }]
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;

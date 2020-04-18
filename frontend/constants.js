@@ -259,15 +259,15 @@ export const itemDetailFieldsByItemType = {
       columnName: "author_name",
       displayName: "Author",
       type: "text",
-      readOnly: true,
+      isReadOnly: true,
     },
     {
       columnName: "updated_at",
       displayName: "Last Updated",
       type: "date",
-      readOnly: true,
+      isReadOnly: true,
     },
-    { columnName: "contents", type: "text" },
+    { columnName: "contents", type: "text-box" },
   ],
 };
 

@@ -61,6 +61,15 @@ const Input = ({ type, value, onChange, valueOptions, save, inputRef }) => {
       </select>
     );
   }
+  if (type === "text-box") {
+    return (
+      <textarea
+        value={value}
+        onChange={({ target: { value } }) => onChange(value)}
+        {...commonInputProps}
+      />
+    );
+  }
   return (
     <input
       type="text"
