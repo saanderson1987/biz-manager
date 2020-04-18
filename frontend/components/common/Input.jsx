@@ -4,7 +4,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import { capitalize } from "../../../util/functions";
 
 // if props.save is defined and props.type is text, then `save` will be called if user presses enter in the text input.
-const Input = ({ type, value, onChange, valueOptions, save, inputRef }) => {
+const Input = ({
+  type,
+  value,
+  onChange,
+  valueOptions,
+  save,
+  inputRef,
+  className,
+}) => {
   const commonInputProps = {
     onKeyUp: ({ keyCode }) => {
       if (save && keyCode === 13 /* 13 is enter key */) {
@@ -12,6 +20,7 @@ const Input = ({ type, value, onChange, valueOptions, save, inputRef }) => {
       }
     },
     ref: inputRef,
+    className,
   };
 
   if (type === "date") {

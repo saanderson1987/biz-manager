@@ -488,17 +488,15 @@ var ItemDetail = function ItemDetail(_ref) {
   };
 
   var inputToFocusRef = (0, _react.createRef)();
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "item-detail"
-  }, /*#__PURE__*/_react["default"].createElement("div", {
+  return /*#__PURE__*/_react["default"].createElement("tr", {
+    className: "item-detail-row"
+  }, /*#__PURE__*/_react["default"].createElement("td", {
     className: "item-detail-name"
-  }, displayName ? displayName : columnName.charAt(0).toUpperCase() + columnName.slice(1), ":"), isValueUpdating ? /*#__PURE__*/_react["default"].createElement(_Loader["default"], {
-    isInline: true
-  }) : /*#__PURE__*/_react["default"].createElement("div", {
-    className: "detail-value-container"
-  }, /*#__PURE__*/_react["default"].createElement("div", {
+  }, displayName ? displayName : columnName.charAt(0).toUpperCase() + columnName.slice(1), ":"), /*#__PURE__*/_react["default"].createElement("td", {
     className: "item-detail-value"
-  }, inEditMode ? /*#__PURE__*/_react["default"].createElement(_Input["default"], {
+  }, isValueUpdating ? /*#__PURE__*/_react["default"].createElement(_Loader["default"], {
+    isInline: true
+  }) : inEditMode ? /*#__PURE__*/_react["default"].createElement(_Input["default"], {
     value: editedValue,
     type: type,
     onChange: setEditedValue,
@@ -508,15 +506,15 @@ var ItemDetail = function ItemDetail(_ref) {
   }) : /*#__PURE__*/_react["default"].createElement(_DisplayValue["default"], {
     value: getDisplayValue ? getDisplayValue(value) : value,
     type: type
-  })), !isReadOnly && /*#__PURE__*/_react["default"].createElement("div", {
-    className: "EditAndSaveButtonRow-container"
+  })), /*#__PURE__*/_react["default"].createElement("td", {
+    className: "item-detail-edit-and-save"
   }, /*#__PURE__*/_react["default"].createElement(_EditAndSaveButtonRow["default"], {
     save: save,
     inEditMode: inEditMode,
     toggleEditMode: function toggleEditMode() {
       setInEditMode(!inEditMode);
     }
-  }))));
+  })));
 };
 
 var _default = ItemDetail;
@@ -550,8 +548,6 @@ var _constants = __webpack_require__(/*! ../constants */ "./frontend/constants.j
 var _store = __webpack_require__(/*! ../store */ "./frontend/store.js");
 
 var _ItemDetail = _interopRequireDefault(__webpack_require__(/*! ./ItemDetail */ "./frontend/components/ItemDetail.jsx"));
-
-var _List = _interopRequireDefault(__webpack_require__(/*! ./List */ "./frontend/components/List.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -590,33 +586,22 @@ var ItemDetails = function ItemDetails(_ref) {
       getById((0, _constants.createItemDetailsGetByIdQueryOptions)(type, itemId, statePath));
     }
   }, [itemId]);
-  return item && /*#__PURE__*/_react["default"].createElement("div", {
-    className: "item-details"
-  }, _constants.itemDetailFieldsByItemType[type].map(function (field, i) {
-    if (field.type === "list") {
-      return /*#__PURE__*/_react["default"].createElement(_List["default"], {
-        type: field.columnName,
-        parentId: itemId,
-        statePath: [].concat(_toConsumableArray(statePath), [itemId, field.columnName]),
-        key: i
-      });
-    } else {
-      return /*#__PURE__*/_react["default"].createElement(_ItemDetail["default"], {
-        field: field,
-        value: item[field.columnName],
-        updateValue: function updateValue(newValue) {
-          return updateRecord({
-            route: route,
-            record: _defineProperty({
-              id: item.id
-            }, field.columnName, newValue || null),
-            statePath: statePath
-          });
-        },
-        key: i
-      });
-    }
-  }));
+  return item && /*#__PURE__*/_react["default"].createElement("table", null, /*#__PURE__*/_react["default"].createElement("tbody", null, _constants.itemDetailFieldsByItemType[type].map(function (field, i) {
+    return /*#__PURE__*/_react["default"].createElement(_ItemDetail["default"], {
+      field: field,
+      value: item[field.columnName],
+      updateValue: function updateValue(newValue) {
+        return updateRecord({
+          route: route,
+          record: _defineProperty({
+            id: item.id
+          }, field.columnName, newValue || null),
+          statePath: statePath
+        });
+      },
+      key: i
+    });
+  })));
 };
 
 var _default = ItemDetails;
@@ -765,6 +750,8 @@ var _ListItemHeader = _interopRequireDefault(__webpack_require__(/*! ./ListItemH
 
 var _ItemDetails = _interopRequireDefault(__webpack_require__(/*! ./ItemDetails */ "./frontend/components/ItemDetails.jsx"));
 
+var _List = _interopRequireDefault(__webpack_require__(/*! ./List */ "./frontend/components/List.jsx"));
+
 var _DeleteWarning = _interopRequireDefault(__webpack_require__(/*! ./DeleteWarning */ "./frontend/components/DeleteWarning.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -772,6 +759,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -832,12 +827,19 @@ var ListItem = function ListItem(_ref) {
         statePath: statePath
       });
     }
-  }), isExpanded && /*#__PURE__*/_react["default"].createElement(_ItemDetails["default"], {
+  }), isExpanded && /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement(_ItemDetails["default"], {
     type: type,
     itemId: item.id,
     parentId: parentId,
     statePath: statePath
-  }), isDeleteWarningVisible && /*#__PURE__*/_react["default"].createElement(_DeleteWarning["default"], {
+  }), (_constants.itemListsByItemType[type] || []).map(function (list, i) {
+    return /*#__PURE__*/_react["default"].createElement(_List["default"], {
+      type: list.type,
+      parentId: item.id,
+      statePath: [].concat(_toConsumableArray(statePath), [item.id, list.type]),
+      key: i
+    });
+  })), isDeleteWarningVisible && /*#__PURE__*/_react["default"].createElement(_DeleteWarning["default"], {
     itemName: itemName,
     closeModal: function closeModal() {
       return setIsDeleteWarningVisible(false);
@@ -1550,10 +1552,7 @@ var DisplayValue = function DisplayValue(_ref) {
 
   if (type === "radio") {
     displayValue = (0, _functions.capitalize)(value);
-  } // if (type === "text-box") {
-  //   return <div className={className}>{displayValue}</div>;
-  // }
-
+  }
 
   return /*#__PURE__*/_react["default"].createElement("span", {
     className: className
@@ -1637,7 +1636,8 @@ var Input = function Input(_ref) {
       _onChange = _ref.onChange,
       valueOptions = _ref.valueOptions,
       save = _ref.save,
-      inputRef = _ref.inputRef;
+      inputRef = _ref.inputRef,
+      className = _ref.className;
   var commonInputProps = {
     onKeyUp: function onKeyUp(_ref2) {
       var keyCode = _ref2.keyCode;
@@ -1648,7 +1648,8 @@ var Input = function Input(_ref) {
           save();
         }
     },
-    ref: inputRef
+    ref: inputRef,
+    className: className
   };
 
   if (type === "date") {
@@ -1957,7 +1958,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.getItemNameFuncByItemType = exports.getDefaultListSortFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
+exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.itemListsByItemType = exports.getItemNameFuncByItemType = exports.getDefaultListSortFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
@@ -2175,6 +2176,29 @@ var jobStatusDisplayNameByType = {
   on_hold: "On Hold",
   completed: "Completed"
 };
+var itemListsByItemType = {
+  clients: [{
+    type: "contacts"
+  }, {
+    type: "jobs"
+  }],
+  prospects: [{
+    type: "contacts"
+  }, {
+    type: "jobs"
+  }],
+  jobs: [{
+    type: "job_orders"
+  }, {
+    type: "notes"
+  }],
+  jobs_orders: [{
+    type: "vendor_orders"
+  }, {
+    type: "installations"
+  }]
+};
+exports.itemListsByItemType = itemListsByItemType;
 var itemDetailFieldsByItemType = {
   clients: [{
     columnName: "notes",
@@ -2187,12 +2211,6 @@ var itemDetailFieldsByItemType = {
     }, {
       value: "client"
     }]
-  }, {
-    columnName: "contacts",
-    type: "list"
-  }, {
-    columnName: "jobs",
-    type: "list"
   }],
   prospects: [{
     columnName: "notes",
@@ -2205,12 +2223,6 @@ var itemDetailFieldsByItemType = {
     }, {
       value: "client"
     }]
-  }, {
-    columnName: "contacts",
-    type: "list"
-  }, {
-    columnName: "jobs",
-    type: "list"
   }],
   contacts: [{
     columnName: "name",
@@ -2272,12 +2284,6 @@ var itemDetailFieldsByItemType = {
     columnName: "art_plan_sent_date",
     displayName: "Art Plan Sent Date",
     type: "date"
-  }, {
-    columnName: "job_orders",
-    type: "list"
-  }, {
-    columnName: "notes",
-    type: "list"
   }],
   job_orders: [{
     columnName: "notes",
@@ -2286,12 +2292,6 @@ var itemDetailFieldsByItemType = {
     columnName: "date_ordered",
     displayName: "Date Ordered",
     type: "date"
-  }, {
-    columnName: "vendor_orders",
-    type: "list"
-  }, {
-    columnName: "installations",
-    type: "list"
   }],
   installations: [{
     columnName: "installation_date",
@@ -4891,7 +4891,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);", ""]);
 
 // module
-exports.push([module.i, "body {\n  font-family: \"Source Sans Pro\", sans-serif;\n  background-color: #f3f4f8; }\n\na {\n  color: inherit;\n  text-decoration: inherit; }\n\na:hover {\n  cursor: pointer;\n  color: inherit;\n  text-decoration: inherit; }\n\nh1 {\n  font-size: 30px; }\n\nul {\n  list-style: none;\n  padding: 0;\n  margin: 0; }\n\nbutton:focus {\n  outline: none; }\n\n.bold {\n  font-weight: bold; }\n\n.inline {\n  display: inline-block;\n  vertical-align: bottom; }\n\n.hidden {\n  display: none; }\n\n.root-container {\n  margin: 0px 13px 13px; }\n\n.button-row {\n  display: flex;\n  justify-content: space-between; }\n\nbutton {\n  cursor: pointer;\n  border: 1px solid #e4e4e4;\n  border-radius: 20px;\n  font-size: 0.8rem;\n  background-color: inherit;\n  padding: 6px 30px; }\n\n.button--save {\n  background-color: #34cc57;\n  border: 1px solid #34cc57;\n  color: white; }\n\n.button--small {\n  padding: 1px 7px 2px; }\n\n.button--new {\n  color: green;\n  margin: 10px;\n  padding: 1px 7px 2px; }\n\n.button--new > span {\n  margin-left: 5px; }\n\n.button--delete {\n  border-color: #d80202;\n  color: #d80202; }\n\n.button-icon {\n  margin-right: 5px; }\n\n.save-cancel-buttons {\n  display: inline-block; }\n\n.save-cancel-buttons > button {\n  margin-left: 20px; }\n\n.pencil-icon {\n  color: #b38700; }\n\n.check-icon {\n  color: green; }\n\n.edit-detail-cancel {\n  display: inline-block;\n  margin-left: 20px;\n  font-size: .85rem;\n  text-decoration: underline; }\n\n.loader {\n  border: 3px solid #f3f3f3;\n  /* Light grey */\n  border-top: 3px solid #3498db;\n  /* Blue */\n  border-radius: 50%;\n  width: 24px;\n  height: 24px;\n  animation: spin 2s linear infinite; }\n\n@keyframes spin {\n  0% {\n    transform: rotate(0deg); }\n  100% {\n    transform: rotate(360deg); } }\n\n.form-header {\n  padding: 10px 20px 10px;\n  background-color: #4f78a9;\n  color: white; }\n\n.form-body {\n  padding: 0px 20px 20px; }\n\n.form-item-detail {\n  margin: 20px 0px; }\n\n.radio-buttons-row {\n  display: inline-block; }\n\n.radio-button-display-name {\n  display: inline-block;\n  margin: 0px 25px 0px 8px;\n  font-size: .8rem; }\n\n.modal-overlay {\n  z-index: 100;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5); }\n\n.modal- {\n  display: block;\n  max-width: 100%;\n  max-height: 100%;\n  position: fixed;\n  z-index: 110;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  /* If known, negative margins are probably better (less chance of blurry text). */\n  /* margin: -200px 0 0 -200px; */\n  background: white; }\n\n.modal-content {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  padding: 20px 50px 20px 20px; }\n\n.warning {\n  padding: 20px; }\n\n.warning-text {\n  margin-bottom: 20px; }\n\n.navbar {\n  background-color: #4f78a9;\n  color: #ffff; }\n\n.navbar-logo {\n  height: 40px;\n  margin-right: 16px;\n  border: 1px solid #c3c4c6;\n  border-radius: 50%;\n  background-color: #a0a1a5;\n  padding: 2px; }\n\n.navbar-toggler- {\n  cursor: pointer; }\n\n#navbar .active {\n  font-weight: bold; }\n\n@media (min-width: 768px) {\n  .navbar-toggler- {\n    display: none; } }\n\n.tabs {\n  display: flex;\n  margin: 13px 0px 0px; }\n\n.tab {\n  background-color: #f3f3f3;\n  padding: 10px 30px;\n  border: 1px solid #e4e4e4;\n  border-radius: 8px 8px 0px 0px;\n  cursor: default; }\n\n.spacer {\n  padding: 2px;\n  border-bottom: 1px solid #e4e4e4; }\n\n.active-tab {\n  background-color: white;\n  border-top: 3px solid #4f78a9;\n  border-bottom: 0px; }\n\n.empty-tab {\n  display: inline-block;\n  padding: 10px 0px;\n  width: 100%;\n  background-color: #f3f4f8;\n  border-bottom: 1px solid #e4e4e4; }\n\n.list {\n  background-color: #ffff; }\n\n.root-list-new-button-container {\n  border-right: 1px solid #e4e4e4;\n  border-left: 1px solid #e4e4e4; }\n\ndiv.list-items--root > div.list-item--first {\n  border-top: none; }\n\n.list-items {\n  margin: 0px 0px 5px 10px; }\n\n.list-items--root {\n  margin-left: 0px; }\n\n.list-item {\n  border: 1px solid #e4e4e4;\n  border-top: none;\n  padding: 2px 10px; }\n\n.list-item--first {\n  border-top: 1px solid #e4e4e4; }\n\n.list-item-header {\n  display: flex;\n  justify-content: space-between;\n  cursor: default; }\n\n.list-item-name {\n  margin-left: 8px;\n  display: inline-block; }\n\n.item-detail-name {\n  display: inline-block;\n  vertical-align: top;\n  width: 200px;\n  margin-right: 15px; }\n\n.detail-value-container {\n  display: inline-block; }\n\n.item-detail-value {\n  display: inline-block; }\n\n.EditAndSaveButtonRow-container {\n  padding-left: 20px;\n  display: inline-block; }\n", ""]);
+exports.push([module.i, "body {\n  font-family: \"Source Sans Pro\", sans-serif;\n  background-color: #f3f4f8; }\n\na {\n  color: inherit;\n  text-decoration: inherit; }\n\na:hover {\n  cursor: pointer;\n  color: inherit;\n  text-decoration: inherit; }\n\nh1 {\n  font-size: 30px; }\n\nul {\n  list-style: none;\n  padding: 0;\n  margin: 0; }\n\nbutton:focus {\n  outline: none; }\n\n.bold {\n  font-weight: bold; }\n\n.inline {\n  display: inline-block;\n  vertical-align: bottom; }\n\n.hidden {\n  display: none; }\n\n.root-container {\n  margin: 0px 13px 13px; }\n\n.button-row {\n  display: flex;\n  justify-content: space-between; }\n\nbutton {\n  cursor: pointer;\n  border: 1px solid #e4e4e4;\n  border-radius: 20px;\n  font-size: 0.8rem;\n  background-color: inherit;\n  padding: 6px 30px;\n  white-space: nowrap; }\n\n.button--save {\n  background-color: #34cc57;\n  border: 1px solid #34cc57;\n  color: white; }\n\n.button--small {\n  padding: 1px 7px 2px; }\n\n.button--new {\n  color: green;\n  margin: 10px;\n  padding: 1px 7px 2px; }\n\n.button--new > span {\n  margin-left: 5px; }\n\n.button--delete {\n  border-color: #d80202;\n  color: #d80202; }\n\n.button-icon {\n  margin-right: 5px; }\n\n.save-cancel-buttons {\n  display: inline-block; }\n\n.save-cancel-buttons > button:first-child {\n  margin-right: 20px; }\n\n.pencil-icon {\n  color: #b38700; }\n\n.check-icon {\n  color: green; }\n\n.edit-detail-cancel {\n  display: inline-block;\n  margin-left: 20px;\n  font-size: 0.85rem;\n  text-decoration: underline; }\n\n.loader {\n  border: 3px solid #f3f3f3;\n  /* Light grey */\n  border-top: 3px solid #3498db;\n  /* Blue */\n  border-radius: 50%;\n  width: 24px;\n  height: 24px;\n  animation: spin 2s linear infinite; }\n\n@keyframes spin {\n  0% {\n    transform: rotate(0deg); }\n  100% {\n    transform: rotate(360deg); } }\n\n.form-header {\n  padding: 10px 20px 10px;\n  background-color: #4f78a9;\n  color: white; }\n\n.form-body {\n  padding: 0px 20px 20px; }\n\n.form-item-detail {\n  margin: 20px 0px; }\n\n.radio-buttons-row {\n  display: inline-block; }\n\n.radio-button-display-name {\n  display: inline-block;\n  margin: 0px 25px 0px 8px;\n  font-size: .8rem; }\n\n.modal-overlay {\n  z-index: 100;\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(0, 0, 0, 0.5); }\n\n.modal- {\n  display: block;\n  max-width: 100%;\n  max-height: 100%;\n  position: fixed;\n  z-index: 110;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n  /* If known, negative margins are probably better (less chance of blurry text). */\n  /* margin: -200px 0 0 -200px; */\n  background: white; }\n\n.modal-content {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  padding: 20px 50px 20px 20px; }\n\n.warning {\n  padding: 20px; }\n\n.warning-text {\n  margin-bottom: 20px; }\n\n.navbar {\n  background-color: #4f78a9;\n  color: #ffff; }\n\n.navbar-logo {\n  height: 40px;\n  margin-right: 16px;\n  border: 1px solid #c3c4c6;\n  border-radius: 50%;\n  background-color: #a0a1a5;\n  padding: 2px; }\n\n.navbar-toggler- {\n  cursor: pointer; }\n\n#navbar .active {\n  font-weight: bold; }\n\n@media (min-width: 768px) {\n  .navbar-toggler- {\n    display: none; } }\n\n.tabs {\n  display: flex;\n  margin: 13px 0px 0px; }\n\n.tab {\n  background-color: #f3f3f3;\n  padding: 10px 30px;\n  border: 1px solid #e4e4e4;\n  border-radius: 8px 8px 0px 0px;\n  cursor: default; }\n\n.spacer {\n  padding: 2px;\n  border-bottom: 1px solid #e4e4e4; }\n\n.active-tab {\n  background-color: white;\n  border-top: 3px solid #4f78a9;\n  border-bottom: 0px; }\n\n.empty-tab {\n  display: inline-block;\n  padding: 10px 0px;\n  width: 100%;\n  background-color: #f3f4f8;\n  border-bottom: 1px solid #e4e4e4; }\n\n.list {\n  background-color: #ffff; }\n\n.root-list-new-button-container {\n  border-right: 1px solid #e4e4e4;\n  border-left: 1px solid #e4e4e4; }\n\ndiv.list-items--root > div.list-item--first {\n  border-top: none; }\n\n.list-items {\n  margin: 0px 0px 5px 10px; }\n\n.list-items--root {\n  margin-left: 0px; }\n\n.list-item {\n  border: 1px solid #e4e4e4;\n  border-top: none;\n  padding: 2px 10px; }\n\n.list-item--first {\n  border-top: 1px solid #e4e4e4; }\n\n.list-item-header {\n  cursor: default;\n  display: flex;\n  justify-content: space-between;\n  align-items: center; }\n\n.list-item-name {\n  margin-left: 8px;\n  display: inline-block; }\n\n.item-detail-name {\n  padding-right: 50px; }\n\n.item-detail-value {\n  text-align: right; }\n\n.item-detail-value input {\n  text-align: right; }\n\n.item-detail-edit-and-save {\n  padding-left: 50px; }\n\n.text-align-right {\n  text-align: right; }\n\n.EditAndSaveButtonRow-container {\n  padding-left: 20px;\n  display: inline-block; }\n", ""]);
 
 // exports
 

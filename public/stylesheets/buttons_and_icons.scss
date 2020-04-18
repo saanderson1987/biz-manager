@@ -1,4 +1,4 @@
-.button-row  {
+.button-row {
   display: flex;
   justify-content: space-between;
 }
@@ -10,6 +10,7 @@ button {
   font-size: 0.8rem;
   background-color: inherit;
   padding: 6px 30px;
+  white-space: nowrap;
 }
 
 .button--save {
@@ -50,8 +51,8 @@ button {
   display: inline-block;
 }
 
-.save-cancel-buttons > button {
-  margin-left: 20px;
+.save-cancel-buttons > button:first-child {
+  margin-right: 20px;
 }
 
 .pencil-icon {
@@ -66,20 +67,24 @@ button {
 .edit-detail-cancel {
   display: inline-block;
   margin-left: 20px;
-  font-size: .85rem;
+  font-size: 0.85rem;
   text-decoration: underline;
 }
 
 .loader {
-    border: 3px solid #f3f3f3; /* Light grey */
-    border-top: 3px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    animation: spin 2s linear infinite;
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 2s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

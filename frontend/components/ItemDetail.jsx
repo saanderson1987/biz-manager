@@ -57,48 +57,42 @@ const ItemDetail = ({
   const inputToFocusRef = createRef();
 
   return (
-    <div className="item-detail">
-      <div className="item-detail-name">
+    <tr className="item-detail-row">
+      <td className="item-detail-name">
         {displayName
           ? displayName
           : columnName.charAt(0).toUpperCase() + columnName.slice(1)}
         :
-      </div>
-      {isValueUpdating ? (
-        <Loader isInline />
-      ) : (
-        <div className="detail-value-container">
-          <div className="item-detail-value">
-            {inEditMode ? (
-              <Input
-                value={editedValue}
-                type={type}
-                onChange={setEditedValue}
-                valueOptions={valueOptions}
-                save={save}
-                inputRef={inputToFocusRef}
-              />
-            ) : (
-              <DisplayValue
-                value={getDisplayValue ? getDisplayValue(value) : value}
-                type={type}
-              />
-            )}
-          </div>
-          {!isReadOnly && (
-            <div className={"EditAndSaveButtonRow-container"}>
-              <EditAndSaveButtonRow
-                save={save}
-                inEditMode={inEditMode}
-                toggleEditMode={() => {
-                  setInEditMode(!inEditMode);
-                }}
-              />
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+      </td>
+      <td className="item-detail-value">
+        {isValueUpdating ? (
+          <Loader isInline />
+        ) : inEditMode ? (
+          <Input
+            value={editedValue}
+            type={type}
+            onChange={setEditedValue}
+            valueOptions={valueOptions}
+            save={save}
+            inputRef={inputToFocusRef}
+          />
+        ) : (
+          <DisplayValue
+            value={getDisplayValue ? getDisplayValue(value) : value}
+            type={type}
+          />
+        )}
+      </td>
+      <td className="item-detail-edit-and-save">
+        <EditAndSaveButtonRow
+          save={save}
+          inEditMode={inEditMode}
+          toggleEditMode={() => {
+            setInEditMode(!inEditMode);
+          }}
+        />
+      </td>
+    </tr>
   );
 };
 

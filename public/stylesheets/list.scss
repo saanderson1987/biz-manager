@@ -30,9 +30,10 @@ div.list-items--root > div.list-item--first {
 }
 
 .list-item-header {
+  cursor: default;
   display: flex;
   justify-content: space-between;
-  cursor: default;
+  align-items: center;
 }
 
 .list-item-name {
@@ -41,18 +42,22 @@ div.list-items--root > div.list-item--first {
 }
 
 .item-detail-name {
-  display: inline-block;
-  vertical-align: top;
-  width: 200px;
-  margin-right: 15px;
-}
-
-.detail-value-container {
-  display: inline-block;
+  padding-right: 50px;
 }
 
 .item-detail-value {
-  display: inline-block;
+  text-align: right;
+}
+.item-detail-value input {
+  text-align: right;
+}
+
+.item-detail-edit-and-save {
+  padding-left: 50px;
+}
+
+.text-align-right {
+  text-align: right;
 }
 
 .EditAndSaveButtonRow-container {

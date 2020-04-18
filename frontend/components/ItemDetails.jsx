@@ -7,7 +7,6 @@ import {
 } from "../constants";
 import { StoreContext } from "../store";
 import ItemDetail from "./ItemDetail";
-import List from "./List";
 
 const ItemDetails = ({ type, itemId, statePath }) => {
   const { state, getById, updateRecord } = useContext(StoreContext);
@@ -23,38 +22,27 @@ const ItemDetails = ({ type, itemId, statePath }) => {
 
   return (
     item && (
-      <div className="item-details">
-        {itemDetailFieldsByItemType[type].map((field, i) => {
-          if (field.type === "list") {
-            return (
-              <List
-                type={field.columnName}
-                parentId={itemId}
-                statePath={[...statePath, itemId, field.columnName]}
-                key={i}
-              />
-            );
-          } else {
-            return (
-              <ItemDetail
-                field={field}
-                value={item[field.columnName]}
-                updateValue={(newValue) =>
-                  updateRecord({
-                    route,
-                    record: {
-                      id: item.id,
-                      [field.columnName]: newValue || null,
-                    },
-                    statePath,
-                  })
-                }
-                key={i}
-              />
-            );
-          }
-        })}
-      </div>
+      <table>
+        <tbody>
+          {itemDetailFieldsByItemType[type].map((field, i) => (
+            <ItemDetail
+              field={field}
+              value={item[field.columnName]}
+              updateValue={(newValue) =>
+                updateRecord({
+                  route,
+                  record: {
+                    id: item.id,
+                    [field.columnName]: newValue || null,
+                  },
+                  statePath,
+                })
+              }
+              key={i}
+            />
+          ))}
+        </tbody>
+      </table>
     )
   );
 };

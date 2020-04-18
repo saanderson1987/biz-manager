@@ -1,9 +1,14 @@
 import React, { useContext, useState } from "react";
 import classNames from "classnames";
-import { getItemNameFuncByItemType, apiRouteByItemType } from "../constants";
+import {
+  getItemNameFuncByItemType,
+  apiRouteByItemType,
+  itemListsByItemType,
+} from "../constants";
 import { StoreContext } from "../store";
 import ListItemHeader from "./ListItemHeader";
 import ItemDetails from "./ItemDetails";
+import List from "./List";
 import DeleteWarning from "./DeleteWarning";
 
 const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
@@ -32,12 +37,22 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
         }
       />
       {isExpanded && (
-        <ItemDetails
-          type={type}
-          itemId={item.id}
-          parentId={parentId}
-          statePath={statePath}
-        />
+        <>
+          <ItemDetails
+            type={type}
+            itemId={item.id}
+            parentId={parentId}
+            statePath={statePath}
+          />
+          {(itemListsByItemType[type] || []).map((list, i) => (
+            <List
+              type={list.type}
+              parentId={item.id}
+              statePath={[...statePath, item.id, list.type]}
+              key={i}
+            />
+          ))}
+        </>
       )}
       {isDeleteWarningVisible && (
         <DeleteWarning

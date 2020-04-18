@@ -150,6 +150,13 @@ const jobStatusDisplayNameByType = {
   completed: "Completed",
 };
 
+export const itemListsByItemType = {
+  clients: [{ type: "contacts" }, { type: "jobs" }],
+  prospects: [{ type: "contacts" }, { type: "jobs" }],
+  jobs: [{ type: "job_orders" }, { type: "notes" }],
+  jobs_orders: [{ type: "vendor_orders" }, { type: "installations" }],
+};
+
 export const itemDetailFieldsByItemType = {
   clients: [
     { columnName: "notes", type: "text" },
@@ -158,8 +165,6 @@ export const itemDetailFieldsByItemType = {
       type: "radio",
       valueOptions: [{ value: "prospect" }, { value: "client" }],
     },
-    { columnName: "contacts", type: "list" },
-    { columnName: "jobs", type: "list" },
   ],
   prospects: [
     { columnName: "notes", type: "text" },
@@ -168,8 +173,6 @@ export const itemDetailFieldsByItemType = {
       type: "radio",
       valueOptions: [{ value: "prospect" }, { value: "client" }],
     },
-    { columnName: "contacts", type: "list" },
-    { columnName: "jobs", type: "list" },
   ],
   contacts: [
     { columnName: "name", type: "text" },
@@ -225,14 +228,10 @@ export const itemDetailFieldsByItemType = {
       displayName: "Art Plan Sent Date",
       type: "date",
     },
-    { columnName: "job_orders", type: "list" },
-    { columnName: "notes", type: "list" },
   ],
   job_orders: [
     { columnName: "notes", type: "text" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
-    { columnName: "vendor_orders", type: "list" },
-    { columnName: "installations", type: "list" },
   ],
   installations: [
     {
