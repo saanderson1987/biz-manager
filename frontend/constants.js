@@ -1,14 +1,33 @@
 import { getDateString } from "../util/functions";
 
+export const tableNameListType = {
+  clients: "company",
+  prospects: "company",
+  vendors: "company",
+  contacts: "contact",
+  jobs: "job",
+  job_orders: "job_order",
+  installations: "installation",
+  vendor_orders: "vendor_order",
+};
+
 export const parentColumnByItemType = {
   contacts: "company_id",
   jobs: "company_id",
   job_orders: "job_id",
   installations: "job_order_id",
   vendor_orders: "job_order_id",
+  notes: "parent_id",
 };
 
-const createParentIdQuery = (type, parentId) => {
+const createParentIdQuery = (type, parentId, statePath) => {
+  if (type === "notes") {
+    return {
+      parent_id: parentId,
+      parent_table: tableNameListType[statePath[statePath.length - 3]],
+    };
+  }
+
   const parentColumn = parentColumnByItemType[type];
   return parentColumn && parentId ? { [parentColumn]: parentId } : {};
 };
@@ -52,7 +71,7 @@ export const createListGetByQueryOptions = (type, parentId, statePath) => {
     route: apiRouteByItemType[type],
     queryParams: {
       ...queryParamsByItemType[type],
-      ...createParentIdQuery(type, parentId),
+      ...createParentIdQuery(type, parentId, statePath),
     },
     statePath,
   };
@@ -365,14 +384,32 @@ export const newItemFormFieldsByItemType = {
     { columnName: "notes" },
   ],
   vendors: [{ columnName: "name" }, { columnName: "notes" }],
-  note: [{ columnName: "contents" }],
+  notes: [{ columnName: "contents" }],
 };
 
-export const newItemRecordBaseByItemType = {
-  jobs: {
-    status: "in_progress",
-  },
-  vendors: {
-    status: "vendor",
-  },
+export const getNewItemRecordBase = ({
+  type,
+  parentId,
+  parentType,
+  userId,
+}) => {
+  const baseRecord = {};
+  if (parentId) {
+    baseRecord[parentColumnByItemType[type]] = parentId;
+  }
+
+  if (type === "notes") {
+    if (parentId && parentType) {
+      baseRecord.parent_table = tableNameListType[parentType];
+    }
+    baseRecord.author = userId;
+  }
+  if (type === "vendors") {
+    baseRecord.status = "vendor";
+  }
+  if (type === "jobs") {
+    baseRecord.status = "in_progress";
+  }
+
+  return baseRecord;
 };

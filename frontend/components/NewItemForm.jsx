@@ -3,9 +3,8 @@ import { capitalize } from "../../util/functions";
 import {
   itemNameByItemType,
   newItemFormFieldsByItemType,
-  parentColumnByItemType,
   apiRouteByItemType,
-  newItemRecordBaseByItemType,
+  getNewItemRecordBase,
 } from "../constants";
 import { StoreContext } from "../store";
 import NewItemDetail from "./NewItemDetail";
@@ -28,6 +27,8 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
   const [pendingNewRecord, setPendingNewRecord] = useState(
     createPendingNewRecord(type)
   );
+
+  console.log(statePath);
 
   return (
     <div className="form">
@@ -54,14 +55,13 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
           <button
             className="button--save"
             onClick={() => {
-              const newRecordBase = newItemRecordBaseByItemType[type] || {};
+              const newRecordBase = getNewItemRecordBase({
+                type,
+                parentId,
+                parentType: statePath[statePath.length - 3],
+                userId: 1,
+              });
               const newRecord = { ...newRecordBase, ...pendingNewRecord };
-              if (parentId) {
-                newRecord[parentColumnByItemType[type]] = parentId;
-              }
-              if (type === "vendors") {
-                newRecord.status = "vendor";
-              }
               createRecord({
                 route: apiRouteByItemType[type],
                 newRecord,

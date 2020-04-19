@@ -4,7 +4,8 @@ CREATE TABLE note (
   id SERIAL PRIMARY KEY,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  job_id INTEGER REFERENCES job(id),
+  parent_id INTEGER,
+  parent_table VARCHAR (255),
   contents text,
   author INTEGER references users(id)
 );

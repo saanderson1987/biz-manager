@@ -17,7 +17,7 @@ const DisplayValue = ({ value, type, className }) => {
   if (type === "text-box") {
     return (value || "")
       .split("\n")
-      .map((line) => (line ? <div>{line}</div> : <br />));
+      .map((line, i) => (line ? <div key={i}>{line}</div> : <br key={i} />));
   }
   return <span className={className}>{displayValue}</span>;
 };

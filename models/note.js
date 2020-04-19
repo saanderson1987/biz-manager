@@ -38,12 +38,6 @@ class NoteModel extends Model {
     }
     return super.getById(id, { columns });
   }
-
-  new(record) {
-    return super.new(record).then((newRecord) => {
-      return this.getById(newRecord.id);
-    });
-  }
 }
 
 const Note = new NoteModel("note");

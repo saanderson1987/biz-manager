@@ -1335,6 +1335,7 @@ var NewItemForm = function NewItemForm(_ref) {
       pendingNewRecord = _useState2[0],
       setPendingNewRecord = _useState2[1];
 
+  console.log(statePath);
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "form"
   }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -1360,17 +1361,14 @@ var NewItemForm = function NewItemForm(_ref) {
   }, "Cancel"), /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--save",
     onClick: function onClick() {
-      var newRecordBase = _constants.newItemRecordBaseByItemType[type] || {};
+      var newRecordBase = (0, _constants.getNewItemRecordBase)({
+        type: type,
+        parentId: parentId,
+        parentType: statePath[statePath.length - 3],
+        userId: 1
+      });
 
       var newRecord = _objectSpread({}, newRecordBase, {}, pendingNewRecord);
-
-      if (parentId) {
-        newRecord[_constants.parentColumnByItemType[type]] = parentId;
-      }
-
-      if (type === "vendors") {
-        newRecord.status = "vendor";
-      }
 
       createRecord({
         route: _constants.apiRouteByItemType[type],
@@ -1555,8 +1553,12 @@ var DisplayValue = function DisplayValue(_ref) {
   }
 
   if (type === "text-box") {
-    return (value || "").split("\n").map(function (line) {
-      return line ? /*#__PURE__*/_react["default"].createElement("div", null, line) : /*#__PURE__*/_react["default"].createElement("br", null);
+    return (value || "").split("\n").map(function (line, i) {
+      return line ? /*#__PURE__*/_react["default"].createElement("div", {
+        key: i
+      }, line) : /*#__PURE__*/_react["default"].createElement("br", {
+        key: i
+      });
     });
   }
 
@@ -1968,7 +1970,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.newItemRecordBaseByItemType = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.itemListsByItemType = exports.getItemNameFuncByItemType = exports.getDefaultListSortFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = void 0;
+exports.getNewItemRecordBase = exports.newItemFormFieldsByItemType = exports.itemNameByItemType = exports.itemDetailFieldsByItemType = exports.itemListsByItemType = exports.getItemNameFuncByItemType = exports.getDefaultListSortFuncByItemType = exports.listNameByItemType = exports.createItemDetailsGetByIdQueryOptions = exports.createListGetByQueryOptions = exports.queryParamsByItemType = exports.apiRouteByItemType = exports.parentColumnByItemType = exports.tableNameListType = void 0;
 
 var _functions = __webpack_require__(/*! ../util/functions */ "./util/functions.js");
 
@@ -1978,16 +1980,35 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+var tableNameListType = {
+  clients: "company",
+  prospects: "company",
+  vendors: "company",
+  contacts: "contact",
+  jobs: "job",
+  job_orders: "job_order",
+  installations: "installation",
+  vendor_orders: "vendor_order"
+};
+exports.tableNameListType = tableNameListType;
 var parentColumnByItemType = {
   contacts: "company_id",
   jobs: "company_id",
   job_orders: "job_id",
   installations: "job_order_id",
-  vendor_orders: "job_order_id"
+  vendor_orders: "job_order_id",
+  notes: "parent_id"
 };
 exports.parentColumnByItemType = parentColumnByItemType;
 
-var createParentIdQuery = function createParentIdQuery(type, parentId) {
+var createParentIdQuery = function createParentIdQuery(type, parentId, statePath) {
+  if (type === "notes") {
+    return {
+      parent_id: parentId,
+      parent_table: tableNameListType[statePath[statePath.length - 3]]
+    };
+  }
+
   var parentColumn = parentColumnByItemType[type];
   return parentColumn && parentId ? _defineProperty({}, parentColumn, parentId) : {};
 };
@@ -2045,7 +2066,7 @@ exports.queryParamsByItemType = queryParamsByItemType;
 var createListGetByQueryOptions = function createListGetByQueryOptions(type, parentId, statePath) {
   return {
     route: apiRouteByItemType[type],
-    queryParams: _objectSpread({}, queryParamsByItemType[type], {}, createParentIdQuery(type, parentId)),
+    queryParams: _objectSpread({}, queryParamsByItemType[type], {}, createParentIdQuery(type, parentId, statePath)),
     statePath: statePath
   };
 };
@@ -2479,20 +2500,43 @@ var newItemFormFieldsByItemType = {
   }, {
     columnName: "notes"
   }],
-  note: [{
+  notes: [{
     columnName: "contents"
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;
-var newItemRecordBaseByItemType = {
-  jobs: {
-    status: "in_progress"
-  },
-  vendors: {
-    status: "vendor"
+
+var getNewItemRecordBase = function getNewItemRecordBase(_ref5) {
+  var type = _ref5.type,
+      parentId = _ref5.parentId,
+      parentType = _ref5.parentType,
+      userId = _ref5.userId;
+  var baseRecord = {};
+
+  if (parentId) {
+    baseRecord[parentColumnByItemType[type]] = parentId;
   }
+
+  if (type === "notes") {
+    if (parentId && parentType) {
+      baseRecord.parent_table = tableNameListType[parentType];
+    }
+
+    baseRecord.author = userId;
+  }
+
+  if (type === "vendors") {
+    baseRecord.status = "vendor";
+  }
+
+  if (type === "jobs") {
+    baseRecord.status = "in_progress";
+  }
+
+  return baseRecord;
 };
-exports.newItemRecordBaseByItemType = newItemRecordBaseByItemType;
+
+exports.getNewItemRecordBase = getNewItemRecordBase;
 
 /***/ }),
 
