@@ -174,15 +174,15 @@ const jobStatusDisplayNameByType = {
 };
 
 export const itemListsByItemType = {
-  clients: [{ type: "contacts" }, { type: "jobs" }],
-  prospects: [{ type: "contacts" }, { type: "jobs" }],
-  jobs: [{ type: "job_orders" }, { type: "notes" }],
-  jobs_orders: [{ type: "vendor_orders" }, { type: "installations" }],
+  clients: [{ type: "contacts" }, { type: "notes" }, { type: "jobs" }],
+  prospects: [{ type: "contacts" }, { type: "notes" }, { type: "jobs" }],
+  jobs: [{ type: "notes" }, { type: "job_orders" }],
+  job_orders: [{ type: "vendor_orders" }, { type: "installations" }],
+  vendor_orders: [{ type: "notes" }],
 };
 
 export const itemDetailFieldsByItemType = {
   clients: [
-    { columnName: "notes", type: "text" },
     {
       columnName: "status",
       type: "radio",
@@ -190,7 +190,6 @@ export const itemDetailFieldsByItemType = {
     },
   ],
   prospects: [
-    { columnName: "notes", type: "text" },
     {
       columnName: "status",
       type: "radio",
@@ -253,7 +252,6 @@ export const itemDetailFieldsByItemType = {
     },
   ],
   job_orders: [
-    { columnName: "notes", type: "text" },
     { columnName: "date_ordered", displayName: "Date Ordered", type: "date" },
   ],
   installations: [
@@ -274,7 +272,6 @@ export const itemDetailFieldsByItemType = {
       type: "text",
     },
     { columnName: "completed", type: "checkbox" },
-    { columnName: "notes", type: "text" },
   ],
   notes: [
     {

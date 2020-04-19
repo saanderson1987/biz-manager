@@ -28,8 +28,6 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
     createPendingNewRecord(type)
   );
 
-  console.log(statePath);
-
   return (
     <div className="form">
       <div className="form-header">

@@ -1335,7 +1335,6 @@ var NewItemForm = function NewItemForm(_ref) {
       pendingNewRecord = _useState2[0],
       setPendingNewRecord = _useState2[1];
 
-  console.log(statePath);
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "form"
   }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -2218,30 +2217,34 @@ var itemListsByItemType = {
   clients: [{
     type: "contacts"
   }, {
+    type: "notes"
+  }, {
     type: "jobs"
   }],
   prospects: [{
     type: "contacts"
   }, {
+    type: "notes"
+  }, {
     type: "jobs"
   }],
   jobs: [{
-    type: "job_orders"
-  }, {
     type: "notes"
+  }, {
+    type: "job_orders"
   }],
-  jobs_orders: [{
+  job_orders: [{
     type: "vendor_orders"
   }, {
     type: "installations"
+  }],
+  vendor_orders: [{
+    type: "notes"
   }]
 };
 exports.itemListsByItemType = itemListsByItemType;
 var itemDetailFieldsByItemType = {
   clients: [{
-    columnName: "notes",
-    type: "text"
-  }, {
     columnName: "status",
     type: "radio",
     valueOptions: [{
@@ -2251,9 +2254,6 @@ var itemDetailFieldsByItemType = {
     }]
   }],
   prospects: [{
-    columnName: "notes",
-    type: "text"
-  }, {
     columnName: "status",
     type: "radio",
     valueOptions: [{
@@ -2324,9 +2324,6 @@ var itemDetailFieldsByItemType = {
     type: "date"
   }],
   job_orders: [{
-    columnName: "notes",
-    type: "text"
-  }, {
     columnName: "date_ordered",
     displayName: "Date Ordered",
     type: "date"
@@ -2357,9 +2354,6 @@ var itemDetailFieldsByItemType = {
   }, {
     columnName: "completed",
     type: "checkbox"
-  }, {
-    columnName: "notes",
-    type: "text"
   }],
   notes: [{
     columnName: "author_name",
