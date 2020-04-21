@@ -81,6 +81,16 @@ const Input = ({
       />
     );
   }
+  if (type === "password") {
+    return (
+      <input
+        type="password"
+        value={value}
+        onChange={({ target: { value } }) => onChange(value)}
+        {...commonInputProps}
+      />
+    );
+  }
   return (
     <input
       type="text"

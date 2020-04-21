@@ -1,14 +1,16 @@
-import React from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { StoreContext } from "../store";
 
 const NavBar = () => {
+  const { logout } = useContext(StoreContext);
   const links = [
     <NavLink to="/companies">Companies</NavLink>,
     <NavLink to="/jobs">Jobs</NavLink>,
     <NavLink to="/orders">Orders</NavLink>,
     <NavLink to="/installations">Installations</NavLink>,
     <NavLink to="/receivables">Receivables</NavLink>,
-    <a onClick={(e) => this.props.logout()}>Log out</a>,
+    <a onClick={() => logout()}>LOG OUT</a>,
   ];
 
   const key = Math.random();
@@ -43,4 +45,4 @@ const NavBar = () => {
   );
 };
 
-export default withRouter(NavBar);
+export default NavBar;
