@@ -488,9 +488,7 @@ var ItemDetail = function ItemDetail(_ref) {
   };
 
   var inputToFocusRef = (0, _react.createRef)();
-  return /*#__PURE__*/_react["default"].createElement("tr", {
-    className: "item-detail-row"
-  }, /*#__PURE__*/_react["default"].createElement("td", {
+  return /*#__PURE__*/_react["default"].createElement("tr", null, /*#__PURE__*/_react["default"].createElement("td", {
     className: "item-detail-name"
   }, displayName ? displayName : columnName.charAt(0).toUpperCase() + columnName.slice(1), ":"), /*#__PURE__*/_react["default"].createElement("td", {
     className: "item-detail-value"
@@ -1030,6 +1028,114 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./frontend/components/Login.jsx":
+/*!***************************************!*\
+  !*** ./frontend/components/Login.jsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _store = __webpack_require__(/*! ../store */ "./frontend/store.js");
+
+var _Modal = _interopRequireDefault(__webpack_require__(/*! ./Modal */ "./frontend/components/Modal.jsx"));
+
+var _Input = _interopRequireDefault(__webpack_require__(/*! ./common/Input */ "./frontend/components/common/Input.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var Login = function Login() {
+  var _useContext = (0, _react.useContext)(_store.StoreContext),
+      login = _useContext.login;
+
+  var _useState = (0, _react.useState)({
+    username: "",
+    password: ""
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      formData = _useState2[0],
+      setFormData = _useState2[1];
+
+  var fields = [{
+    fieldName: "username",
+    displayName: "Username",
+    type: "text"
+  }, {
+    fieldName: "password",
+    displayName: "Password",
+    type: "password"
+  }];
+  return /*#__PURE__*/_react["default"].createElement(_Modal["default"], null, /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form"
+  }, /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-header"
+  }, "Login"), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "form-body"
+  }, /*#__PURE__*/_react["default"].createElement("table", null, /*#__PURE__*/_react["default"].createElement("tbody", null, fields.map(function (_ref, i) {
+    var fieldName = _ref.fieldName,
+        displayName = _ref.displayName,
+        type = _ref.type;
+    return /*#__PURE__*/_react["default"].createElement("tr", null, /*#__PURE__*/_react["default"].createElement("td", {
+      className: "item-detail-name"
+    }, displayName), /*#__PURE__*/_react["default"].createElement("td", {
+      className: "item-detail-value"
+    }, /*#__PURE__*/_react["default"].createElement(_Input["default"], {
+      value: formData[fieldName],
+      type: type,
+      onChange: function onChange(newVal) {
+        return setFormData(function (prev) {
+          return _objectSpread({}, prev, _defineProperty({}, fieldName, newVal));
+        });
+      }
+    })));
+  })))), /*#__PURE__*/_react["default"].createElement("div", {
+    className: "button-row"
+  }, /*#__PURE__*/_react["default"].createElement("button", {
+    className: "button--save",
+    onClick: function onClick() {
+      return login(formData);
+    }
+  }, "Save"))));
+};
+
+var _default = Login;
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "./frontend/components/Modal.jsx":
 /*!***************************************!*\
   !*** ./frontend/components/Modal.jsx ***!
@@ -1450,6 +1556,53 @@ var _default = function _default() {
   return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("h2", null, "404: Page Not Found"));
 };
 
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "./frontend/components/Protected.jsx":
+/*!*******************************************!*\
+  !*** ./frontend/components/Protected.jsx ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _store = __webpack_require__(/*! ../store */ "./frontend/store.js");
+
+var _Login = _interopRequireDefault(__webpack_require__(/*! ./Login */ "./frontend/components/Login.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var Protected = function Protected(_ref) {
+  var children = _ref.children;
+
+  var _useContext = (0, _react.useContext)(_store.StoreContext),
+      isAuthenticated = _useContext.state.authentication.isAuthenticated,
+      getAuthenticationStatus = _useContext.getAuthenticationStatus;
+
+  (0, _react.useEffect)(function () {
+    getAuthenticationStatus();
+  }, []);
+  return isAuthenticated ? children : /*#__PURE__*/_react["default"].createElement(_Login["default"], null);
+};
+
+var _default = Protected;
 exports["default"] = _default;
 
 /***/ }),
@@ -2554,14 +2707,16 @@ __webpack_require__(/*! ../public/stylesheets/main.scss */ "./public/stylesheets
 
 var _store = __webpack_require__(/*! ./store */ "./frontend/store.js");
 
+var _Protected = _interopRequireDefault(__webpack_require__(/*! ./components/Protected */ "./frontend/components/Protected.jsx"));
+
 var _App = _interopRequireDefault(__webpack_require__(/*! ./components/App */ "./frontend/components/App.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-(0, _reactDom.render)( /*#__PURE__*/_react["default"].createElement(_store.StoreProvider, null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
+(0, _reactDom.render)( /*#__PURE__*/_react["default"].createElement(_store.StoreProvider, null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react["default"].createElement(_Protected["default"], null, /*#__PURE__*/_react["default"].createElement(_reactRouterDom.Route, {
   path: "/",
   component: _App["default"]
-}))), document.getElementById("root"));
+})))), document.getElementById("root"));
 
 /***/ }),
 
@@ -2656,7 +2811,12 @@ var StoreProvider = function StoreProvider(_ref2) {
     clients: {},
     jobs: {},
     job_orders: {},
-    installations: {}
+    installations: {},
+    authentication: {
+      isAuthenticated: false,
+      error: ""
+    },
+    user: {}
   }),
       _useState2 = _slicedToArray(_useState, 2),
       state = _useState2[0],
@@ -2766,6 +2926,79 @@ var StoreProvider = function StoreProvider(_ref2) {
             statePath: statePath,
             oldState: oldState,
             data: data,
+            newState: newState
+          });
+          return newState;
+        });
+      })["catch"](handleError);
+    },
+    getAuthenticationStatus: function getAuthenticationStatus() {
+      return _axios["default"].get("/isAuthenticated").then(function (_ref13) {
+        var isAuthenticated = _ref13.data;
+        return setState(function (oldState) {
+          var newState = _objectSpread({}, oldState, {
+            authentication: {
+              isAuthenticated: isAuthenticated
+            }
+          });
+
+          log({
+            functionName: "getAuthenticationStatus",
+            statePath: ["authentication", "isAuthenticated"],
+            oldState: oldState,
+            data: isAuthenticated,
+            newState: newState
+          });
+          return newState;
+        });
+      })["catch"](handleError);
+    },
+    login: function login(data) {
+      return _axios["default"].post("/login", data).then(function (_ref14) {
+        var data = _ref14.data;
+        var isAuthenticated = data.isAuthenticated,
+            user = data.user;
+        setState(function (oldState) {
+          var newState = _objectSpread({}, oldState, {
+            user: user,
+            authentication: {
+              isAuthenticated: isAuthenticated
+            }
+          });
+
+          log({
+            functionName: "login",
+            statePath: [["authentication", "isAuthenticated"], ["user"]],
+            oldState: oldState,
+            data: data,
+            newState: newState
+          });
+          return newState;
+        });
+      })["catch"](function (e) {
+        console.log(e);
+        setState(function (oldState) {
+          return _objectSpread({}, oldState, {
+            error: JSON.stringify(e)
+          });
+        });
+      });
+    },
+    logout: function logout() {
+      return _axios["default"].get("/logout").then(function (_ref15) {
+        var isAuthenticated = _ref15.data.isAuthenticated;
+        return setState(function (oldState) {
+          var newState = _objectSpread({}, oldState, {
+            authentication: {
+              isAuthenticated: isAuthenticated
+            }
+          });
+
+          log({
+            functionName: "logout",
+            statePath: ["authentication", "isAuthenticated"],
+            oldState: oldState,
+            data: isAuthenticated,
             newState: newState
           });
           return newState;

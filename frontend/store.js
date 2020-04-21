@@ -25,6 +25,8 @@ export const StoreProvider = ({ children }) => {
     jobs: {},
     job_orders: {},
     installations: {},
+    authentication: { isAuthenticated: false, error: "" },
+    user: {},
   });
 
   const updaterFunctions = {
@@ -128,6 +130,74 @@ export const StoreProvider = ({ children }) => {
               statePath,
               oldState,
               data,
+              newState,
+            });
+            return newState;
+          })
+        )
+        .catch(handleError),
+
+    getAuthenticationStatus: () =>
+      axios
+        .get("/isAuthenticated")
+        .then(({ data: isAuthenticated }) =>
+          setState((oldState) => {
+            const newState = {
+              ...oldState,
+              authentication: { isAuthenticated },
+            };
+            log({
+              functionName: "getAuthenticationStatus",
+              statePath: ["authentication", "isAuthenticated"],
+              oldState,
+              data: isAuthenticated,
+              newState,
+            });
+            return newState;
+          })
+        )
+        .catch(handleError),
+
+    login: (data) =>
+      axios
+        .post("/login", data)
+        .then(({ data }) => {
+          const { isAuthenticated, user } = data;
+          setState((oldState) => {
+            const newState = {
+              ...oldState,
+              user,
+              authentication: { isAuthenticated },
+            };
+            log({
+              functionName: "login",
+              statePath: [["authentication", "isAuthenticated"], ["user"]],
+              oldState,
+              data,
+              newState,
+            });
+            return newState;
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+          setState((oldState) => ({ ...oldState, error: JSON.stringify(e) }));
+        }),
+
+    logout: () =>
+      axios
+        .get("/logout")
+        .then(({ data: { isAuthenticated } }) =>
+          setState((oldState) => {
+            const newState = {
+              ...oldState,
+              authentication: { isAuthenticated },
+            };
+            log({
+              functionName: "logout",
+              statePath: ["authentication", "isAuthenticated"],
+              oldState,
+              data: isAuthenticated,
               newState,
             });
             return newState;

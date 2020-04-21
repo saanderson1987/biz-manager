@@ -1,5 +1,5 @@
-const Model = require('./model.js');
-const bcrypt = require('bcryptjs');
+const Model = require("./model.js");
+const bcrypt = require("bcryptjs");
 
 class UserModel extends Model {
   new(record) {
@@ -10,12 +10,12 @@ class UserModel extends Model {
   }
 }
 
-const User = new UserModel('users');
+const User = new UserModel("users");
 module.exports = User;
 
 // const test = {
-//   username: 'test2',
-//   password: 'test2'
-// }
-//
+//   username: "test2",
+//   password: "test2",
+// };
+
 // User.new(test).then((user) => console.log(user));

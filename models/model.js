@@ -61,6 +61,10 @@ class Model {
       if (!columnsArr.includes("id")) {
         columnsArr.push("t1.id");
       }
+      const idIdx = columnsArr.findIndex((col) => col === "id");
+      if (idIdx > -1) {
+        columnsArr[idIdx] = "t1.id";
+      }
       selectColumns = columnsArr.join(",");
     }
 
