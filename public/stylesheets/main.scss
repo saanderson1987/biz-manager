@@ -1,7 +1,7 @@
 // @import './reset.scss';
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700");
 
-$default-font-family: 'Source Sans Pro', sans-serif;
+$default-font-family: "Source Sans Pro", sans-serif;
 $white: #ffff;
 $grey: #f3f4f8;
 
@@ -9,7 +9,7 @@ body {
   // padding: 10px 20px;
   // font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-family: $default-font-family;
-  background-color:$grey
+  background-color: $grey;
 }
 
 a {
@@ -28,13 +28,13 @@ h1 {
 }
 
 ul {
-	list-style: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 button:focus {
-  outline:none;
+  outline: none;
 }
 
 .bold {
@@ -54,10 +54,13 @@ button:focus {
   margin: 0px 13px 13px;
 }
 
+.text-align-right {
+  text-align: right;
+}
 
-@import './buttons_and_icons.scss';
-@import './form.scss';
-@import './modal.scss';
-@import './navbar.scss';
-@import './tabs.scss';
-@import './list.scss';
+@import "./buttons_and_icons.scss";
+@import "./form.scss";
+@import "./modal.scss";
+@import "./navbar.scss";
+@import "./tabs.scss";
+@import "./list.scss";

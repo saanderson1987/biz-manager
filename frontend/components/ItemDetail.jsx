@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createRef } from "react";
+import classNames from "classnames";
 import Loader from "./common/Loader";
 import Input from "./common/Input";
 import DisplayValue from "./common/DisplayValue";
@@ -75,7 +76,7 @@ const ItemDetail = ({
             valueOptions={valueOptions}
             save={save}
             inputRef={inputToFocusRef}
-            className={"item-detail-input"}
+            className={classNames({ "text-align-right": type !== "text-box" })}
           />
         ) : (
           <DisplayValue
@@ -84,15 +85,17 @@ const ItemDetail = ({
           />
         )}
       </td>
-      <td className="item-detail-edit-and-save">
-        <EditAndSaveButtonRow
-          save={save}
-          inEditMode={inEditMode}
-          toggleEditMode={() => {
-            setInEditMode(!inEditMode);
-          }}
-        />
-      </td>
+      {!isReadOnly && (
+        <td className="item-detail-edit-and-save">
+          <EditAndSaveButtonRow
+            save={save}
+            inEditMode={inEditMode}
+            toggleEditMode={() => {
+              setInEditMode(!inEditMode);
+            }}
+          />
+        </td>
+      )}
     </tr>
   );
 };
