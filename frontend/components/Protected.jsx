@@ -14,7 +14,12 @@ const Protected = ({ children }) => {
     getAuthenticationStatus();
   }, []);
 
-  return isAuthenticated ? children : <Login />;
+  // these precise statements ensure that if the page is reloaded and user has already been authenticated, the Login page does not flash.
+  if (isAuthenticated === true) {
+    return children;
+  } else if (isAuthenticated === false) {
+    return <Login />;
+  } else return null;
 };
 
 export default Protected;

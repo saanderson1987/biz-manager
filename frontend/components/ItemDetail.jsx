@@ -75,6 +75,7 @@ const ItemDetail = ({
             valueOptions={valueOptions}
             save={save}
             inputRef={inputToFocusRef}
+            className={"item-detail-input"}
           />
         ) : (
           <DisplayValue

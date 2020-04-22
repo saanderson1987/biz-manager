@@ -25,7 +25,10 @@ export const StoreProvider = ({ children }) => {
     jobs: {},
     job_orders: {},
     installations: {},
-    authentication: { isAuthenticated: false, error: "" },
+    authentication: {
+      isAuthenticated: null /* set to null to prevent the Login screen from flashing upon reload if user is authenticated */,
+      error: "",
+    },
     user: {},
   });
 
@@ -140,22 +143,24 @@ export const StoreProvider = ({ children }) => {
     getAuthenticationStatus: () =>
       axios
         .get("/isAuthenticated")
-        .then(({ data: isAuthenticated }) =>
+        .then(({ data }) => {
+          const { isAuthenticated, user } = data;
           setState((oldState) => {
             const newState = {
               ...oldState,
+              user,
               authentication: { isAuthenticated },
             };
             log({
               functionName: "getAuthenticationStatus",
-              statePath: ["authentication", "isAuthenticated"],
+              statePath: [["authentication", "isAuthenticated"], ["user"]],
               oldState,
-              data: isAuthenticated,
+              data,
               newState,
             });
             return newState;
-          })
-        )
+          });
+        })
         .catch(handleError),
 
     login: (data) =>

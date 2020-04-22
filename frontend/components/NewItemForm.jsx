@@ -22,7 +22,10 @@ const createPendingNewRecord = (type) =>
   }, {});
 
 const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
-  const { createRecord } = useContext(StoreContext);
+  const {
+    state: { user },
+    createRecord,
+  } = useContext(StoreContext);
 
   const [pendingNewRecord, setPendingNewRecord] = useState(
     createPendingNewRecord(type)
@@ -57,7 +60,7 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
                 type,
                 parentId,
                 parentType: statePath[statePath.length - 3],
-                userId: 1,
+                userId: user.id,
               });
               const newRecord = { ...newRecordBase, ...pendingNewRecord };
               createRecord({

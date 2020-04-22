@@ -19,7 +19,7 @@ const Login = () => {
           <table>
             <tbody>
               {fields.map(({ fieldName, displayName, type }, i) => (
-                <tr>
+                <tr key={i}>
                   <td className="item-detail-name">{displayName}</td>
                   <td className="item-detail-value">
                     <Input

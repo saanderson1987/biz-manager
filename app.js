@@ -61,8 +61,23 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+function getAuthenticationReturnObject({ isAuthenticated, user }) {
+  const object = { isAuthenticated };
+  if (user && user.id && user.username) {
+    object.user = {
+      id: user.id,
+      username: user.username,
+    };
+  }
+  return object;
+}
+
 app.get("/isAuthenticated", (req, res) => {
-  res.send(req.isAuthenticated());
+  const authenticationReturnObject = getAuthenticationReturnObject({
+    isAuthenticated: req.isAuthenticated(),
+    user: req.user,
+  });
+  res.send(authenticationReturnObject);
 });
 
 app.post("/login", function (req, res, next) {
@@ -72,10 +87,11 @@ app.post("/login", function (req, res, next) {
     }
     req.logIn(user, function (err) {
       if (err) return next(err);
-      return res.send({
+      const authenticationReturnObject = getAuthenticationReturnObject({
         isAuthenticated: true,
-        user: { id: user.id, username: user.username },
+        user,
       });
+      return res.send(authenticationReturnObject);
     });
   })(req, res, next);
 });
