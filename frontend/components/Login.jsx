@@ -16,7 +16,7 @@ const Login = () => {
       <div className="form">
         <div className="form-header">Login</div>
         <div className="form-body">
-          <table>
+          <table className="form-table">
             <tbody>
               {fields.map(({ fieldName, displayName, type }, i) => (
                 <tr key={i}>
@@ -37,12 +37,11 @@ const Login = () => {
               ))}
             </tbody>
           </table>
-        </div>
-        <div className="button-row">
-          {/* <button onClick={}>Cancel</button> */}
-          <button className="button--save" onClick={() => login(formData)}>
-            Save
-          </button>
+          <div className="button-row-single-button">
+            <button className="button--save" onClick={() => login(formData)}>
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
