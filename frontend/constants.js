@@ -370,8 +370,8 @@ export const newItemFormFieldsByItemType = {
     {
       columnName: "vendor_id",
       displayName: "Vendor Name",
-      type: "dropdown",
-      dropdownType: "vendors",
+      type: "dropdown-with-query",
+      dropdownItemType: "vendors",
     },
     { columnName: "po_num", displayName: "Invoice/ PO #" },
     { columnName: "tracking_num", displayName: "Tracking #" },

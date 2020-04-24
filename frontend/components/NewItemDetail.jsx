@@ -1,77 +1,35 @@
 import React from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { capitalize } from "../../util/functions";
-import Dropdown from "./Dropdown";
+import DropdownWithQuery from "./common/DropdownWithQuery";
+import Input from "./common/Input";
 
 const NewItemDetail = ({
   detailValue,
   onValueChange,
-  field: { displayName, columnName, type, valueOptions, dropdownType },
-}) => {
-  const getInput = () => {
-    switch (type) {
-      case "radio":
-        return valueOptions.map((valueOption) => (
-          <div className="radio-buttons-row" key={valueOption.value}>
-            <input
-              type="radio"
-              className="radio-button"
-              value={valueOption.value}
-              checked={detailValue === valueOption.value}
-              onChange={() => onValueChange(valueOption.value)}
-            />
-            <div className="radio-button-display-name">
-              {valueOption.displayName || capitalize(valueOption.value)}
-            </div>
-          </div>
-        ));
-
-      case "date":
-        return (
-          <DatePicker
-            selected={detailValue}
-            onChange={(date) => onValueChange(date)}
-            popperPlacement="bottom"
-          />
-        );
-      case "checkbox":
-        return (
-          <input
-            type="checkbox"
-            checked={detailValue}
-            onChange={(e) => onValueChange(e.target.checked)}
-          />
-        );
-      case "dropdown":
-        return (
-          <Dropdown
-            type={dropdownType}
-            value={detailValue}
-            onChange={(newValue) => onValueChange(newValue)}
-          />
-        );
-      default:
-        return (
-          <input
-            type="text"
-            value={detailValue}
-            onChange={(e) => onValueChange(e.target.value)}
-          />
-        );
-    }
-  };
-
-  return (
-    <div className="form-item-detail">
-      <div className="item-detail-name">
-        {displayName
-          ? displayName + ":"
-          : columnName.charAt(0).toUpperCase() + columnName.slice(1) + ":"}
-      </div>
-      <div className="item-detail-value">{getInput()}</div>
-    </div>
-  );
-};
+  field: { displayName, columnName, type, valueOptions, dropdownItemType },
+}) => (
+  <tr>
+    <td className="item-detail-name">
+      {displayName
+        ? displayName + ":"
+        : columnName.charAt(0).toUpperCase() + columnName.slice(1) + ":"}
+    </td>
+    <td className="item-detail-value">
+      {type === "dropdown-with-query" ? (
+        <DropdownWithQuery
+          value={detailValue}
+          type={dropdownItemType}
+          onChange={onValueChange}
+        />
+      ) : (
+        <Input
+          value={detailValue}
+          type={type}
+          onChange={onValueChange}
+          valueOptions={valueOptions}
+        />
+      )}
+    </td>
+  </tr>
+);
 
 export default NewItemDetail;

@@ -64,7 +64,11 @@ const Input = ({
         {...commonInputProps}
       >
         {valueOptions.map((option) => (
-          <option value={option.value} key={option.value}>
+          <option
+            value={option.value}
+            disabled={option.isDisabled}
+            key={option.value}
+          >
             {option.displayName || option.value}
           </option>
         ))}

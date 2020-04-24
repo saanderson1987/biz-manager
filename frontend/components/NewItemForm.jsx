@@ -37,20 +37,24 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
         Create New {capitalize(itemNameByItemType[type])}
       </div>
       <div className="form-body">
-        {newItemFormFieldsByItemType[type].map((field, i) => (
-          <NewItemDetail
-            field={field}
-            detailValue={pendingNewRecord[field.columnName]}
-            displayName={field.displayName}
-            onValueChange={(value) =>
-              setPendingNewRecord((prev) => ({
-                ...prev,
-                [field.columnName]: value,
-              }))
-            }
-            key={i}
-          />
-        ))}
+        <table className="form-table">
+          <tbody>
+            {newItemFormFieldsByItemType[type].map((field, i) => (
+              <NewItemDetail
+                field={field}
+                detailValue={pendingNewRecord[field.columnName]}
+                displayName={field.displayName}
+                onValueChange={(value) =>
+                  setPendingNewRecord((prev) => ({
+                    ...prev,
+                    [field.columnName]: value,
+                  }))
+                }
+                key={i}
+              />
+            ))}
+          </tbody>
+        </table>
         <div className="button-row">
           <button onClick={closeModal}>Cancel</button>
           <button
@@ -60,7 +64,7 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
                 type,
                 parentId,
                 parentType: statePath[statePath.length - 3],
-                userId: user.id,
+                userId: user ? user.id : "",
               });
               const newRecord = { ...newRecordBase, ...pendingNewRecord };
               createRecord({
@@ -77,6 +81,52 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
       </div>
     </div>
   );
+  // return (
+  //   <div className="form">
+  //     <div className="form-header">
+  //       Create New {capitalize(itemNameByItemType[type])}
+  //     </div>
+  //     <div className="form-body">
+  //       {newItemFormFieldsByItemType[type].map((field, i) => (
+  //         <NewItemDetail
+  //           field={field}
+  //           detailValue={pendingNewRecord[field.columnName]}
+  //           displayName={field.displayName}
+  //           onValueChange={(value) =>
+  //             setPendingNewRecord((prev) => ({
+  //               ...prev,
+  //               [field.columnName]: value,
+  //             }))
+  //           }
+  //           key={i}
+  //         />
+  //       ))}
+  //       <div className="button-row">
+  //         <button onClick={closeModal}>Cancel</button>
+  //         <button
+  //           className="button--save"
+  //           onClick={() => {
+  //             const newRecordBase = getNewItemRecordBase({
+  //               type,
+  //               parentId,
+  //               parentType: statePath[statePath.length - 3],
+  //               userId: user.id,
+  //             });
+  //             const newRecord = { ...newRecordBase, ...pendingNewRecord };
+  //             createRecord({
+  //               route: apiRouteByItemType[type],
+  //               newRecord,
+  //               statePath,
+  //             });
+  //             closeModal();
+  //           }}
+  //         >
+  //           Save
+  //         </button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default NewItemForm;
