@@ -1338,52 +1338,7 @@ var NewItemForm = function NewItemForm(_ref) {
       });
       closeModal();
     }
-  }, "Save")))); // return (
-  //   <div className="form">
-  //     <div className="form-header">
-  //       Create New {capitalize(itemNameByItemType[type])}
-  //     </div>
-  //     <div className="form-body">
-  //       {newItemFormFieldsByItemType[type].map((field, i) => (
-  //         <NewItemDetail
-  //           field={field}
-  //           detailValue={pendingNewRecord[field.columnName]}
-  //           displayName={field.displayName}
-  //           onValueChange={(value) =>
-  //             setPendingNewRecord((prev) => ({
-  //               ...prev,
-  //               [field.columnName]: value,
-  //             }))
-  //           }
-  //           key={i}
-  //         />
-  //       ))}
-  //       <div className="button-row">
-  //         <button onClick={closeModal}>Cancel</button>
-  //         <button
-  //           className="button--save"
-  //           onClick={() => {
-  //             const newRecordBase = getNewItemRecordBase({
-  //               type,
-  //               parentId,
-  //               parentType: statePath[statePath.length - 3],
-  //               userId: user.id,
-  //             });
-  //             const newRecord = { ...newRecordBase, ...pendingNewRecord };
-  //             createRecord({
-  //               route: apiRouteByItemType[type],
-  //               newRecord,
-  //               statePath,
-  //             });
-  //             closeModal();
-  //           }}
-  //         >
-  //           Save
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+  }, "Save"))));
 };
 
 var _default = NewItemForm;
