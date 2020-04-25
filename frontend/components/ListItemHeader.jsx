@@ -14,6 +14,7 @@ const ListItemHeader = ({
   toggleExpanded,
   isEditable,
   save,
+  onClickDelete,
 }) => {
   const [inEditMode, setInEditMode] = useState(false);
   const [isValueUpdating, setIsValueUpdating] = useState(false);
@@ -74,9 +75,7 @@ const ListItemHeader = ({
           </div>
         )}
       </div>
-      {isExpanded && (
-        <DeleteButton onClick={() => setIsDeleteWarningVisible(true)} />
-      )}
+      {isExpanded && <DeleteButton onClick={onClickDelete} />}
     </div>
   );
 };

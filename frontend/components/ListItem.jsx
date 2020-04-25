@@ -20,6 +20,7 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
   const { itemName, itemNameColumnName } = getItemNameFuncByItemType[type](
     item
   );
+  const route = apiRouteByItemType[type];
 
   return (
     <div className={classNames("list-item", { "list-item--first": isFirst })}>
@@ -30,11 +31,12 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
         isEditable={!!itemNameColumnName}
         save={(newValue) =>
           updateRecord({
-            route: apiRouteByItemType[type],
+            route,
             record: { id: item.id, [itemNameColumnName]: newValue },
             statePath,
           })
         }
+        onClickDelete={() => setIsDeleteWarningVisible(true)}
       />
       {isExpanded && (
         <>

@@ -704,6 +704,7 @@ var ListItem = function ListItem(_ref) {
       itemName = _getItemNameFuncByIte.itemName,
       itemNameColumnName = _getItemNameFuncByIte.itemNameColumnName;
 
+  var route = _constants.apiRouteByItemType[type];
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: (0, _classnames["default"])("list-item", {
       "list-item--first": isFirst
@@ -717,12 +718,15 @@ var ListItem = function ListItem(_ref) {
     isEditable: !!itemNameColumnName,
     save: function save(newValue) {
       return updateRecord({
-        route: _constants.apiRouteByItemType[type],
+        route: route,
         record: _defineProperty({
           id: item.id
         }, itemNameColumnName, newValue),
         statePath: statePath
       });
+    },
+    onClickDelete: function onClickDelete() {
+      return setIsDeleteWarningVisible(true);
     }
   }), isExpanded && /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, /*#__PURE__*/_react["default"].createElement(_ItemDetails["default"], {
     type: type,
@@ -814,7 +818,8 @@ var ListItemHeader = function ListItemHeader(_ref) {
       isExpanded = _ref.isExpanded,
       toggleExpanded = _ref.toggleExpanded,
       isEditable = _ref.isEditable,
-      _save = _ref.save;
+      _save = _ref.save,
+      onClickDelete = _ref.onClickDelete;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -886,9 +891,7 @@ var ListItemHeader = function ListItemHeader(_ref) {
       return setInEditMode(!inEditMode);
     }
   }))), isExpanded && /*#__PURE__*/_react["default"].createElement(_DeleteButton["default"], {
-    onClick: function onClick() {
-      return setIsDeleteWarningVisible(true);
-    }
+    onClick: onClickDelete
   }));
 };
 
