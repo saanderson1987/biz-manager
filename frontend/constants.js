@@ -90,7 +90,7 @@ const itemDetailsGetByIdQueryParams = {
       "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status",
   },
   notes: { columns: "contents,author_name,updated_at" },
-  vendor_order_replacements: { columns: "item_number,updated_at" },
+  vendor_order_replacements: { columns: "item_number,completed,updated_at" },
 };
 
 export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
@@ -305,6 +305,7 @@ export const itemDetailFieldsByItemType = {
   ],
   vendor_order_replacements: [
     { columnName: "item_number", displayName: "Item Number" },
+    { columnName: "completed", type: "checkbox" },
   ],
 };
 
@@ -403,6 +404,7 @@ export const newItemFormFieldsByItemType = {
   notes: [{ columnName: "contents" }],
   vendor_order_replacements: [
     { columnName: "item_number", displayName: "Item Number" },
+    { columnName: "completed", type: "checkbox" },
     { columnName: "notes" },
   ],
 };

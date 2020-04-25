@@ -2240,7 +2240,7 @@ var itemDetailsGetByIdQueryParams = {
     columns: "contents,author_name,updated_at"
   },
   vendor_order_replacements: {
-    columns: "item_number,updated_at"
+    columns: "item_number,completed,updated_at"
   }
 };
 
@@ -2548,6 +2548,9 @@ var itemDetailFieldsByItemType = {
   vendor_order_replacements: [{
     columnName: "item_number",
     displayName: "Item Number"
+  }, {
+    columnName: "completed",
+    type: "checkbox"
   }]
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;
@@ -2681,6 +2684,9 @@ var newItemFormFieldsByItemType = {
   vendor_order_replacements: [{
     columnName: "item_number",
     displayName: "Item Number"
+  }, {
+    columnName: "completed",
+    type: "checkbox"
   }, {
     columnName: "notes"
   }]
