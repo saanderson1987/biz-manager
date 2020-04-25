@@ -1,7 +1,8 @@
 const Model = require("./model.js");
+const { notesMixin } = require("./mixins");
 const pgp = require("pg-promise")();
 
-class VendorOrderModel extends Model {
+class VendorOrderModel extends notesMixin(Model) {
   getByQuery(queryParams) {
     queryParams.joinTable = new pgp.helpers.TableName("company");
     queryParams.joinClause =

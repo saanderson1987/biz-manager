@@ -177,7 +177,11 @@ export const itemListsByItemType = {
   clients: [{ type: "contacts" }, { type: "notes" }, { type: "jobs" }],
   prospects: [{ type: "contacts" }, { type: "notes" }, { type: "jobs" }],
   jobs: [{ type: "notes" }, { type: "job_orders" }],
-  job_orders: [{ type: "vendor_orders" }, { type: "installations" }],
+  job_orders: [
+    { type: "notes" },
+    { type: "vendor_orders" },
+    { type: "installations" },
+  ],
   vendor_orders: [{ type: "notes" }],
 };
 
@@ -389,17 +393,18 @@ export const getNewItemRecordBase = ({
   parentId,
   parentType,
   userId,
+  hasNotes,
 }) => {
   const baseRecord = {};
   if (parentId) {
     baseRecord[parentColumnByItemType[type]] = parentId;
   }
 
-  if (type === "notes") {
-    if (parentId && parentType) {
-      baseRecord.parent_table = tableNameListType[parentType];
-    }
+  if (type === "notes" || hasNotes) {
     baseRecord.author = userId;
+  }
+  if (type === "notes" && parentId && parentType) {
+    baseRecord.parent_table = tableNameListType[parentType];
   }
   if (type === "vendors") {
     baseRecord.status = "vendor";

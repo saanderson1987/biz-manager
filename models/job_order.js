@@ -1,5 +1,7 @@
-const Model = require('./model.js');
+const Model = require("./model.js");
+const { notesMixin } = require("./mixins");
 
-const JobOrder = new Model('job_order');
+const JobOrderModel = notesMixin(Model);
+const JobOrder = new JobOrderModel("job_order");
 
 module.exports = JobOrder;

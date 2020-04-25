@@ -997,6 +997,11 @@ var Login = function Login() {
     displayName: "Password",
     type: "password"
   }];
+
+  var save = function save() {
+    return login(formData);
+  };
+
   return /*#__PURE__*/_react["default"].createElement(_Modal["default"], null, /*#__PURE__*/_react["default"].createElement("div", {
     className: "form"
   }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -1022,15 +1027,14 @@ var Login = function Login() {
         return setFormData(function (prev) {
           return _objectSpread({}, prev, _defineProperty({}, fieldName, newVal));
         });
-      }
+      },
+      save: save
     })));
   }))), /*#__PURE__*/_react["default"].createElement("div", {
     className: "button-row-single-button"
   }, /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--save",
-    onClick: function onClick() {
-      return login(formData);
-    }
+    onClick: save
   }, "Save")))));
 };
 
@@ -1322,12 +1326,14 @@ var NewItemForm = function NewItemForm(_ref) {
   }, "Cancel"), /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--save",
     onClick: function onClick() {
-      var newRecordBase = (0, _constants.getNewItemRecordBase)({
+      var _getNewItemRecordBase;
+
+      var newRecordBase = (0, _constants.getNewItemRecordBase)((_getNewItemRecordBase = {
         type: type,
         parentId: parentId,
         parentType: statePath[statePath.length - 3],
         userId: user ? user.id : ""
-      });
+      }, _defineProperty(_getNewItemRecordBase, "type", type), _defineProperty(_getNewItemRecordBase, "hasNotes", pendingNewRecord.notes), _getNewItemRecordBase));
 
       var newRecord = _objectSpread({}, newRecordBase, {}, pendingNewRecord);
 
@@ -2377,6 +2383,8 @@ var itemListsByItemType = {
     type: "job_orders"
   }],
   job_orders: [{
+    type: "notes"
+  }, {
     type: "vendor_orders"
   }, {
     type: "installations"
@@ -2647,19 +2655,20 @@ var getNewItemRecordBase = function getNewItemRecordBase(_ref5) {
   var type = _ref5.type,
       parentId = _ref5.parentId,
       parentType = _ref5.parentType,
-      userId = _ref5.userId;
+      userId = _ref5.userId,
+      hasNotes = _ref5.hasNotes;
   var baseRecord = {};
 
   if (parentId) {
     baseRecord[parentColumnByItemType[type]] = parentId;
   }
 
-  if (type === "notes") {
-    if (parentId && parentType) {
-      baseRecord.parent_table = tableNameListType[parentType];
-    }
-
+  if (type === "notes" || hasNotes) {
     baseRecord.author = userId;
+  }
+
+  if (type === "notes" && parentId && parentType) {
+    baseRecord.parent_table = tableNameListType[parentType];
   }
 
   if (type === "vendors") {

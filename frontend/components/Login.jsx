@@ -11,6 +11,9 @@ const Login = () => {
     { fieldName: "username", displayName: "Username", type: "text" },
     { fieldName: "password", displayName: "Password", type: "password" },
   ];
+
+  const save = () => login(formData);
+
   return (
     <Modal>
       <div className="form">
@@ -31,6 +34,7 @@ const Login = () => {
                           [fieldName]: newVal,
                         }))
                       }
+                      save={save}
                     />
                   </td>
                 </tr>
@@ -38,7 +42,7 @@ const Login = () => {
             </tbody>
           </table>
           <div className="button-row-single-button">
-            <button className="button--save" onClick={() => login(formData)}>
+            <button className="button--save" onClick={save}>
               Save
             </button>
           </div>

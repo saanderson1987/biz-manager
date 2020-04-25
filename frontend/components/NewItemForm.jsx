@@ -65,6 +65,8 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
                 parentId,
                 parentType: statePath[statePath.length - 3],
                 userId: user ? user.id : "",
+                type,
+                hasNotes: pendingNewRecord.notes,
               });
               const newRecord = { ...newRecordBase, ...pendingNewRecord };
               createRecord({
