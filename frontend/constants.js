@@ -9,6 +9,7 @@ export const tableNameListType = {
   job_orders: "job_order",
   installations: "installation",
   vendor_orders: "vendor_order",
+  vendor_order_replacements: "vendor_order_replacement",
 };
 
 export const parentColumnByItemType = {
@@ -18,6 +19,7 @@ export const parentColumnByItemType = {
   installations: "job_order_id",
   vendor_orders: "job_order_id",
   notes: "parent_id",
+  vendor_order_replacements: "vendor_order_id",
 };
 
 const createParentIdQuery = (type, parentId, statePath) => {
@@ -43,6 +45,7 @@ export const apiRouteByItemType = {
   vendor_orders: "vendor_orders",
   vendors: "companies",
   notes: "notes",
+  vendor_order_replacements: "vendor_order_replacements",
 };
 
 export const queryParamsByItemType = {
@@ -64,6 +67,7 @@ export const queryParamsByItemType = {
   vendor_orders: { columns: "name,date_ordered" },
   vendors: { columns: "name", status: "vendor" },
   notes: { columns: "contents,updated_at" },
+  vendor_order_replacements: { columns: "item_number" },
 };
 
 export const createListGetByQueryOptions = (type, parentId, statePath) => {
@@ -86,6 +90,7 @@ const itemDetailsGetByIdQueryParams = {
       "name,po_num,status,budget_sent_date,image_proposal_sent_date,art_plan_sent_date,receivable_status",
   },
   notes: { columns: "contents,author_name,updated_at" },
+  vendor_order_replacements: { columns: "item_number,updated_at" },
 };
 
 export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
@@ -108,12 +113,14 @@ export const listNameByItemType = {
   vendor_orders: "Vendor Orders",
   vendors: "Vendors",
   notes: "Notes",
+  vendor_order_replacements: "Replacements",
 };
 
 const defaultSortFieldByItemType = {
   job_orders: "date_ordered",
   installations: "installation_date",
   notes: "updated_at",
+  vendor_order_replacements: "updated_at",
 };
 
 export const getDefaultListSortFuncByItemType = (type) => {
@@ -165,6 +172,9 @@ export const getItemNameFuncByItemType = {
       itemName,
     };
   },
+  vendor_order_replacements: ({ item_number }) => ({
+    itemName: `Item number ${item_number}`,
+  }),
 };
 
 const jobStatusDisplayNameByType = {
@@ -182,7 +192,8 @@ export const itemListsByItemType = {
     { type: "vendor_orders" },
     { type: "installations" },
   ],
-  vendor_orders: [{ type: "notes" }],
+  vendor_orders: [{ type: "notes" }, { type: "vendor_order_replacements" }],
+  vendor_order_replacements: [{ type: "notes" }],
 };
 
 export const itemDetailFieldsByItemType = {
@@ -292,6 +303,9 @@ export const itemDetailFieldsByItemType = {
     },
     { columnName: "contents", type: "text-box" },
   ],
+  vendor_order_replacements: [
+    { columnName: "item_number", displayName: "Item Number" },
+  ],
 };
 
 export const itemNameByItemType = {
@@ -305,6 +319,7 @@ export const itemNameByItemType = {
   vendor_orders: "Vendor Order",
   vendors: "Vendor",
   notes: "Note",
+  vendor_order_replacements: "Replacement",
 };
 
 export const newItemFormFieldsByItemType = {
@@ -386,6 +401,10 @@ export const newItemFormFieldsByItemType = {
   ],
   vendors: [{ columnName: "name" }, { columnName: "notes" }],
   notes: [{ columnName: "contents" }],
+  vendor_order_replacements: [
+    { columnName: "item_number", displayName: "Item Number" },
+    { columnName: "notes" },
+  ],
 };
 
 export const getNewItemRecordBase = ({

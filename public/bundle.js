@@ -2136,7 +2136,8 @@ var tableNameListType = {
   jobs: "job",
   job_orders: "job_order",
   installations: "installation",
-  vendor_orders: "vendor_order"
+  vendor_orders: "vendor_order",
+  vendor_order_replacements: "vendor_order_replacement"
 };
 exports.tableNameListType = tableNameListType;
 var parentColumnByItemType = {
@@ -2145,7 +2146,8 @@ var parentColumnByItemType = {
   job_orders: "job_id",
   installations: "job_order_id",
   vendor_orders: "job_order_id",
-  notes: "parent_id"
+  notes: "parent_id",
+  vendor_order_replacements: "vendor_order_id"
 };
 exports.parentColumnByItemType = parentColumnByItemType;
 
@@ -2171,7 +2173,8 @@ var apiRouteByItemType = {
   installations: "installations",
   vendor_orders: "vendor_orders",
   vendors: "companies",
-  notes: "notes"
+  notes: "notes",
+  vendor_order_replacements: "vendor_order_replacements"
 };
 exports.apiRouteByItemType = apiRouteByItemType;
 var queryParamsByItemType = {
@@ -2207,6 +2210,9 @@ var queryParamsByItemType = {
   },
   notes: {
     columns: "contents,updated_at"
+  },
+  vendor_order_replacements: {
+    columns: "item_number"
   }
 };
 exports.queryParamsByItemType = queryParamsByItemType;
@@ -2229,6 +2235,9 @@ var itemDetailsGetByIdQueryParams = {
   },
   notes: {
     columns: "contents,author_name,updated_at"
+  },
+  vendor_order_replacements: {
+    columns: "item_number,updated_at"
   }
 };
 
@@ -2252,13 +2261,15 @@ var listNameByItemType = {
   installations: "Installations",
   vendor_orders: "Vendor Orders",
   vendors: "Vendors",
-  notes: "Notes"
+  notes: "Notes",
+  vendor_order_replacements: "Replacements"
 };
 exports.listNameByItemType = listNameByItemType;
 var defaultSortFieldByItemType = {
   job_orders: "date_ordered",
   installations: "installation_date",
-  notes: "updated_at"
+  notes: "updated_at",
+  vendor_order_replacements: "updated_at"
 };
 
 var getDefaultListSortFuncByItemType = function getDefaultListSortFuncByItemType(type) {
@@ -2354,6 +2365,12 @@ var getItemNameFuncByItemType = {
     return {
       itemName: itemName
     };
+  },
+  vendor_order_replacements: function vendor_order_replacements(_ref5) {
+    var item_number = _ref5.item_number;
+    return {
+      itemName: "Item number ".concat(item_number)
+    };
   }
 };
 exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
@@ -2390,6 +2407,11 @@ var itemListsByItemType = {
     type: "installations"
   }],
   vendor_orders: [{
+    type: "notes"
+  }, {
+    type: "vendor_order_replacements"
+  }],
+  vendor_order_replacements: [{
     type: "notes"
   }]
 };
@@ -2519,6 +2541,10 @@ var itemDetailFieldsByItemType = {
   }, {
     columnName: "contents",
     type: "text-box"
+  }],
+  vendor_order_replacements: [{
+    columnName: "item_number",
+    displayName: "Item Number"
   }]
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;
@@ -2532,7 +2558,8 @@ var itemNameByItemType = {
   installations: "Installation",
   vendor_orders: "Vendor Order",
   vendors: "Vendor",
-  notes: "Note"
+  notes: "Note",
+  vendor_order_replacements: "Replacement"
 };
 exports.itemNameByItemType = itemNameByItemType;
 var newItemFormFieldsByItemType = {
@@ -2647,16 +2674,22 @@ var newItemFormFieldsByItemType = {
   }],
   notes: [{
     columnName: "contents"
+  }],
+  vendor_order_replacements: [{
+    columnName: "item_number",
+    displayName: "Item Number"
+  }, {
+    columnName: "notes"
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;
 
-var getNewItemRecordBase = function getNewItemRecordBase(_ref5) {
-  var type = _ref5.type,
-      parentId = _ref5.parentId,
-      parentType = _ref5.parentType,
-      userId = _ref5.userId,
-      hasNotes = _ref5.hasNotes;
+var getNewItemRecordBase = function getNewItemRecordBase(_ref6) {
+  var type = _ref6.type,
+      parentId = _ref6.parentId,
+      parentType = _ref6.parentType,
+      userId = _ref6.userId,
+      hasNotes = _ref6.hasNotes;
   var baseRecord = {};
 
   if (parentId) {
