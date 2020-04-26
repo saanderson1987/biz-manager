@@ -185,8 +185,15 @@ export const StoreProvider = ({ children }) => {
           });
         })
         .catch((e) => {
-          console.log(e);
-          setState((oldState) => ({ ...oldState, error: JSON.stringify(e) }));
+          if (e.response.status === 401) {
+            setState((oldState) => ({
+              ...oldState,
+              authentication: {
+                isAuthenticated: false,
+                error: "Invalid username or password",
+              },
+            }));
+          }
         }),
 
     logout: () =>

@@ -45,8 +45,13 @@ passport.use(
     User.getByQuery({ username })
       .then(function (users) {
         const user = Object.values(users)[0];
-        const isCorrectPassword = bcrypt.compareSync(password, user.password);
-        if (isCorrectPassword) return done(null, user);
+        const isCorrectPassword = bcrypt.compareSync(
+          password,
+          (user && user.password) || ""
+        );
+        if (isCorrectPassword) {
+          return done(null, user);
+        }
         return done(null, false);
       })
       .catch((e) => done(e));
@@ -86,7 +91,11 @@ app.post("/login", function (req, res, next) {
       return next(err);
     }
     req.logIn(user, function (err) {
-      if (err) return next(err);
+      if (err) {
+        const loginError = new Error("Error logging in");
+        loginError.status = 401;
+        return next(loginError);
+      }
       const authenticationReturnObject = getAuthenticationReturnObject({
         isAuthenticated: true,
         user,
@@ -125,13 +134,11 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send({ message: err.message, stack: err.stack });
+  // res.render("error");
 });
 
 module.exports = app;

@@ -4,7 +4,12 @@ import Modal from "./Modal";
 import Input from "./common/Input";
 
 const Login = () => {
-  const { login } = useContext(StoreContext);
+  const {
+    login,
+    state: {
+      authentication: { error },
+    },
+  } = useContext(StoreContext);
   const [formData, setFormData] = useState({ username: "", password: "" });
 
   const fields = [
@@ -46,6 +51,11 @@ const Login = () => {
               Save
             </button>
           </div>
+          {error && (
+            <div className="error-message-container">
+              <p className="error-message">{error}</p>
+            </div>
+          )}
         </div>
       </div>
     </Modal>

@@ -58,6 +58,14 @@ button:focus {
   text-align: right;
 }
 
+.error-message-container {
+  margin-top: 20px;
+}
+
+.error-message {
+  color: red;
+}
+
 @import "./buttons_and_icons.scss";
 @import "./form.scss";
 @import "./modal.scss";
