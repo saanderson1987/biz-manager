@@ -64,7 +64,7 @@ export const queryParamsByItemType = {
   jobs: { columns: "name" },
   job_orders: { columns: "date_ordered" },
   installations: { columns: "installation_date" },
-  vendor_orders: { columns: "name,date_ordered" },
+  vendor_orders: { columns: "name,date_ordered,does_have_replacements" },
   vendors: { columns: "name", status: "vendor" },
   notes: { columns: "contents,updated_at" },
   vendor_order_replacements: { columns: "item_number" },

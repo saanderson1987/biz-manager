@@ -2205,7 +2205,7 @@ var queryParamsByItemType = {
     columns: "installation_date"
   },
   vendor_orders: {
-    columns: "name,date_ordered"
+    columns: "name,date_ordered,does_have_replacements"
   },
   vendors: {
     columns: "name",
