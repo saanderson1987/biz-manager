@@ -4,32 +4,6 @@ const pgp = require("pg-promise")();
 const db = require("../db.js");
 
 class VendorOrderModel extends notesMixin(Model) {
-  // getByQuery(queryParams) {
-  //   queryParams.joinTable = new pgp.helpers.TableName("company");
-  //   queryParams.joinClause =
-  //     " INNER JOIN ${joinTable} on company.id = t1.vendor_id";
-  //   return super.getByQuery(queryParams);
-  // }
-
-  createSelectClause(columns) {
-    const selectClause = "SELECT ";
-    let selectColumns = "*";
-
-    if (columns) {
-      const columnsArr = columns.split(",");
-      if (!columnsArr.includes("id")) {
-        columnsArr.push("t1.id");
-      }
-      const idIdx = columnsArr.findIndex((col) => col === "id");
-      if (idIdx > -1) {
-        columnsArr[idIdx] = "t1.id";
-      }
-      selectColumns = columnsArr.join(",");
-    }
-
-    return selectClause + selectColumns;
-  }
-
   getByQuery(queryParams) {
     if (queryParams.columns.includes("does_have_replacements")) {
       const columns = queryParams.columns

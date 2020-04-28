@@ -10,6 +10,7 @@ export const tableNameListType = {
   installations: "installation",
   vendor_orders: "vendor_order",
   vendor_order_replacements: "vendor_order_replacement",
+  installers: "installer",
 };
 
 export const parentColumnByItemType = {
@@ -20,6 +21,7 @@ export const parentColumnByItemType = {
   vendor_orders: "job_order_id",
   notes: "parent_id",
   vendor_order_replacements: "vendor_order_id",
+  installers: "installation_id",
 };
 
 const createParentIdQuery = (type, parentId, statePath) => {
@@ -46,6 +48,7 @@ export const apiRouteByItemType = {
   vendors: "companies",
   notes: "notes",
   vendor_order_replacements: "vendor_order_replacements",
+  installers: "installers",
 };
 
 export const queryParamsByItemType = {
@@ -68,6 +71,7 @@ export const queryParamsByItemType = {
   vendors: { columns: "name", status: "vendor" },
   notes: { columns: "contents,updated_at" },
   vendor_order_replacements: { columns: "item_number" },
+  installers: { columns: "name" },
 };
 
 export const createListGetByQueryOptions = (type, parentId, statePath) => {
@@ -91,6 +95,7 @@ const itemDetailsGetByIdQueryParams = {
   },
   notes: { columns: "contents,author_name,updated_at" },
   vendor_order_replacements: { columns: "item_number,completed,updated_at" },
+  installers: { columns: "name" },
 };
 
 export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
@@ -114,6 +119,7 @@ export const listNameByItemType = {
   vendors: "Vendors",
   notes: "Notes",
   vendor_order_replacements: "Replacements",
+  installers: "Installers",
 };
 
 const defaultSortFieldByItemType = {
@@ -175,6 +181,7 @@ export const getItemNameFuncByItemType = {
   vendor_order_replacements: ({ item_number }) => ({
     itemName: `Item number ${item_number}`,
   }),
+  installers: (item) => ({ itemName: item.name, itemNameColumnName: "name" }),
 };
 
 const jobStatusDisplayNameByType = {
@@ -194,6 +201,7 @@ export const itemListsByItemType = {
   ],
   vendor_orders: [{ type: "notes" }, { type: "vendor_order_replacements" }],
   vendor_order_replacements: [{ type: "notes" }],
+  installations: [{ type: "installers" }],
 };
 
 export const itemDetailFieldsByItemType = {
@@ -307,6 +315,7 @@ export const itemDetailFieldsByItemType = {
     { columnName: "item_number", displayName: "Item Number" },
     { columnName: "completed", type: "checkbox" },
   ],
+  installers: [],
 };
 
 export const itemNameByItemType = {
@@ -321,6 +330,7 @@ export const itemNameByItemType = {
   vendors: "Vendor",
   notes: "Note",
   vendor_order_replacements: "Replacement",
+  installers: "Installer",
 };
 
 export const newItemFormFieldsByItemType = {
@@ -407,6 +417,7 @@ export const newItemFormFieldsByItemType = {
     { columnName: "completed", type: "checkbox" },
     { columnName: "notes" },
   ],
+  installers: [{ columnName: "name" }],
 };
 
 export const getNewItemRecordBase = ({

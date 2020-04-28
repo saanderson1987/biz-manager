@@ -3,7 +3,27 @@ const InstallationJobOrder = require("./installation_job_order");
 const pgp = require("pg-promise")();
 const db = require("../db.js");
 
+const defaultColumns = ["id", "created_at", "updated_at"];
+
 class InstallationModel extends Model {
+  constructor({ name, columns = [], belongsTo = [] }) {
+    super(name);
+
+    this.columns = new Set([...defaultColumns, ...columns]);
+
+    this.joinColumns = belongsTo.reduce((acc, belongsToData) => {
+      for (const col of belongsToData.model.columns) {
+        acc[col] = { tableString: belongsToData.model.tableString };
+      }
+      return acc;
+    }, {});
+
+    this.joinTablesByName = belongsTo.reduce((acc, belongsToData) => {
+      acc[belongsToData.model.tableString] = belongsToData;
+      return acc;
+    }, {});
+  }
+
   getByQuery(queryParams) {
     queryParams.joinTable = new pgp.helpers.TableName("installation_job_order");
     queryParams.joinClause =
@@ -57,5 +77,8 @@ class InstallationModel extends Model {
   }
 }
 
-const Installation = new InstallationModel("installation");
+const Installation = new InstallationModel({
+  name: "installation",
+  columns: ["installation_date", "completed"],
+});
 module.exports = Installation;

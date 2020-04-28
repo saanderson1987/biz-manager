@@ -2145,7 +2145,8 @@ var tableNameListType = {
   job_orders: "job_order",
   installations: "installation",
   vendor_orders: "vendor_order",
-  vendor_order_replacements: "vendor_order_replacement"
+  vendor_order_replacements: "vendor_order_replacement",
+  installers: "installer"
 };
 exports.tableNameListType = tableNameListType;
 var parentColumnByItemType = {
@@ -2155,7 +2156,8 @@ var parentColumnByItemType = {
   installations: "job_order_id",
   vendor_orders: "job_order_id",
   notes: "parent_id",
-  vendor_order_replacements: "vendor_order_id"
+  vendor_order_replacements: "vendor_order_id",
+  installers: "installation_id"
 };
 exports.parentColumnByItemType = parentColumnByItemType;
 
@@ -2182,7 +2184,8 @@ var apiRouteByItemType = {
   vendor_orders: "vendor_orders",
   vendors: "companies",
   notes: "notes",
-  vendor_order_replacements: "vendor_order_replacements"
+  vendor_order_replacements: "vendor_order_replacements",
+  installers: "installers"
 };
 exports.apiRouteByItemType = apiRouteByItemType;
 var queryParamsByItemType = {
@@ -2221,6 +2224,9 @@ var queryParamsByItemType = {
   },
   vendor_order_replacements: {
     columns: "item_number"
+  },
+  installers: {
+    columns: "name"
   }
 };
 exports.queryParamsByItemType = queryParamsByItemType;
@@ -2246,6 +2252,9 @@ var itemDetailsGetByIdQueryParams = {
   },
   vendor_order_replacements: {
     columns: "item_number,completed,updated_at"
+  },
+  installers: {
+    columns: "name"
   }
 };
 
@@ -2270,7 +2279,8 @@ var listNameByItemType = {
   vendor_orders: "Vendor Orders",
   vendors: "Vendors",
   notes: "Notes",
-  vendor_order_replacements: "Replacements"
+  vendor_order_replacements: "Replacements",
+  installers: "Installers"
 };
 exports.listNameByItemType = listNameByItemType;
 var defaultSortFieldByItemType = {
@@ -2379,6 +2389,12 @@ var getItemNameFuncByItemType = {
     return {
       itemName: "Item number ".concat(item_number)
     };
+  },
+  installers: function installers(item) {
+    return {
+      itemName: item.name,
+      itemNameColumnName: "name"
+    };
   }
 };
 exports.getItemNameFuncByItemType = getItemNameFuncByItemType;
@@ -2421,6 +2437,9 @@ var itemListsByItemType = {
   }],
   vendor_order_replacements: [{
     type: "notes"
+  }],
+  installations: [{
+    type: "installers"
   }]
 };
 exports.itemListsByItemType = itemListsByItemType;
@@ -2556,7 +2575,8 @@ var itemDetailFieldsByItemType = {
   }, {
     columnName: "completed",
     type: "checkbox"
-  }]
+  }],
+  installers: []
 };
 exports.itemDetailFieldsByItemType = itemDetailFieldsByItemType;
 var itemNameByItemType = {
@@ -2570,7 +2590,8 @@ var itemNameByItemType = {
   vendor_orders: "Vendor Order",
   vendors: "Vendor",
   notes: "Note",
-  vendor_order_replacements: "Replacement"
+  vendor_order_replacements: "Replacement",
+  installers: "Installer"
 };
 exports.itemNameByItemType = itemNameByItemType;
 var newItemFormFieldsByItemType = {
@@ -2694,6 +2715,9 @@ var newItemFormFieldsByItemType = {
     type: "checkbox"
   }, {
     columnName: "notes"
+  }],
+  installers: [{
+    columnName: "name"
   }]
 };
 exports.newItemFormFieldsByItemType = newItemFormFieldsByItemType;
