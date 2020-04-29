@@ -48,7 +48,7 @@ const Login = () => {
           </table>
           <div className="button-row-single-button">
             <button className="button--save" onClick={save}>
-              Save
+              Login
             </button>
           </div>
           {error && (

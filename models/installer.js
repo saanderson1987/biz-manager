@@ -1,6 +1,7 @@
 const Model = require("./model.js");
 const pgp = require("pg-promise")();
 const db = require("../db.js");
+const { isEmpty } = require("../util/functions");
 const Contact = require("./contact");
 const Installation = require("./installation");
 
@@ -14,7 +15,7 @@ class InstallerModel extends Model {
 
     this.joinColumns = belongsTo.reduce((acc, belongsToData) => {
       for (const col of belongsToData.model.columns) {
-        acc[col] = { tableString: belongsToData.model.tableString };
+        acc[col] = { model: belongsToData.model };
       }
       return acc;
     }, {});
@@ -44,9 +45,9 @@ class InstallerModel extends Model {
             let tableString;
             if (this.columns.has(col)) {
               tableString = this.tableString;
-            }
-            if (this.joinColumns[col]) {
-              const joinColumnTableString = this.joinColumns[col].tableString;
+            } else if (this.joinColumns[col]) {
+              const joinColumnTableString = this.joinColumns[col].model
+                .tableString;
               if (!acc.queryJoinTablesByName[joinColumnTableString]) {
                 acc.queryJoinTablesByName[
                   joinColumnTableString
@@ -89,7 +90,7 @@ class InstallerModel extends Model {
     };
   }
 
-  getById(id, queryParams) {
+  getById(id, queryParams = {}) {
     if (this.isInvalidId(id)) return this.error("id");
 
     const {
@@ -131,6 +132,71 @@ class InstallerModel extends Model {
     } else {
       return super.new(record).then((newRecord) => {
         return this.getById(newRecord.id);
+      });
+    }
+  }
+
+  update(record) {
+    if (this.isInvalidId(record.id)) return this.error("id");
+    if (Object.keys(record).length === 1) return this.getById(record.id);
+
+    const {
+      thisTableRecord,
+      otherRecordsByTable,
+      thisTableRecordKeysLength,
+    } = Object.entries(record).reduce(
+      (acc, [col, value]) => {
+        if (this.columns.has(col)) {
+          acc.thisTableRecord[col] = value;
+          acc.thisTableRecordKeysLength++;
+        } else if (this.joinColumns[col]) {
+          const colJoinTable = this.joinColumns[col].model.tableString;
+          if (!acc.otherRecordsByTable[colJoinTable]) {
+            acc.otherRecordsByTable[colJoinTable] = {};
+          }
+          acc.otherRecordsByTable[colJoinTable][col] = value;
+        }
+        return acc;
+      },
+      {
+        thisTableRecord: {},
+        otherRecordsByTable: {},
+        thisTableRecordKeysLength: 0,
+      }
+    );
+
+    const promises = [];
+    // if thisTableRecord includes more than just id (which is necessary)
+    if (thisTableRecordKeysLength > 1) {
+      promises.push(super.update(thisTableRecord));
+    }
+    if (!isEmpty(otherRecordsByTable)) {
+      return this.getById(record.id).then((currentRecord) => {
+        for (const tableName in otherRecordsByTable) {
+          promises.push(
+            this.joinTablesByName[tableName].model.update({
+              ...otherRecordsByTable[tableName],
+              [this.joinTablesByName[tableName].foreignKeyReference]:
+                currentRecord[this.joinTablesByName[tableName].foreignKey],
+            })
+          );
+        }
+        return Promise.all(promises).then((updatedRecords) => {
+          const recordWithFieldsToReturn = updatedRecords.reduce(
+            (acc, updatedRecord) => {
+              for (const col in updatedRecord) {
+                if (col !== "id" && record[col]) {
+                  acc[col] = updatedRecord[col];
+                }
+              }
+              return acc;
+            },
+            {}
+          );
+          return new Promise((resolve) => {
+            resolve({ id: record.id, ...recordWithFieldsToReturn });
+          });
+        });
       });
     }
   }

@@ -1039,7 +1039,7 @@ var Login = function Login() {
   }, /*#__PURE__*/_react["default"].createElement("button", {
     className: "button--save",
     onClick: save
-  }, "Save")), error && /*#__PURE__*/_react["default"].createElement("div", {
+  }, "Login")), error && /*#__PURE__*/_react["default"].createElement("div", {
     className: "error-message-container"
   }, /*#__PURE__*/_react["default"].createElement("p", {
     className: "error-message"
