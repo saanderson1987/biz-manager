@@ -33,6 +33,7 @@ class VendorOrderModel extends notesMixin(Model) {
       console.log(query);
 
       return db.any(query).then((records) => {
+        console.log(records);
         const obj = {};
         records.forEach((record) => {
           if (record.vendor_order_replacement_id) {
@@ -55,16 +56,33 @@ class VendorOrderModel extends notesMixin(Model) {
     }
   }
 
-  getById(id) {
-    const joinTable = new pgp.helpers.TableName("company");
-    const joinClause = " INNER JOIN ${joinTable} on company.id = t1.vendor_id";
-    const columns =
-      "job_order_id,vendor_id,completed,number_of_pieces,date_ordered,po_num,company.name";
-    return super.getById(id, {
-      queryValues: { joinTable },
-      joinClause,
-      columns,
-    });
+  getById(id, queryParams) {
+    if (
+      queryParams.columns &&
+      queryParams.columns.includes("does_have_replacements")
+    ) {
+      return this.getByQuery({
+        ...queryParams,
+        columns: queryParams.columns + ",id",
+        id,
+      }).then(
+        (recordsById) =>
+          new Promise((resolve) => {
+            resolve(Object.values(recordsById)[0]);
+          })
+      );
+    } else {
+      const joinTable = new pgp.helpers.TableName("company");
+      const joinClause =
+        " INNER JOIN ${joinTable} on company.id = t1.vendor_id";
+      const columns =
+        "job_order_id,vendor_id,completed,number_of_pieces,date_ordered,po_num,company.name";
+      return super.getById(id, {
+        queryValues: { joinTable },
+        joinClause,
+        columns,
+      });
+    }
   }
 
   new(record) {

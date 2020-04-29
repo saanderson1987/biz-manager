@@ -5,6 +5,7 @@ import {
   newItemFormFieldsByItemType,
   apiRouteByItemType,
   getNewItemRecordBase,
+  onAddOrRemoveByType,
 } from "../constants";
 import { StoreContext } from "../store";
 import NewItemDetail from "./NewItemDetail";
@@ -22,11 +23,11 @@ const createPendingNewRecord = (type) =>
   }, {});
 
 const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
+  const storeContext = useContext(StoreContext);
   const {
     state: { user },
     createRecord,
-  } = useContext(StoreContext);
-
+  } = storeContext;
   const [pendingNewRecord, setPendingNewRecord] = useState(
     createPendingNewRecord(type)
   );
@@ -73,6 +74,10 @@ const NewItemForm = ({ type, parentId, statePath, closeModal }) => {
                 route: apiRouteByItemType[type],
                 newRecord,
                 statePath,
+              }).then(() => {
+                if (onAddOrRemoveByType[type]) {
+                  onAddOrRemoveByType[type](statePath, storeContext);
+                }
               });
               closeModal();
             }}

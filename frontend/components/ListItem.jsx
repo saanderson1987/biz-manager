@@ -5,6 +5,7 @@ import {
   apiRouteByItemType,
   itemListsByItemType,
   getItemWarningByItemType,
+  onAddOrRemoveByType,
 } from "../constants";
 import { StoreContext } from "../store";
 import ListItemHeader from "./ListItemHeader";
@@ -13,8 +14,8 @@ import List from "./List";
 import DeleteWarning from "./DeleteWarning";
 
 const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
-  const { updateRecord, deleteRecord } = useContext(StoreContext);
-
+  const storeContext = useContext(StoreContext);
+  const { updateRecord, deleteRecord } = storeContext;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleteWarningVisible, setIsDeleteWarningVisible] = useState(false);
 
@@ -64,7 +65,13 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
         <DeleteWarning
           itemName={itemName}
           closeModal={() => setIsDeleteWarningVisible(false)}
-          deleteItem={() => deleteRecord({ route, id: item.id, statePath })}
+          deleteItem={() =>
+            deleteRecord({ route, id: item.id, statePath }).then(() => {
+              if (onAddOrRemoveByType[type]) {
+                onAddOrRemoveByType[type](statePath, storeContext);
+              }
+            })
+          }
         />
       )}
     </div>

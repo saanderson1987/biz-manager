@@ -77,7 +77,7 @@ const ListItemHeader = ({
                     "expandable-on-click"
                   )}
                 >
-                  *{warning.message}*
+                  {warning.message}
                 </div>
               )}
             </div>

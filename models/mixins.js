@@ -8,8 +8,6 @@ module.exports = {
         const author = record.author;
         delete record.notes;
         delete record.author;
-        console.log("hi");
-        console.log(notes, author);
         if (notes && author) {
           return super.new(record).then((newRecord) =>
             Note.new({

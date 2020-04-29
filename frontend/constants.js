@@ -1,3 +1,7 @@
+import cloneDeep from "lodash.clonedeep";
+import get from "lodash.get";
+import merge from "lodash.merge";
+import update from "lodash.update";
 import { getDateString } from "../util/functions";
 
 export const tableNameListType = {
@@ -102,6 +106,21 @@ export const getItemWarningByItemType = {
   vendor_orders: (item) => {
     if (item && item.does_have_replacements) {
       return { message: "NEEDS REPLACEMENTS", color: "yellow" };
+    }
+  },
+};
+
+export const onAddOrRemoveByType = {
+  vendor_order_replacements: (statePath, storeContext) => {
+    const parentType = statePath[statePath.length - 3];
+    const parentId = statePath[statePath.length - 2];
+    if (parentType && parentId) {
+      storeContext.getById({
+        route: apiRouteByItemType[parentType],
+        id: parentId,
+        queryParams: { columns: "does_have_replacements" },
+        statePath: statePath.slice(0, statePath.length - 2),
+      });
     }
   },
 };
