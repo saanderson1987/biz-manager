@@ -13,6 +13,7 @@ const ListItemHeader = ({
   isExpanded,
   toggleExpanded,
   isEditable,
+  warning,
   update,
   onClickDelete,
 }) => {
@@ -53,7 +54,11 @@ const ListItemHeader = ({
           isExpanded={isExpanded}
           className="expandable-on-click"
         />
-        <div className={"list-item-name"}>
+        <div
+          className={classNames("list-item-name", {
+            [`list-item-has-warning--${warning && warning.color}`]: warning,
+          })}
+        >
           {isValueUpdating ? (
             <Loader isInline />
           ) : inEditMode && isEditable ? (
@@ -65,6 +70,16 @@ const ListItemHeader = ({
           ) : (
             <div className={classNames({ bold: isExpanded })}>
               <DisplayValue value={itemName} className="expandable-on-click" />
+              {warning && (
+                <div
+                  className={classNames(
+                    "list-item-warning",
+                    "expandable-on-click"
+                  )}
+                >
+                  *{warning.message}*
+                </div>
+              )}
             </div>
           )}
         </div>

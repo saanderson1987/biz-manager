@@ -4,6 +4,7 @@ import {
   getItemNameFuncByItemType,
   apiRouteByItemType,
   itemListsByItemType,
+  getItemWarningByItemType,
 } from "../constants";
 import { StoreContext } from "../store";
 import ListItemHeader from "./ListItemHeader";
@@ -29,6 +30,9 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
         isExpanded={isExpanded}
         toggleExpanded={() => setIsExpanded(!isExpanded)}
         isEditable={!!itemNameColumnName}
+        warning={
+          getItemWarningByItemType[type] && getItemWarningByItemType[type](item)
+        }
         update={(newValue) =>
           updateRecord({
             route,

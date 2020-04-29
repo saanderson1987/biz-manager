@@ -98,6 +98,14 @@ const itemDetailsGetByIdQueryParams = {
   installers: { columns: "name" },
 };
 
+export const getItemWarningByItemType = {
+  vendor_orders: (item) => {
+    if (item && item.does_have_replacements) {
+      return { message: "NEEDS REPLACEMENTS", color: "yellow" };
+    }
+  },
+};
+
 export const createItemDetailsGetByIdQueryOptions = (type, id, statePath) => {
   return {
     route: apiRouteByItemType[type],

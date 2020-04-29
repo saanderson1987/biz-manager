@@ -41,6 +41,14 @@ div.list-items--root > div.list-item--first {
   display: inline-block;
 }
 
+.list-item-has-warning--yellow {
+  background: yellow;
+}
+
+.list-item-warning {
+  text-align: center;
+}
+
 .item-detail-name {
   padding-right: 50px;
 }
