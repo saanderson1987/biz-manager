@@ -13,7 +13,7 @@ const ListItemHeader = ({
   isExpanded,
   toggleExpanded,
   isEditable,
-  save,
+  update,
   onClickDelete,
 }) => {
   const [inEditMode, setInEditMode] = useState(false);
@@ -26,6 +26,14 @@ const ListItemHeader = ({
       setIsValueUpdating(false);
     }
   }, [itemName]);
+
+  const save = () => {
+    setInEditMode(!inEditMode);
+    if (editedItemName !== itemName) {
+      setIsValueUpdating(true);
+      update(editedItemName);
+    }
+  };
 
   return (
     <div className="list-item-header">
@@ -49,7 +57,11 @@ const ListItemHeader = ({
           {isValueUpdating ? (
             <Loader isInline />
           ) : inEditMode && isEditable ? (
-            <Input value={editedItemName} onChange={setEditedItemName} />
+            <Input
+              value={editedItemName}
+              onChange={setEditedItemName}
+              save={save}
+            />
           ) : (
             <div className={classNames({ bold: isExpanded })}>
               <DisplayValue value={itemName} className="expandable-on-click" />
@@ -57,18 +69,9 @@ const ListItemHeader = ({
           )}
         </div>
         {isExpanded && isEditable && (
-          <div
-            // style={{ width: "100%" }}
-            className={"EditAndSaveButtonRow-container"}
-          >
+          <div className={"EditAndSaveButtonRow-container"}>
             <EditAndSaveButtonRow
-              save={() => {
-                setInEditMode(!inEditMode);
-                if (editedItemName !== itemName) {
-                  setIsValueUpdating(true);
-                  save(editedItemName);
-                }
-              }}
+              save={save}
               inEditMode={inEditMode}
               toggleEditMode={() => setInEditMode(!inEditMode)}
             />

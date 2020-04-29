@@ -29,7 +29,7 @@ const ListItem = ({ type, item, isFirst, parentId, statePath }) => {
         isExpanded={isExpanded}
         toggleExpanded={() => setIsExpanded(!isExpanded)}
         isEditable={!!itemNameColumnName}
-        save={(newValue) =>
+        update={(newValue) =>
           updateRecord({
             route,
             record: { id: item.id, [itemNameColumnName]: newValue },

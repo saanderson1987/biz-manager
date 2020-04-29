@@ -716,7 +716,7 @@ var ListItem = function ListItem(_ref) {
       return setIsExpanded(!isExpanded);
     },
     isEditable: !!itemNameColumnName,
-    save: function save(newValue) {
+    update: function update(newValue) {
       return updateRecord({
         route: route,
         record: _defineProperty({
@@ -818,7 +818,7 @@ var ListItemHeader = function ListItemHeader(_ref) {
       isExpanded = _ref.isExpanded,
       toggleExpanded = _ref.toggleExpanded,
       isEditable = _ref.isEditable,
-      _save = _ref.save,
+      update = _ref.update,
       onClickDelete = _ref.onClickDelete;
 
   var _useState = (0, _react.useState)(false),
@@ -843,6 +843,16 @@ var ListItemHeader = function ListItemHeader(_ref) {
       setIsValueUpdating(false);
     }
   }, [itemName]);
+
+  var save = function save() {
+    setInEditMode(!inEditMode);
+
+    if (editedItemName !== itemName) {
+      setIsValueUpdating(true);
+      update(editedItemName);
+    }
+  };
+
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "list-item-header"
   }, /*#__PURE__*/_react["default"].createElement("div", {
@@ -865,7 +875,8 @@ var ListItemHeader = function ListItemHeader(_ref) {
     isInline: true
   }) : inEditMode && isEditable ? /*#__PURE__*/_react["default"].createElement(_Input["default"], {
     value: editedItemName,
-    onChange: setEditedItemName
+    onChange: setEditedItemName,
+    save: save
   }) : /*#__PURE__*/_react["default"].createElement("div", {
     className: (0, _classnames["default"])({
       bold: isExpanded
@@ -874,18 +885,9 @@ var ListItemHeader = function ListItemHeader(_ref) {
     value: itemName,
     className: "expandable-on-click"
   }))), isExpanded && isEditable && /*#__PURE__*/_react["default"].createElement("div", {
-    // style={{ width: "100%" }}
     className: "EditAndSaveButtonRow-container"
   }, /*#__PURE__*/_react["default"].createElement(_EditAndSaveButtonRow["default"], {
-    save: function save() {
-      setInEditMode(!inEditMode);
-
-      if (editedItemName !== itemName) {
-        setIsValueUpdating(true);
-
-        _save(editedItemName);
-      }
-    },
+    save: save,
     inEditMode: inEditMode,
     toggleEditMode: function toggleEditMode() {
       return setInEditMode(!inEditMode);
