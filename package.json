@@ -34,7 +34,7 @@
     "lodash.update": "^4.10.2",
     "memory-fs": "^0.4.1",
     "method-override": "^2.3.10",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
